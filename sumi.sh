@@ -1,3 +1,4 @@
+your mine
 my family is my streanth
 Wherever you are, be happy.
 hi sumi i miss u
