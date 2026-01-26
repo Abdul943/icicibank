@@ -1,0 +1,1459 @@
+                                               Ansible=1
+                                               =========
+
+
+Configuration Management Tools
+------------------------------
+Chef
+Puppet
+Ansible
+salt stack
+
+
+Ansible Play Books: as a DevOps Engineer we are the reponsible for write a Ansible Play Books
+
+
+What is Ansible? 
+Ansible is an Open Source Configuration Management Tool, Provided by RedHat.
+
+Ansible developed by 'Python'
+
+Configuration Mgt Tool:
+
+Configuration: Configuration can be any task, which we can perform on host machines/servers.
+
+a) Start/stop/restart the services
+b) create an user
+c) create a file/dir
+d) change the ownership  
+
+Ansible is a Python Module
+
+Agent is like a piece of software
+Ansible is agent less  #push based Architecture #Ansible is going to push the configuration host machine
+
+chef
+puppet     #these are the pull based Architechure
+salt slack
+
+onpermises server means the server physically existed your company   
+
+ANSIBLE:Installation 39minutes
+
+create 3 servers
+select Amazon Linux
+t2.micro   #1gm ram enouf
+abdul.pem  #key
+Launch 3 Instances
+
+Ansible Server
+Host Machine1
+Host Machine2
+
+
+select this Ansible server take this Ip Address
+
+
+Ansible Server
+--------------
+172.31.27.69
+
+Host Machine1            #All Private Ip Address
+-------------
+172.31.29.176
+
+Host Machine2
+-------------
+172.31.21.62
+
+
+
+a)Connect to the server, switch to root user and create an ansible user
+b) set the password
+c) enable password authentication
+d) restart the sshd service
+e) provide the sudo access 
+
+letme first connect to the Ansible server ssh -i "abdul.pem.pem" ec2-user@ec2-54-144-113-20.compute-1.amazonaws.com
+
+sudo su -
+useradd ansible
+passwd ansible
+devops             #password
+devops
+
+vi /etc/ssh/sshd_config    #press i it will come to insertmode
+
+scroll down
+
+PasswordAuthentication yes                #instead of no we can add yes
+PermitEmptyPasswords no
+
+:wq                                       #esc shift :wq save and quite
+
+
+service sshd restart                     #restart the service
+
+visudo                             #then provide the sudo access
+
+## Allow root to run any commands anywhere
+root    ALL=(ALL)       ALL                             
+ansible ALL=(ALL)       NOPASSWD: ALL                   #we have to add just one line                  
+
+ctrl o ctrl x                 #save and quite this is nano editor
+---------------------------------------
+
+same thing we have to do two more other server also HostMachine1
+
+
+Host Machine1 connect the server ssh -i "abdul.pem.pem" ec2-user@ec2-98-94-58-223.compute-1.amazonaws.com
+
+sudo su -
+useradd ansible
+passwd ansible
+devops
+devops
+vi /etc/ssh/sshd_config         #enable the password authentication
+
+# restarting sshd in the default instance launch configuration.
+PasswordAuthentication yes                                            #instead of no we can add yes
+PermitEmptyPasswords no
+
+service sshd restart
+
+visudo
+
+
+## Allow root to run any commands anywhere
+root    ALL=(ALL)       ALL
+ansible ALL=(ALL)       NOPASSWD: ALL             #just add this one line
+
+ctrl o ctrl x 
+-------------------------------
+
+HostMachine2
+
+now am going to connect HostMachine2 ssh -i "abdul.pem.pem" ec2-user@ec2-3-95-206-73.compute-1.amazonaws.com
+
+
+sudo su -
+useradd ansible
+passwd ansible
+devops
+devops
+vi /etc/ssh/sshd_config         #enable the password authentication
+
+# restarting sshd in the default instance launch configuration.
+PasswordAuthentication yes                                            #instead of no we can add yes
+PermitEmptyPasswords no
+
+service sshd restart
+
+visudo
+
+
+## Allow root to run any commands anywhere
+root    ALL=(ALL)       ALL
+ansible ALL=(ALL)       NOPASSWD: ALL             #just add this one line
+
+ctrl o ctrl x 
+-------------------------------Done
+
+
+
+Ansible server 172.31.27.69
+
+This is Ansible Server
+
+sudo su -
+
+python3 --version                     #by default any linux server installed
+
+
+Switch to the ansible user and install ansible software  #make sure we have to do this one
+
+sudo su - ansible
+
+sudo yum install pip -y
+
+pip install ansible                     #when we are using pip no need to use -y  
+
+ansible --version
+
+#As a ansible user generate the ssh keys in ansible server
+#and copy the ssh keys into host machines
+
+#ssh-keygen                 #for generating the ssh key
+
+#ssh-copy-id username@ip/hn
+
+
+ssh-keygen
+hit the enter button
+hit the enter button
+one more time hit the enter button it's generating
+
+#in all the three server also ansible user are there
+#both private ip address becouse all this three are in the same network
+
+let me excute one by one in ansible server only
+
+ssh-copy-id ansible@172.31.29.176
+yes
+devops
+
+ssh-copy-id ansible@172.31.21.62
+yes
+devops
+
+#/etc/ansible/hosts ---> this is the default inventry file (default path)this directory it's not going to create let me create directory
+
+sudo mkdir /etc/ansible
+sudo vi /etc/ansible/hosts
+
+#press i it will come insert mode #just add this ip address in this file
+
+172.31.29.176
+172.31.21.62
+
+
+ansible all -m ping            #ansible command -m module ping is a module#suppose if u see colour full line your successfully connected
+
+
+
+
+
+                                      ANSIBLE-2
+                                      =========
+lets start the server All Three server
+
+let me connect Ansible server ssh -i "abdul.pem.pem" ec2-user@ec2-54-163-6-25.compute-1.amazonaws.com
+
+sudo su - ansible
+
+ansible --version
+
+ansible all -m ping                  #we provided private ip address
+
+#/etc/ansible/hosts
+#/etc/ansible/icicibankhosts
+
+
+#ansible all -i /etc/ansible/icicibankhosts -m ping
+#ansible all --inventory /etc/ansible/icicibankhosts -m ping           #thise are the option u can use 
+#ansible all --inventory-file /etc/ansible/icicibankhosts -m ping
+#-m means “module”
+#-i stands for “inventory”.
+#deprecated means no longer support or stop
+#ansible --help
+
+sudo vi /etc/ansible/icicibankhosts
+
+press i it come insert mode
+
+
+172.31.29.176                               #inside the file u can add any private ip 
+
+:wq
+
+
+ansible all -m ping                                    #if u use this command by default it will ping Two server               
+                                                       # -i means whatever u specifid in this file or server that one only ping
+ansible all -i /etc/ansible/icicibankhosts -m ping     #instead of two i want to ping what ever specified in this server u can use this command
+
+ansible all --inventory /etc/ansible/icicibankhosts -m ping    #u can use like this
+
+ansible all --inventory-file /etc/ansible/icicibankhosts -m ping   #u can use like this
+
+
+
+3[webservers]
+#172.31.29.176
+
+#[appservers]
+#172.31.21.62
+
+#[dbservers]
+#172.31.21.62
+
+
+#/etc/ansible/icicibankhosts
+
+#ssh-copy-id ansible@172.31.29.176
+#ssh-copy-id ansible@172.31.21.62
+
+
+#    comments begin with hash means ignore this one
+
+
+ssh-copy-id ansible@localhost             
+yes
+devops
+
+sudo vi /etc/ansible/hosts             #this is default inventory path and file also
+
+localhost
+
+[webservers]                           #squre bracket we are keep in the group hedder
+172.31.29.176
+
+[appservers]
+172.31.21.62
+
+[dbservers]
+172.31.21.62
+
+
+:wq
+
+ansible all -m ping         
+
+ansible webservers -m ping          #sudo su - ansible
+ansible appservers -m ping
+ansible 172.31.21.62 -m ping          20minutes
+ansible localhost -m ping
+
+
+ansible dbservers -m ping         #without hash it's working
+
+
+sudo vi /etc/ansible/hosts
+
+localhost
+
+[webservers]
+172.31.29.176
+
+[appservers]
+172.31.21.62
+
+[dbservers]
+#172.31.21.62                        #this dbserver not working becouse this is a comminted
+
+ansible dbservers -m ping             #No hosts matched, nothing to do#it's comminted#blank lines are ignored#u can specify host name and ip address
+
+
+
+#export ANSIBLE_HOSTS=/etc/ansible/icicibankhosts          #suppose if u use this command no need to write this path always #ansible all -i /etc/ansible/icicibankhosts -m ping
+#ansible dbservers -m ping   #instead of path u can write like this command
+#ansible dbservers -m ping  # -m module ping is not a module it's connectivity  #
+
+ansible all -m shell -a date             #instead of ping we are using shell  # -a means attribute we are going to use linux command# shell is a module
+
+ansible webservers -m shell -a date       # -a attribute is commapulesary  
+
+ansible webservers -m shell -a df          #suppose if your using shell module u can excute the LINUX COMMAND
+
+ansible all -m shell -a 'df -h'             #whenever we are using this option keep in the single code
+
+
+ansible all -m shell -a uptime
+
+ansible all -m ping
+
+ansible all -m ping -o                    # -o means it will be display single line
+
+
+ansible-doc -l                 #it's going to dispay list of ansible module
+
+press q it will quite
+
+ansible-doc yum             #if u know more u can go through the documentastion# docs.ansible.com
+
+ansible all -m yum -a "name=git"      #it is going to install git package#am getting the error
+
+
+ansible -b all -m yum -a "name=git"      # -b means become -b means sudo previlages -m means module -a means attribute
+
+
+service httpd status
+
+ansible -b all -m yum -a "name=httpd"      #install httpd server#using yum command we are installing the packages we are not able to start the service
+
+ansible -b all -m yum -a "name=httpd state=latest"
+
+service httpd status
+systemclt start httpd
+
+ansible -b all -m service -a "name=httpd state=started"     #statred it's mandatory to use  #name is a parameter and state also parameter in service module
+
+#"reloaded"
+
+#"restarted"     #u can use like this
+
+#"started"
+
+#"stopped"
+
+
+service httpd status
+
+press q come outside
+
+
+one server to another server we are using scp command
+
+
+
+ls -l /home
+
+ansible -b all -m user -a "name=bhaskar"                  #-b become sudo previligeous#creating bhaskar user
+
+ls -l /home
+
+ansible all -m file -a "path=/home/ansible/mithuntechno.java state=touch"     #it's creating empty file
+
+ls
+pwd
+#/home/ansible
+ls -l
+
+vi mithuntechno.java
+
+Hello this file is created by using file module..
+
+ls
+
+ls -l /tmp/
+
+sudo rm -rf /tmp/*        #whatever the files or directory in temp directory it's going to delete
+
+ls -l /tmp/
+
+pwd
+
+ansible all -m copy -a "src=/home/ansible/mithuntechno.java dest=/tmp/mithuntechno.java"         #src means source file destination
+
+
+ls -l /tmp/
+
+
+ansible all -m setup      #using the setup module will give the all the details
+
+
+
+
+
+
+                                   ANSIBLE-3
+                                   =========
+let's start the servers all three server
+
+sudo su - ansible
+
+
+YAML Basics  ---->Yet Another Markup Language
+-----------
+
+.yaml
+.yml
+
+YAML isa data serialization language for storing information in a human readable form
+
+light weight
+it is very easy and simple for represent complex mapping
+support for many programming language
+
+Docker Compose files ---->yaml using
+
+K8s Manifest files  ---->yaml using
+
+GitOps              ---->yaml using
+
+Ansible Playbooks
+
+key: value
+
+name: bhaskar        #name is a key #bhaskar is a value
+id: 1239873
+salary: 123.5643
+age: 10
+isWorking: yes
+
+
+yes|no
+true|false
+
+
+fruits:
+ - mango
+ - banana
+ - orange                             #YAML file Exetenstion is yaml (or) yml
+ - grapes
+ - apple
+
+fruites: ["mango","banana","orange","grapes","apple"]
+
+
+
+Ansible Playbook
+
+Ansible playbook is a yaml file,it contains one or more palys.
+play is a set of task,
+task may be
+a) restart/stop/start the service
+b) create a file
+c) create a dir
+d) create a user
+
+
+PlayBook start with the yaml Three Dashes(---) and end with ... 
+
+       
+am going to write a playbook                                 #GitHub Copoilet for VisualStudio Code
+
+
+
+
+---
+- hosts: all
+  tasks:
+    - name: Ping servers
+      ping:
+
+
+...
+-------------------
+
+sudo su - ansible
+
+mkdir ansibleplaybooks
+
+cd ansibleplaybooks
+
+vi pingServers.yaml           #nano pingServers.yaml      #instead of vi use nano    
+
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Ping all servers
+      ping:
+...
+
+
+:wq
+
+ansible-playbook pingServers.yaml --syntax-check     #before excuting any playbook just check the syntax
+
+ls                            
+
+ansible-playbook pingServers.yaml                    #if u want to run play the playbook this is a command ansible-playbook filename
+
+if u want to run the module all # ansible all -m ping
+
+ansible-playbook --help   #if u want to learn more command
+
+ansible-playbook pingServers.yaml --list-hosts
+
+ansible-playbook pingServers.yaml --list-tasks          
+
+ansible-playbook pingServers.yaml --syntax-check     #before excuting any playbook just check the syntax
+
+ansible-playbook pingServers.yaml  --check       #Dry Run means it's not going to run actually run just it's going to give that what will be happen
+
+ansible-playbook pingServers.yaml --step   
+
+
+sudo rm -rf /tmp/*              #whatever files are there in temp directory romve all those file using this command 
+
+nano createFile.yml                #ctrl o ctrl x
+
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Create a new file on remote server
+      file:
+        path: /tmp/mithundevops.txt
+        state: touch
+...
+
+ansible-playbook createFile.yml c
+
+ansible-playbook createFile.yml
+
+ls -l /tmp/
+
+ansible-playbook createFile.yml --check
+
+ansible-playbook createFile.yml
+
+ls -l /tmp/
+
+nano createFile.yml  #am adding the file permistion
+
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Create a new file on remote server
+      file:
+        path: /tmp/mithundevops.txt
+        state: touch
+        mode: '0700'
+...
+
+ansible-playbook createFile.yml
+
+ls -l /tmp/
+
+nano createFile.yml              #am changing groupname and owner name
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Create a new file on remote server
+      file:
+        path: /tmp/mithundevops.txt
+        state: touch
+        mode: '0700'
+        owner: bhaskar
+        group: bhaskar
+...
+
+ansible-playbook createFile.yml
+
+ls -l /tmp/
+
+ansible-playbook createFile.yml                 #ansible-playbook -b createFile.yml              #-b become sudo previlegeous
+
+nano createFile.yml                #become: yes  sudo previlegeous
+
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Create a new file on remote server
+      file:
+        path: /tmp/mithundevops.txt
+        state: touch
+        mode: '0700'
+        owner: bhaskar
+        group: bhaskar
+...
+
+ls -l /tmp/
+
+
+nano createSoftLink.yml
+
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Create a new file on remote server
+      file:
+        src: /tmp/mithundevops.txt
+        dest: /tmp/mithundevops_link.txt
+        mode: '0700'
+        owner: bhaskar
+        group: bhaskar
+        state: link
+...
+
+ansible-playbook createSoftLink.yml --syntax-check
+
+ansible-playbook createSoftLink.yml
+
+ls -l /tmp/
+
+nano createHardLink.yml
+
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Create a new file on remote server
+      file:
+        src: /tmp/mithundevops.txt
+        dest: /tmp/mithundevops_hardlink.txt
+        mode: '0755'
+        owner: bhaskar
+        group: bhaskar
+        state: link
+...
+
+ansible-playbook createSoftLink.yml --syntax-check
+ansible-playbook createSoftLink.yml
+
+ ls -l /tmp/
+
+
+
+
+                                                	ANSIBLE-4
+                                                        =========
+let start the all Three server
+
+sudo su - ansible
+cd ansibleplaybooks/
+
+nano installHTTPServer.yaml
+
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Install HTTP Server
+      yum:
+       name: httpd
+       state: latest
+    - name: Start and enable HTTP Server
+      service:
+       name: httpd
+       state: started
+       enabled: yes
+    - name: Copy index.html to web server root
+      copy:
+       src: index.html
+       dest: /var/www/html/index.html
+...
+
+
+ctrl o enter ctrl x enter
+
+ansible-playbook installHTTPServer.yaml --syntax-check        #am getting becouse of index.html file is not existed
+
+vi index.html
+<h1>Welcom to Mithun Technologies located in Banglore contact:8105363205</h1>
+
+ansible-playbook installHTTPServer.yaml    
+
+http://34.204.43.78:80
+http://98.84.104.159:80
+http://54.91.100.101:80
+
+first u go and enable the port of Ansible 80 only http after that this Three server are working
+
+
+vi index.html
+<h1>Welcome to {{company_name}}, located in {{location}}, Contact: {{contact}}</h1>
+
+nano installHTTPServer.yaml            #we are added vars here
+
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  vars:
+    company: Mithun Technologies             #am adding this details in this file that's it
+    location: Bangalore
+    contact: 8105363205
+  tasks:
+    - name: Install HTTP Server
+      yum:
+       name: httpd
+       state: latest
+    - name: Start and enable HTTP Server
+      service:
+       name: httpd
+       state: started
+       enabled: yes
+    - name: Copy index.html to web server root
+      template:                                               #instead of copy am adding template becouse of copy module is only copieng template means change the values what ever you right
+       src: index.html
+       dest: /var/www/html/index.html
+...
+
+
+ansible-playbook installHTTPServer.yaml    #then go and refresh the ip
+
+always giving the hard code values it's not good practice that's why am creating a file called variables.yaml
+
+nano variables.yaml
+
+company_name: Mithun Technologies Pvt Ltd
+location: Chilamathur
+contact: 8105363205
+
+
+
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  vars:
+    company: Mithun Technologies                #company_name
+    location: Bangalore
+    contact: 8105363205
+  vars_files:                                   #am adding this file
+    - variables.yaml
+  tasks:
+    - name: Install HTTP Server
+      yum:
+       name: httpd
+       state: latest
+    - name: Start and enable HTTP Server
+      service:
+       name: httpd
+       state: started
+       enabled: yes
+    - name: Copy index.html to web server root
+      template:
+       src: index.html
+       dest: /var/www/html/index.html
+...
+
+ansible-playbook installHTTPServer.yaml    #now go and refresh the page
+
+ansible-playbook installHTTPServer.yaml -e company=MT           #u can pass the value like this #then go page and refresh it
+
+ansible-playbook installHTTPServer.yaml -e company_name=MT    
+
+ansible-playbook installHTTPServer.yaml -e 'company_name=AsmaHameed location=Karnataka' 
+
+ansible-playbook --help
+
+
+Ansible Playbooks   we are passing the value using Ansible Playbooks
+YAML file           we are passing the value using YAML file
+Dynamically         we are passing the value using Dynamically   #dynamicall first taking the value #any time it will take command prompt 
+
+diffrence between
+copy module --> it's going to copy whatever the containt exactly 
+template --> it's going to replace that actually value with the variables
+
+debug module --> whenever getting the error
+
+
+
+nano debugmodule.yaml
+
+---
+- hosts: all
+  vars:
+    company_name: Mithun Technologies
+    location: Bangalore
+    contact: 8105363205
+  tasks:
+    - name: Debug module to print variables
+      debug:
+        var: company_name
+...
+
+
+ansible-playbook debugmodule.yaml
+
+ansible-playbook debugmodule.yaml -e company_name=MT       #let'see it's displaying
+
+#var parameter just going to display the variable values
+#msg  we can display the customise msg along with the variable value
+
+nano debugmodule.yaml
+---
+- hosts: all
+  vars:
+    company_name: Mithun Technologies
+    location: Bangalore
+    contact: 8105363205
+  tasks:
+    - name: Debug module to print variables
+      debug:
+        msg: "Company_name is: {{ company_name }}"
+...
+
+ansible-playbook debugmodule.yaml
+
+group_vars
+----------
+
+write an Ansible playbook to install java in diffrent group diffrent version
+
+
+
+cat /etc/ansible/hosts
+[webservers]
+172.31.29.176
+java 17
+java-17-amazon-corretto-devel
+
+[appservers]
+172.31.21.62
+
+java 21
+java-21-amazon-corretto-devel
+
+
+[dbservers]
+#172.31.21.62
+
+sudo mkdir /etc/ansible/group_vars
+
+sudo vi webservers.yaml
+
+#guy's all the yaml file's are not play-book
+#all the ansible-playbooks are yaml file
+
+
+javaVersion: java-17-amazon-corretto-devel
+
+
+
+sudo vi appservers.yaml
+
+javaVersion: java-21-amazon-corretto-devel
+
+
+
+sudo mkdir /etc/ansible/group_vars
+/etc/ansible/group_vars
+pwd
+etc/ansible/group_vars
+ls
+sudo vi webservers.yaml
+javaVersion: java-17-amazon-corretto-devel
+
+sudo vi appservers.yaml
+javaVersion: java-21-amazon-corretto-devel
+
+cd -                     
+[ansible@ip-172-31-27-69 ansibleplaybooks]$     #this is a directory we need stay and create file here
+
+nano installjava.yaml
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Install Java
+      yum:
+        name: "{{ javaVersion }}"
+        state: latest
+...
+
+this file is not save becouse we are in wrong directory#[ansible@ip-172-31-27-69 group_vars]wrong location like this
+cd -
+pwd
+#/home/ansible/ansibleplaybooks
+
+ansible-playbook installjava.yaml --syntax-check
+
+let me connect other two server also
+java -version
+to check both server
+java -version
+
+#sudo su - ansible           #suppose if your ansible server got logout u can log out like this
+#cd ansibleplaybooks/
+
+ansible-playbook installjava.yaml    #local host get the error
+
+cd /etc/ansible/group_vars/
+
+sudo vi all.yaml                       #ungrouped server means not belong to any group    #this file install all those server
+javaVersion: java-21-amazon-corretto-devel                    
+
+cd -
+
+cd ansibleplaybooks/
+
+ansible-playbook installjava.yaml
+
+
+
+
+
+
+                                                ANSIBLE:5
+                                                =========
+let's start all the server
+
+am creating a new server take amazon linux t2.micro click on launch instance
+
+172.31.28.142 ansible_user=ec2-user ansible_ssh_private_key_file=~/ansiblehosts.pem     #this is private ip of hostmachine3
+
+sudo su - ansible   #this is ansible server 
+pwd
+vi ansiblehosts.pem
+abdul.pem file paste here suppose if i peste it will take huge place that'ts why i didn't peste here
+
+:wq
+
+chmod 400 ansiblehosts.pem
+
+sudo vi /etc/ansible/hosts
+
+localhost
+
+172.31.28.142 ansible_user=ec2-user ansible_ssh_private_key_file=~/ansiblehosts.pem #add just this line
+
+[webservers]
+172.31.29.176
+
+[appservers]
+172.31.21.62
+
+[dbservers]
+#172.31.21.62
+
+:wq
+
+ansible all -m ping
+
+
+ctrl c       #this file is asking host key checking that's why i exit
+
+
+sudo vi /etc/ansible/ansible.cfg
+
+[defaults]
+host_key_checking = False
+
+:wq
+
+ansible all -m ping
+
+sudo mkdir /etc/ansible/hosts_vars
+
+sudo vi 172.31.28.142.yaml
+  
+javaVersion: java-11-amazon-corretto-devel
+
+:wq
+
+cd ansibleplaybooks/                              #[ansible@ip-172-31-27-69 ansibleplaybooks]$
+
+ansible-playbook installjava.yaml 
+
+
+let's ssh -i "abdul.pem.pem" ec2-user@ec2-54-89-166-199.compute-1.amazonaws.com connect to the host machine3 #this is a git bash 
+
+java -version       # this is a hostmachine3 server taking 21 why becouse we create all.yaml so we add 21
+ 
+
+[ansible@ip-172-31-27-69 ansibleplaybooks]$ cd /etc/ansible/hosts_vars/      #u can go this directory
+
+
+sudo vi 172.31.28.142.yaml
+
+javaVersion: java-11-amazon-corretto-devel
+
+:wq
+
+cd -              #[ansible@ip-172-31-27-69 ansibleplaybooks]$
+
+ansible-playbook installjava.yaml
+
+
+java -version           # this is a hostmachine3 server
+
+sudo yum remove java-21-amazon-corretto-devel -y     # this is a hostmachine3 server make sure install corect server
+
+
+#sudo vi all.yaml                  #assume whatever package add here this package are downloading all the server in ansible
+#javaVersion: java-11-amazon-corretto-devel   #instaed of 21 u can change 11 in all.yaml file
+#other wise u can delete all.yaml then it will take(sudo vi 172.31.28.142.yaml)
+#sudo mkdir /etc/ansible/hosts_vars  #after deleting all.yaml file u can create a file like this
+#sudo vi 172.31.28.142.yaml
+
+sudo yum remove -y java-11-amazon-corretto-devel     #remove this 11 in hostmachine3
+
+java -version                    #this is a hostmachine3
+
+[ansible@ip-172-31-27-69 ansibleplaybooks]$ ansible-playbook installjava.yaml    #this is ansible server 
+
+java -version                     #this is a hostmachine3
+
+
+handlers: Handler is a special task, which will run end of the playbook notified by another task
+(#notified means called by)
+
+tasks:    #instead of task we are using handlers
+
+handlers
+
+nano handlers.yaml                     #ansible server
+
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: install HTTP Server
+      yum:
+        name: httpd
+        state: latest
+    - name: Copy index.html to webserver root
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        owner: apache
+        group: apache
+        mode: '0644'
+      notify: Restart HTTP service
+  handlers:
+    - name: Restart HTTP service
+      service:
+        name: httpd
+        state: restarted
+        enabled: yes
+
+ansible-playbook handlers.yaml
+
+am enabling the 80 port number in hostmachine3 server then am going to access take public ip all those server
+http://54.89.166.199/80
+
+
+vi handlers.yaml
+
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  vars:
+    company_name: MithunTechno
+    contact: 8105363205
+    location: Bangalore
+  tasks:
+    - name: install HTTP Server
+      yum:
+        name: httpd
+        state: latest
+    - name: Copy index.html to webserver root
+      template:
+        src: index.html
+        dest: /var/www/html/index.html
+        owner: apache
+        group: apache
+        mode: '0644'
+      notify: Restart HTTP service
+  handlers:
+    - name: Restart HTTP service
+      service:
+        name: httpd
+        state: restarted
+        enabled: yes
+...
+
+:wq
+
+ansible-playbook handlers.yaml
+
+u can goto the page access the page  #task is excuting that's why handelr is excuted
+iam going to change the any containt means task going to excuted handerls also excuted
+
+
+ansible-playbook handlers.yaml -e company_name=mithunTechnologiesPvtLtd
+ansible-playbook handlers.yaml -e company_name=AbdulAsmaHameed
+
+
+if u go and refesh the page it's working
+
+
+tags: 100 task are there if u want to run any particular task u can add the tags then u can run the tasks
+----
+
+
+nano tagsdemo.yaml
+
+ansible-playbook tagsdemo.yaml --list-tags
+
+ansible-playbook tagsdemo.yaml --tags "install,copy"
+
+ansible-playbook tagsdemo.yaml --skip-tags "install,restart"
+
+
+vi tagsdemo.yaml
+
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  vars:
+    company_name: MithunTechno
+    contact: 8105363205
+    location: Bangalore
+  tasks:
+    - name: Install HTTP Server
+      tags:
+        - install
+      yum:
+        name: httpd
+        state: latest
+    - name: Copy index.html to webserver root
+      tags:
+        - copy
+        - install                                           #just added this one
+      template:
+        src: index.html
+        dest: /var/www/html/index.html
+        owner: apache
+        group: apache
+        mode: '0644'
+    - name: Restart HTTP Server
+      tags:
+        - restart
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+
+ansible-playbook tagsdemo.yaml --tags "install"
+
+
+ 
+
+
+                                                        ANSIBLE:6
+                                                        =========
+
+
+ansible vault  we can store sencivte data securly(Password API Keys PAT SSL Certificates)
+-------------
+
+Hashicorp Vault
+Hashicorp Terraform
+Hashicorp Packer
+
+LETme connect Ansible Server and Host machine1 (run only two server)
+am connecting to the Ansible server ssh -i "abdul.pem.pem" ec2-user@ec2-54-225-12-193.compute-1.amazonaws.com
+
+sudo su - ansible
+cd ansibleplaybooks/
+ansible-vault --help
+
+ansible-vault ecncrypt filename         --> Vault Password   #once u encrypt na your not able to read the containts#showing numbers
+ansible-vault decrypt encriptedfilename --> Vault Password   #
+ansible-vault edit encriptedfilename    --> Vault Password                            #
+ansible-vault view encriptedfile                             #without decrypting i want to read the containts using view
+
+
+ansible-vault create filename        #it's going to create encrypted file
+
+ansible-vault rekey filename       #i want to change the password using rekey
+
+
+I WANT TO CREATE A NEW SERVER HOST MACHINE4 T2micro abdul.pem launch instances
+172.31.17.174  This is a host machine4 private ip
+
+sudo su -
+passwd ec2-user           14minutes
+devops
+devops
+
+vi /etc/ssh/sshd_config
+
+PasswordAuthentication yes     #change no to yes
+#PermitEmptyPasswords no
+
+
+service sshd restart          #till host machine4
+
+[ansible@ip-172-31-27-69 ansibleplaybooks]$sudo vi /etc/ansible/hosts
+
+localhost
+
+#172.31.28.142 ansible_user=ec2-user ansible_ssh_private_key_file=~/ansiblehosts.pem
+
+
+172.31.17.174 ansible_user=ec2-user ansible_password=devops   #just add this line in this file
+
+
+[webservers]
+172.31.29.176
+
+[appservers]
+172.31.21.62
+
+[dbservers]
+#172.31.21.62
+
+ansible all -m ping
+
+sudo vi /etc/ansible/hosts
+
+localhost
+
+#172.31.28.142 ansible_user=ec2-user ansible_ssh_private_key_file=~/ansiblehosts.pem
+
+
+172.31.17.174 ansible_user=ec2-user ansible_password=devops
+
+
+[webservers]
+#172.31.29.176
+
+#[appservers]                #i commented this server becouse this server's are not running
+#172.31.21.62                #whatever server's are not using u can comment it
+
+[dbservers]
+#172.31.21.62
+---------
+
+sudo yum install sshpass -y
+
+cd /etc/ansible/group_vars/
+
+ls
+
+sudo rm -f all.yaml
+
+cd ..
+
+ls -l
+
+sudo chmod -R 777 group_vars/
+
+cd group_vars/
+
+ansible-vault create all.yaml
+#devops   #this both are password don't add this two
+#devops
+
+password: devops            #add just this line inside the file
+
+:wq
+
+cat all.yaml         #your not able see this encrypted formet
+
+sudo vi /etc/ansible/hosts            #ansible_password={{password}} instead of devops u can add like this      
+
+localhost
+
+#172.31.28.142 ansible_user=ec2-user ansible_ssh_private_key_file=~/ansiblehosts.pem
+
+172.31.17.174 ansible_user=ec2-user ansible_password={{password}}
+
+
+[webservers]
+#172.31.29.176
+
+#[appservers]
+#172.31.21.62
+
+[dbservers]
+#172.31.21.62
+
+:wq
+
+ansible all -m ping            #getting error#we need to pass the vault secrets
+
+ansible --help
+
+ansible all -m ping --ask-vault-password
+devops
+
+ansible-vault view all.yaml
+devops
+
+#password: devops    #this is a containt
+
+ansible-vault edit all.yaml
+devops
+
+#password: devops
+
+javaVersion: java-21-amazon-corretto-devel     #just add this line
+
+:wq
+
+ansible-vault view all.yaml
+devops
+
+#password: devops
+
+#javaVersion: java-21-amazon-corretto-devel     #u can view the containt like this
+
+ansible all -m ping --ask-vault-password
+devops
+
+cd ~/ansibleplaybooks/
+
+ansible-playbook pingServers.yaml --ask-vault-password
+devops
+
+vi ~/vaultpassword
+plmnko
+
+:wq
+
+ls
+
+ls ~
+
+ansible all -m ping --vault-password-file=~/vaultpassword
+
+vi /etc/ansible/group_vars/all.yaml   #suppose if u face any kind of the problem u can change in all.yaml file add like this
+
+password: devops                     
+
+ansible all -m ping --vault-password-file=~/vaultpassword
+
+cd -
+
+ansible-vault rekey all.yaml
+
+ansible all -m ping --vault-password-file=~/vaultpassword
+
+
+#ansible-vault encrypt all.yaml                         #u can encrypt file like this
+#New Vault password:qazxsw
+#Confirm New Vault password:qazxsw
+#Encryption successful
+
+#cat ~/vaultpassword
+#qazxsw
+
+ansible-vault rekey all.yaml
+Vault password:qazxsw
+New Vault password:abdul
+Confirm New Vault password:abdul
+Rekey successful
+
+
+vi ~/vaultpassword
+abdul
+
+:wq
+
+ansible all -m ping --vault-password-file=~/vaultpassword
+
+cat all.yaml              #this is a encrypt formate we can't see the containt
+$ANSIBLE_VAULT;1.1;AES256
+61316135623232336366383866333964383465343230393766666162363536356338353133316336
+
+ansible-vault decrypt all.yaml    #decrypt means we can see the containts
+Vault password:abdul
+
+cat all.yaml
+password: devops
+
+ansible all -m ping
+
+
+
+                                             ANSIBLE-7
+                                             =========
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
