@@ -1,0 +1,776 @@
+(how to copy the files container to local)
+docker pull tomcat
+docker ps
+docker images
+docker tag 43d370fcdfcf abdul-tomcat-image
+docker images
+docker run -d --name jawa-web-maven -p 1000:8080 abdul-tomcat-image
+docker ps
+docker exec jawa-web-maven ls
+docker exec jawa-web-maven ls logs
+docker exec jawa-web-maven pwd
+docker exec jawa-web-maven ls /usr/local/tomcat
+docker cp jawa-web-maven:/usr/local/tomcat/RUNNING.txt RUNNING.txt
+docker ps
+ls
+
+
+[20:04, 9/29/2023] 💞Allahmdulillah💞: Docker volume ls (check the volumes)
+dockerhandson/spring-boot-mongo:latest (in docker hub)
+Docker images
+Docker image inspect MySQL
+(Var/lib/MySQL volume storage)
+Docker run -d --name MySQL -e MYSQL_ALLOW_EMPTY_PASSWORD=true MySQL (MySQL run without password)
+Docker volume ls
+Docker volume inspect id
+sudo su
+Cd /var/lib/docker/volumes/id
+Ls
+Docker ps
+Docker exec -it id
+dockerhandson/spring-boot-mongo:latest (in docker hub)
+(dokcer bind mount)
+vi Dockerfile
+docker volume create abdulvol
+docker build -t abdulvol .
+docker ps
+docker images
+ docker ps
+docker volume ls
+docker volume inspect abdulvol
+docker inspect 9d63fdc10f2f
+docker exec -it 9d63fdc10f2f bash
+cd app/
+write something here
+cat >abdul
+docker volume ls
+ docker volume inspect abdulvol
+sudo ls
+sudo ls /var/lib/docker/volumes/abdulvol/_data
+docker ps
+sudo su
+ ls
+sudo ls /var/lib/docker/volumes/abdulvol/_data
+
+
+
+MySQL
+Show databases;
+Create database abdul;
+Create database test;
+Create database example;
+Exit
+Docker ps
+Docker rm -d id
+Docker ps -a
+Docker run -d --name MySQL -e MYSQL_ALLOW_EMPTY_PASSWORD=true MySQL
+Docker exec -it id bash
+MySQL
+Show databases;
+Exit
+Docker volume ls
+Docker ps
+Docker inspect id
+Docker volume ls
+Docker run -itd -v id:/var/lib/mysql mysql
+Docker exec -it id bash
+MySQL
+Show databases;
+[20:31, 9/29/2023] 💞Allahmdulillah💞: Docker run -d --name MySQL -e MYSQL_ALLOW_EMPTY_PASSWORD=true MySQL
+[18:46, 9/30/2023] 💞Allahmdulillah💞: Docker run -d --name abduldatabase -v abc:/var/lib/mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql
+[18:56, 9/30/2023] 💞Allahmdulillah💞: Docker volume create mytest1
+[20:31, 9/29/2023] 💞Allahmdulillah💞: Docker run -d --name MySQL -e MYSQL_ALLOW_EMPTY_PASSWORD=true MySQL
+[18:46, 9/30/2023] 💞Allahmdulillah💞: docker run -d --name abduldatabase -v abdulrukhi:/var/lib/mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql
+docker run -itd -v abdullocal:/var/lib/mysql mysql  (if you don't want to ananymouse volume,you can use full path like -v abdullocal:/var/lib/mysql mysql)
+docker volume rm abdullocal (delete the named volume)
+(abdullocal this is a named volume, 1245363254121 this is a ananymous volume)  
+Docker volume create mytest2
+Docker volume create mytest3
+Docker volume create mytest4
+Docker volume ls
+                                                docker volume inspect 6b87247808b868985540c05acbe1ef25ca371197aa6ff58c606b173ee0445bf9
+Docker volume rm mytest1(you can delete multiple volumes at a time)
+Docker volume prune ( This command delete unusable command)
+Docker Stop or kill id
+Docker volume
+docker run -d --name abdulcont --mount source=abdulvol,target=/app nginx
+[19:15, 9/30/2023] 💞Allahmdulillah💞: Mkdir bind
+Cd bind
+Ls
+Vi index.html(data is in photos)
+Ls
+Docker ps
+Docker run -it -v /home/Abdul/bind:/tmp/test/ ubuntu bash 
+Cd tmp
+Ls
+Cd test
+Ls
+Cat index.html
+(Changes in index.html)
+Cat index.html
+docker run -it -v /home/ubuntu/bind:/abdul/hameed ubuntu (bind mount)
+Cd /tmp/tes/
+Ls
+Cat index.html
+[20:11, 9/30/2023] 💞Allahmdulillah💞: Docker network ls
+Docker network inspect bridge (by default all containers are connected to bridge network)
+Docker run -itd nginx docker network inspect bridge
+Docker run -it ubuntu:14.04 bash
+Ping 8.8.8.8(internet access)
+Docker run -itd -P nginx (-P mapping to 80 map kardeta hai)32771 to check in Web
+[20:14, 9/30/2023] 💞Allahmdulillah💞: Ifconfig
+[20:48, 9/30/2023] 💞Allahmdulillah💞: Docker network create -d bridge test (create a network)
+Docker network ls
+Docker run -it --network test ubuntu bash (attach to test network and go to inside)
+Ifconfig
+Exit
+Ifconfig
+Docker run -it --network test ubuntu bash
+Docker run -it ubuntu bash
+Docker ps
+(Ip a (to check network)
+Docker inspect id (check all containers ip address)
+Docker exec -it id bash
+Ping ip1 (3rd container ke andar javo aur first container ke ip ko ping Karo)
+Docker run --network=test -itd -P nginx
+Docker inspect id
+Docker run -it ubuntu bash
+Apt-get update 
+Apt-get install wget
+Wget ip (not working)
+Docker run --network=test -itd -P nginx
+Docker ps
+Docker inspect id
+(Take ip)
+Docker exec -it id bash (go to inside where wget cmd installed)
+Wget hostmachineip :32776
+[21:10, 9/30/2023] 💞Allahmdulillah💞: (-P automatically generate Port32768, -p we are creating 1000) 8000:container port:80 imageport
+version: '3'
+services:
+  webapp1:
+    image: nginx
+    ports:
+      - "8000:80"
+  webapp2:
+    image: nginx
+    ports:
+      - "8001:80"
+
+
+AWS ECR (elastic container register, it's maintain container registry,where we can store docker images)
+create private repositary
+maven-web-application     (cd maven-web-application)
+create repositary
+docker build -t 939646748296.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1 . (ecr create id)
+sudo apt  install awscli (install cli)
+aws_access_key_id = AKIA5VR2PQ2EMWZLJJF2
+aws_secret_access_key = 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
+
+docker tag (tomcat image-id) 939646748296.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1 (create an image will you get this image id in ec2)
+docker run -d --name abdulcont -p 8080:8080 maven-web-application:1
+sudo apt-get update && sudo apt-get install -y awscli (to install AWS CLI using the package manager.)
+cd ..
+aws ecr get-login-password --region us-east-1 (create a ec2 role give ec2-container-register-fullaccess and attach to running ec2 machine)
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 939646748296.dkr.ecr.us-east-1.amazonaws.com
+docker ps
+docker images
+docker push 939646748296.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1 (push to this image in ecr)
+
+
+(without registry we can move one server to another server images)
+docker save web-maven-application -o web-maven-application.tar
+scp web-maven-application.tar ubuntu@54.82.169.221 (another server public ip)
+ vi ABD.pem (copy the key)
+chmod 400 ABD.pem (change permistion of the pem key)
+scp -i ABD.pem web-maven-application.tar ubuntu@54.82.169.221:/home/ubuntu/web-maven-application.tar
+(go to another server download all docker concepts)
+ls
+docker images
+docker load -i web-maven-application.tar 
+
+docker search nginx (searching nginx images)
+
+
+(docker-compose)
+(install docker-compose in ubuntu)
+sudo apt-get update
+sudo apt-get install docker-compose-plugin
+sudo apt  install docker-compose -y
+
+ (if you don't won't create a network and volume external=true external=true) 
+docker-compose up -d (create & run the container in detached mode)
+docker-compose down  (delete the all container while created)
+docker-compose create (create the container)
+docker-compose stop   (stop the container)
+docker-compose start   (start the container)
+docker-compose restart (restart the conatner)
+docker-compose images  (show docker-compose images)
+docker-compose ps       (show the running containers of the docker-compose)
+docker-compose config (check file written correct or not)
+
+version: '3'
+services:
+  Web:
+    image: nginx
+  database:
+    image: redis
+(https://github.com/docker/compose/releases) (if you want to diffrent version of the docker-compose file use this url)
+vi Dockerfile
+ vi docker-compose.yml   (create a docker-compose yml file)
+
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: abdul123
+      MYSQL_DATABASE: mydatabase
+volumes:
+  abdulvol:
+    driver: local
+networks:
+  abdulbridge:
+    driver: bridge
+
+version: '3'
+services:
+  app:
+    build:
+      context: ./myapp
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+version: '3'
+services:
+  web:
+    build:
+      context: ./mydjangoapp
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: example_password
+      POSTGRES_DB: mydatabase
+  redis:
+    image: redis:latest
+
+version: '3'
+services:
+  web:
+    build:
+      context: ./mydjangoapp
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: example_password
+      POSTGRES_DB: mydatabase
+  redis:
+    image: redis:latest
+
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    networks:
+      - frontend
+  app:
+    image: myapp:latest
+    networks:
+      - frontend
+      - backend
+  db:
+    image: postgres:latest
+    networks:
+      - backend
+networks:
+  frontend:
+  backend:
+
+version: '3.1'
+services:
+  springapp:
+    image: dockerhandson/spring-boot-mongo:1
+    ports:
+    - 8080:8080
+    environment:
+    - MONGO_DB_HOSTNAME=mongo
+    - MONGO_DB_USERNAME=devdb
+    - MONGO_DB_PASSWORD=devdb@123
+    networks:
+    - springappbridge
+    depends_on:
+    - mongo
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 20s
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+  mongo:
+    image: mongo
+    environment:
+    - MONGO_INITDB_ROOT_USERNAME=devdb
+    - MONGO_INITDB_ROOT_PASSWORD=devdb1234
+    volumes:
+    - mongodb:/data/db
+    networks:
+    - springappbridge
+volumes:
+  mongodb:
+    driver: local
+networks:
+  springappbridge:
+    driver: bridge
+
+version: '3'
+services:
+  webapp1:
+    image: nginx
+    ports:
+    - "8000:80"
+  webapp2:
+    image: nginx
+    ports:
+    - "8001:80"
+  abdul:
+    image: tomcat
+    ports:
+    - "5000:8080"
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ruhki123
+      MYSQL_DATABASE: mydatabase
+  
+
+(install docker swarm)                                    (DOCKER SWARM)
+ALLOW SECURITY GROUP TAKE ALL 3 SERVER
+TCP 2377
+TCP 7946
+UDP 7946
+UDP 4789
+
+
+(ADD USER DATA)
+#!/bin/bash
+sudo apt update
+sudo apt install docker.io -y
+sudo usermod -aG docker ubuntu
+sudo systemctl enable docker
+sudo systemctl start docker
+
+(exit & connect the vm) (master w1,w2)(take all servers to t2.medium servers)
+
+ docker swarm init (master node)
+
+docker node ls (check the nodes in master node)
+
+ docker swarm join --token SWMTKN-1-53yh1rsd3467m3p832mb523nsrs8zvtqssjzt9lfv76v1yb8if-2aqk1wx3i83xxltmo0qyecavi 10.0.0.6:2377 (this is a master node command to join the multiple worker nodes,worker-node1 worker-node2)
+
+
+docker node ls (to check the how many nodes join 1.leader 2.workers)
+
+
+[12:59, 10/20/2023] 💞Allahmdulillah💞: Scaling
+1) horizontal scaling: creating multiple replica(replica means duplicate,copy)
+2) vertical scaling: increasing the capacity of the server, like CPU and memory.
+[13:17, 10/20/2023] 💞Allahmdulillah💞: With down time (deleting all replicas of the container, creating a container of latest image)
+Without down time
+[13:22, 10/20/2023] 💞Allahmdulillah💞: Roling update (it will create a container version to image once this is ready it will delete one old container same steps doing 3times) without down time do this All steps
+[13:26, 10/20/2023] 💞Allahmdulillah💞: Multi Host network (doker swarm, overlay)
+[13:35, 10/20/2023] 💞Allahmdulillah💞: Docker swarm init
+[13:44, 10/20/2023] 💞Allahmdulillah💞: Master is down it will continue run ,it will won't delete,you need High availability in the master (real time multi master) minimum need 3 servers 
+I have two masters
+1) leader
+2) reachable
+[15:46, 10/20/2023] 💞Allahmdulillah💞: (install docker swarm)            (docker swarm)
+Docker swarm init (run this command in master node)
+Curl http://169.254.169.254/latest/meta-data/ (will show public ip of this server)
+Docker swarm init --advertise-addr private ip
+(Docker swarm join-token manager)
+(Docker swarm join-token worker)
+Docker node ls
+[18:06, 10/20/2023] 💞Allahmdulillah💞: Docker node ls
+Docker service ls   (list of the containers)
+(Docker swarm command is not working on worker node)
+docker service create --name jawawebapp -p 1000:8080 dockerhandson/maven-web-application:2 (create a container)
+Docker service ls (1/1 actual 1/1desired)
+Docker ps 
+Docker service ps container name
+Docker node ls
+docker node ls  (list of the nodes)
+docker service ls
+docker service ps cname  
+(you can stop a node then check it)(again start the node)
+netstat -tulnp (check listen ports)
+sudo netstat -tulnp
+(Take worker node public ip8080/jawa-web-app/)
+Docker service ps jawawebapp
+Docker rm -f Cid (delete the container)
+(Check public ip )
+Docker service ls
+Docker node ls (check this command in worker node)
+Docker ps
+Docker rm -f Cid (worker node id)
+Docker service ls
+Docker service ls  (list of the services)
+docker service ps abdul1
+Docker service ls
+Docker service scale jawawebapp=3
+Docker service ls
+Docker service ps jawawebapp
+Docker rm -f Cid
+Docker service ps jawawebapp
+Docker service scale jawawebapp=4
+docker service rm name of the container  (remove the container)
+Docker node ls 
+ docker node ps q3ekwl22b2u5jcq3gkmhbgw7a (how many pods(containers) running in one node) 
+Dock service ps jawawebapp
+Docker service scale jawawebapp=3
+Docker service ps jawawebapp
+Docker service scale jawawebapp=2
+[18:18, 10/20/2023] 💞Allahmdulillah💞: Docker service ls
+Docker service rm jawawebapp (delete the service)                                      (delete the containers) docker pull dockerhandson22/java-web-app:1
+Docker service create --replicas 2 --name jawawebapp -P 8080:8080 dockerhandson/maven-web-application:2
+Docker service ls
+Docker service create --replicas 1 --name pythonapp -p 5000:5000 dockerhandson/python-app:1
+[18:27, 10/20/2023] 💞Allahmdulillah💞: Service discovery (DNS resulation)
+Docker service ps jawawebapp
+Docker service ls
+docker service  rollback abdul1   (rolling update)
+docker service update abdul1
+Docker service scale pythonapp=2
+[18:41, 10/20/2023] 💞Allahmdulillah💞: Docker service rm jawawebapp
+Docker service create --name nginxapp --mode global -p 80:80 nginx (agar ek server down hua toh jo replica rehta hai us server main vo delete ho jata hai dubara create nahi hota)
+Docker node ls 
+Docker service ls
+Docker service ps nginxapp
+Docker node ls
+Docker service ps pythonapp
+docker node ps ip-10-0-0-109 (use ip)
+Docker node ps nodename (how many containers running these node)
+[19:01, 10/20/2023] 💞Allahmdulillah💞: Connect worker node 2
+Docker service status docker (check status) (if node goes down these container replicated in another node,replicate only replica continer not global service node)
+Service docker stop
+Docker (Stop one EC2 instance )
+Docker node ls
+Docker service ls
+Docker service ps pythonapp
+(Start the EC2 sever)
+Docker node ls 
+Docker node update masternodeid --availability drain (global node will be deleted replica node move to another node, if node will be created global also created that node )
+(Maine master ko drain Kiya uske aandar ke container dusri jagah par move ho gaye)
+drain means to be stopped (if you start again the service global service will come automatically) 
+[19:18, 10/20/2023] 💞Allahmdulillah💞: Docker node ls
+Docker node update masternodeid --availability active (global service again up and running )
+Container scheduling (labels)
+Docker node inspect masterid
+Docker node inspect workerid
+Docker node ls
+docker service rm sm1h35anhk8f oaixopo7txkl (remove all the current running service)
+Docker service rm $(docker service ls -q)
+ (ab hum worker nodes se create karsakte hai)
+Docker service ps nginxapp
+[19:27, 10/20/2023] 💞Allahmdulillah💞: docker node update nodeid --label-add name=nodeone (adding the labels)
+Docker inspect id
+Docker service rm $(docker service ls -q)
+docker service create --constraint "node.labels.name==nodeone" --name nginxapp --mode global -p 80:80 nginx
+Docker service ps nginxapp
+
+
+[19:29, 10/20/2023] 💞Allahmdulillah💞: (Sirf label aur constraint create hoga container)
+[19:39, 10/20/2023] 💞Allahmdulillah💞: (Using deploying compose file)
+Vi docker-compose.yml
+Docker stack deploy --compse-file docker-compose.yml springapp
+Docker network create -d overlay springapp network 
+Docker stack deploy --compse-file docker-compose.yml springapp
+Docker service ls
+Docker stack ls
+
+(create an abdul directory go to inside these directory & run the docker-compose command)
+version: '3'        (nginx)
+services:
+  webapp1:
+    image: nginx:latest
+    ports:
+    - "1000:80"
+    volumes:
+    - abdullocal:/home/ubuntu/abdul
+    networks:
+    - abdulbridge
+
+volumes:
+  abdullocal:
+    driver: local
+networks:
+  abdulbridge:
+    driver: bridge
+
+
+
+version: '3'       (tomcat)
+  tomcat:
+    image: tomcat:latest
+    ports:
+    - "8080:8080"
+
+version: '3'           (apache2)
+services:
+  apache2:
+    image: httpd:latest
+    ports:
+    - "2000:80"
+
+
+version: '3'
+services:
+  webapp1:
+    image: nginx
+    ports:
+    - "8000:80"
+    volumes:
+    - abdulvol:/data/db
+    networks:
+    - abdulbridge
+
+  webapp2:
+    image: nginx
+    ports:
+    - "8001:80"
+    volumes:
+    - abdulvol:/data/db
+    networks:
+    - abdulbridge
+
+  abdul:
+    image: tomcat
+    ports:
+    - "5000:8080"
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: abdul
+      MYSQL_DATABASE: mydatabase
+
+volumes:
+  abdulvol:
+    driver: local
+
+networks:
+  abdulbridge:
+    driver: bridge
+
+docker networks
+docker network create -d bridge abdulbridge (default network)
+docker network ls
+docker run -d --name abdulcont2 -p 1000:80 dockerhandson/maven-web-application:2
+docker ps
+docker exec -it 91d725d3eebd bash
+ping 91d725d3eebd
+exit
+docker inspect 91d725d3eebd
+172.17.0.2
+docker ps
+docker exec -it 91d725d3eebd bash
+ping 172.17.0.2
+ping abdulcont1  (name will not ping)
+
+custom network
+docker network create -d bridge abdulbridge
+docker network ls
+docker run -d --name abdul2 -p 1200:80 --network abdulbridge dockerhandson/maven-web-application:2
+docker inspect cid  (conatiner id)
+docker ps
+docker exec -it 9fb08fee65e0 bash
+ping 172.18.0.2
+ping 9fb08fee65e0
+ping abdul2 (will ping everything in custom(means we have created) network)
+docker network ls
+docker run -d --name abdul5 -p 1300:80 --network hameedbridge dockerhandson/maven-web-application:2
+docker exec -it 323cf0e19448 bash
+same network will ping ex,abdulbridge abdulbridge                              (local is default volume)
+diffrent will not work ex,abdulbridge hameedbridge
+docker network connect abdulbridge 91d725d3eebd (connect to another network)
+docker network disconnect abdulbridge 91d725d3eebd (disconnect)                (bridge is a default network)
+
+
+ (if you don't won't create a network and volume external=true external=true) 
+docker-compose up -d (create & run the container in detached mode)
+docker-compose down  (delete the all container while created)
+docker-compose create (create the container)
+docker-compose stop   (stop the container)
+docker-compose start   (start the container)
+docker-compose restart (restart the conatner)
+docker-compose images  (show docker-compose images)
+docker-compose ps       (show the running containers of the docker-compose)
+docker-compose config (check file written correct or not)
+
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - myvolume:/path/to/container/directory
+
+volumes:
+  myvolume:
+
+version: '3'
+services:
+  app:
+    image: myapp:latest
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    environment:
+      - MY_VARIABLE=value
+
+
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    env_file:
+      - .env
+
+version: '3'
+services:
+  custom-app:
+    build:
+      context: ./path/to/app
+      dockerfile: Dockerfile.dev
+
+
+create docker-compose httpd
+
+version: '3'
+services:
+  myhttpd:
+    image: httpd:latest
+    ports:
+      - "8080:80"
+
+
+version: '3'
+services:
+  abdulsumi:
+    image: httpd:latest
+    ports:
+      - "1000:80"
+  abdulrukhi:
+    image: httpd:latest
+    ports:
+      - "1200:80"
+  abdulmubeen:
+    image: httpd:latest
+    ports:
+      - "1400:80"
+  abdulsameena:
+    image: httpd:latest
+    ports:
+      - "1500:80"
+
+volumes:
+  abdulvol:
+    driver: local
+
+networks:
+  abdulbridge:
+    driver: bridge
+
+(check data in the volumes)
+
+version: '3'
+services:
+  abdul1:
+    image: httpd:latest
+    ports:
+      - "1000:80"
+    volumes:
+      - abdulvol:/usr/local/apache2/abdulvol
+
+volumes:
+  abdulvol:
+    driver: local
+
+networks:
+  abdulbridge:
+    driver: bridge
+
+
+
+version: '3'
+services:
+  myapp1:
+    image: httpd:latest
+    ports:
+      - "1200:80"
+    volumes:
+      - abdulvol:/usr/local/apache2/abdulvol
+    networks:
+      - abdulbridge
+
+volumes:
+  abdulvol:
+    driver: local
+
+networks:
+  abdulbridge:
+    driver: bridge
+
+
+
+
+
+
+
+
