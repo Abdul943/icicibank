@@ -1,0 +1,674 @@
+                                           GIT-1
+                                           =====
+can u tell me company URL?
+sorry we can't share that repository and all
+
+https://github.com/Abdul943/icicibank.git HTTPS url
+
+https://github.com/Abdul943/hdfcbank.git   
+
+Create the Teams
+
+
+                                            GIT-2
+                                            =====
+connect to ec2-server
+sudo su -
+yum install git -y
+git --version
+
+Git Commands
+------------
+exit          #we can do it normal user also
+
+mkdir icicibank
+cd icicibank
+ls
+pwd
+git init            #intialize the git it's going to create empty repo
+ls -la              #check hidden file also
+
+Working Area  #what are the files which are created newly this files available in working area
+
+Working Area              Staging Area                    Localrepo
+------------              ------------                    ---------
+                           DBUtils.java
+                         StringUtils.java--> git commit -m "First -m "First Commit"
+EmployeeSevice.java
+
+git status        #untracked files
+
+IDEs ----->integrated development environment
+----
+eclipse
+myeclipse               #those are IDe's #to devlop the code#we are using vi editor
+netbeans
+intellij
+
+vsc
+
+atom
+---------
+
+ vi DBUtils.java
+This file contains the DB related script..
+esc shift: wq
+git status
+
+vi StringUtils.java
+This File conatins the String related functions..
+
+git status
+
+git add .    #adding into staging area
+git add *    
+git add *.java #i want to update only java files
+git add f1 f2 f3     #u can add files like this
+
+git add .
+git status
+
+
+
+
+git config --global user.name "abdulhameed"
+git config --global user.email "hameedabdul5593@gmail.com"     #this is onetime activity
+git config --global --list
+
+user.name=abdulhameed
+user.email=hameedabdul5593@gmail.com
+
+git commit -m "First Commit"
+
+vi EmployeeService.java
+This file contain the employee service
+
+git add *.java
+
+git commit -m "Added Employee service code"
+
+git status
+
+git remote add abdul https://github.com/Abdul943/icicibank.git  #abdul is alias name
+
+git remote -v        #to check the map or not to remote repo
+
+git remote -v      #abdul is alias name
+
+git push abdul master
+
+abdul personal access token:  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
+
+PAT:personal access token
+
+git push abdul master
+abdulhameed
+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    #tocken will not dispay it will be hide
+u got to repo then u have to check displaying or not
+
+
+vi DBUtils.java
+This file contains the DB related script..     #only add this line   
+Hello addthis line for updating..        
+
+git status
+
+git commit -a -m "Updated"            #-a add -m commit #we can use like this add and commit
+                                  #only existing file add and commit worked not new file 
+git status
+
+vi deploy.sh
+this file contains the deployment logic
+
+git add .
+git commit -m "added deployment script"
+
+git status
+
+git push abdul master           #suppose not working both na so u can use this command # git pull origin Dev1 --rebase
+
+abdulhameed
+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
+
+git log      #list all commits  display all this details commit #press q (come outside of the logs)
+
+git log -2   #last commit id
+
+git show b8120e36b       #display the all details b8120e36ba692f173639f78eed494305b41043a2
+
+git show --pretty="" --name-only b8120e36ba69    #only showing the name 
+
+
+                 #git pull origin Dev1 --rebase
+
+                                             GIT-3
+                                             =====
+cd icicibank/
+ls
+pwd
+git status
+touch test.javals
+
+touch test.sh
+git status
+
+git clean -n        #which are the files remove? # -n review
+git status
+
+git clean -f          #remove all the file
+
+Removing test.java
+Removing test.sh
+
+vi test.py
+This file contains the python script
+
+vi EmployeeService.java                     #this is existing file only one line added
+addded this line now..
+
+git status
+git add .
+git status
+
+git reset            #get back all the files in staging area to working area#only new files#before commit don't forget it
+
+git reset test.py      #if u want only one file untrack u can use like thisgit status
+
+git status
+rm -f *.txt           #at a time delete multiple file via .txt 
+
+
+git add *
+git status
+
+git commit -m "Added python script"
+
+git push abdul master
+abdulhameed
+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
+
+git revert cid 
+git log
+git revert  faf7ed89b68    #update contains commit u have to update using this command
+Reverted ..Revert "Added python script"   #add Reverted ..  #one line deleted #it's only delete in local repo not in remote
+
+ls
+cat EmployeeService.java    #to check file delete or not
+
+git push abdul master     #suppose this command is not working u can git push abdul -f master 
+abdulhameed
+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   #go and see to remotrepo
+
+git resert   #git resert command going get back all the files staging area to working area
+git revert   #what are the commit id we specified it's going delete what are update contain in exsting file local repo only
+
+git is VCS     #commit id means verstining it's maintins the verstion
+
+git is Distributed verstion control system
+
+.gitignore               #.gitignore tells git which files not to track
+
+
+touch .classpath .settings
+git status
+
+mkdir node_modules
+
+touch node_modules/test.sh
+
+git status
+                              #suppose if we added files in git ignore that files will be not displaying
+touch .gitignore               
+
+vi .gitignore
+.classpath
+.settings
+node_modules/
+
+git status
+
+git restore -- file1            #deleting data recover#until u will not commit your data will never recover
+git restore -- file1
+git restore -- file1
+
+git add .
+git commit -m "added gitignore"  
+
+git push abdul master
+abdulhameed                                       #if CMD is not working u can use gitbash
+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
+
+
+Git Branches
+------------
+
+Dev--->Development This is the environment where developers write and integrate code, try out new features, fix bugs, experiment.
+QA---->Quality Assurance This environment is used by testers or QA engineers to validate that code from Dev works as expected
+Prod-->Production This is the live environment where the application is deployed for real users/customers.
+
+git branch           #chek list of the branch 
+git branch bn         #create a new branch   #suppose if u create a new branch what are the code in master branch same code will get it in this branch
+git branch -d bn      #delete the branch
+git push hameedasma -d sumibranch                 #if u delete in remote u can use this command#hameedasma instead of origin
+git push hameedasma -d Dev1                                                                            git push hameedasma -d Dev1
+
+
+git branch development         # *represent currently we are using that branch
+git checkout -b abdul2         #create and switch that branch
+git checkout development       #switch to this branch
+git branch
+
+vi deploy.sh
+adding this line in dev branch..
+
+git status
+git commit -a -m "added in dev branch"
+
+cat deploy.sh
+git checkout master  
+git status
+cat deploy.sh
+
+git merge bn      #development branch code will get it in master branch u can use this command
+first u have to switch to master branch then u can use this cmd
+
+master> git merge development
+master>git diff development             #diff u can see the diffrence use command this #this line of code is not there
+
+git merge development           #integrate with develpoment branch
+
+git diff development          #it's not giving means there is no diffrece
+
+cat deploy.sh                 #now u can get the containts after merging
+
+
+vi DBUtils.java
+added this line in master branch
+
+git commit -a -m "Updated in master branch"
+
+cat DBUtils.java
+
+git checkout development          #befoe switch to other branch commit the code and then switch otherwise file is not saved
+
+cat DBUtils.java                   #contains are not showing what are the conatants added
+
+vi DBUtils.java
+added this line in dev branch
+
+git commit -a -m "added in dev branch"
+
+git checkout master
+
+cat DBUtils.java     #contains are not showing what are the conatants added
+
+
+git merge    #it's going to integrate one branch code to other branch #if u merge your code in other branch u can swith that branch
+after that (git merge abdulbranch)#git merge main #git push hameedasma abdulbranch
+git branch
+git checkout development   #suppsose if u in master u have to switch to development
+
+git diff master
+
+git merge development     #it's not going to work becouse of same branch 1:06
+
+git checkout -b stage     #using this command create a branch and switch to that branch instead of two branch git branch branchname &git checkout branchname
+git branch
+
+git branch -r       #-r means remote branch only one branch
+git branch -a       #-a means all the branch local & remote branch
+
+
+
+                                                   GIT-4
+                                                   =====
+(git push abdul -all      #push all branches)
+
+git branch
+git push abdul master development
+abdulhameed
+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
+
+#after that u can go and see the branches in github
+
+git push --all           #means all the branch is going to push
+
+#go to github click the branch then u can type uat like this
+#suppose whatever add in remote repo u can't display in local we have to get the code git pull or git fetch
+
+git branch -d stage      #same we can't delete it
+
+#if u delete repo branch u can go to repo then u click to branch then u have to delete
+
+<<<<<<< HEAD
+=======                         #delete all three lines
+>>>>>>> development
+
+git branch -d development      #now sucsessfully deleted
+
+git push abdul :uat            #delete in repo u can use this command 
+abdulhameed
+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
+
+git push abdul --delete abdulbranch   #ucan delete like this
+
+
+
+now u can goto repo and refresh the page
+
+git checkout -b abdulbranch     #creating branch and switch that branch
+
+
+Branch                    Tag                         
+------                    ----
+mutable(u can edit)       immutable(not able to edit)
+as long as deployment     after prod deployment
+                                                    #tn=tag name
+git branch                git tag
+git branch bn             git tag tn
+git branch -d bn          git tag -d tn
+git branch abdul bn       git push abdul tag tn            git push hameedasma sumitag #abdul means alias or origin                   #
+git push abdul --all      git push abdul --tags    
+
+git tag -d banutag sheikhtag sameenatag zeenathtag           #deleted multiple tags at a time
+
+git tag
+git branch
+
+git push hameedasma -d sumitag                      #deleted in remote repository
+
+git tag icicibankv1.0.0                               #git push hameedasma icicibankv1.0.0
+git tag
+
+git push abdul tag icicibankv1.0.0             #v1.0.0minor,major,patch
+abdulhameed
+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
+
+#goto github 
+refresh the page and check the tag
+
+git tag -d icicibankv1.0.0       #delete tag
+git tag
+
+git clone remotepourl
+
+git clone https://github.com/Abdul943/icicibank.git   30:00
+
+
+vi StringUtils.java
+added this line on Nov 6th at 6.45 IST
+git commit -a -m "Updated.."
+
+#abdul   https://github.com/Abdul943/icicibank.git (fetch) abdul is alias name
+#abdul   https://github.com/Abdul943/icicibank.git (push)
+
+git push abdul master
+abdulhameed
+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
+
+400 Series --> Client Side issues
+401  --->un authorised
+403  ---> forbidden
+500 Series --> Server Side issues
+
+click on setting tab 
+
+git pull 
+git fetch
+
+
+git pull--> if excute this command it will com remo repo to local repo and working area also
+git fetch-->if excute this command it will be come in remote to local afterthat u have to merge that code then it will be in working area
+
+
+(git pull = git fetch + git merge)
+
+cat DBUtils.java
+
+git branch
+
+i want to add one more line here    #add this line in remote repo
+
+git fetch abdul master             #if u use fetch command like this
+git status
+cat DBUtils.java
+git merge abdul/master
+cat DBUtils.java             #now i can able to see
+
+(git pull)
+cat DBUtils.java
+Git is my Favorite Tool         #add this line in remote repo     
+git pull abdul master
+cat DBUtils.java
+
+
+                                                 GIT-5
+                                                 =====
+
+PR --> Pull Request       # i practiced handson
+
+
+https://github.com/Abdul943/icicibank.git   ---->HTTPS
+git remote add abdulhameed git@github.com:Abdul943/icicibank.git       ---->SSH
+
+(ssh-keygen)       #genarate the key
+
+                                             # ~/.ssh/      
+
+ls -la ~/.ssh
+ssh-keygen                                                      #suppose if u are not understand this u can look at down|
+ls -la ~/.ssh
+cat ~/.ssh/id_rsa.pub
+ls -la ~/.ssh
+ssh -T git@github.com
+yes
+ls -la ~/.ssh
+git remote -v
+
+git remote add abdulhameed git@github.com:Abdul943/icicibank.git
+
+git remote -v
+
+#git push abdul stage    #assume if u use this url they are asking username & password
+so better u can cancel it CTRL C press the button
+
+git push abdulhameed stage 
+
+id_rsa    --->Private Key      #rsa means encryption algorithm
+id_rsa.pub -->Public Key
+
+ssh-keygen -t dsa
+
+id_dsa
+id_dsa.pub
+
+                                  CREATE A NEW SSH KEY
+                                  ====================
+git@github.com:Abdul943/Git1.git --->SSH URL
+
+ls -la ~/ .ssh
+
+The key's randomart image is:
++---[RSA 3072]----+
+|   +E. o+B.ooo   |
+|  + o o o.Ooo..  |
+|   o .   oooo.   |
+|          o+     |
+|     .  S  ..    |     #until this path not come hit the enter
+|   .  o.   .     |
+|  ....+. .  o    |
+|  ooo=o.o o...   |
+|   +==*= . .oo   |
++----[SHA256]-----+
+
+ssh-keygen
+hit the enter
+hit the enter
+hit the enter
+hit the enter
+hit the enter
+
+ls -la ~/.ssh
+cat ~/.ssh/id_rsa.pub
+ls -la ~/.ssh
+ssh -T git@github.com
+yes
+ls -la ~/.ssh
+git remote -v
+
+git remote add abdulhameed git@github.com:Abdul943/icicibank.git
+
+git remote -v
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                          GIT-6
+                                                          =====
+Git Branching startergy
+-----------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
