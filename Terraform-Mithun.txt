@@ -1,0 +1,3813 @@
+Terraform with AWS - Amazon Web Series------------TERRAFORM-1
+======================================
+abdulhameed810536@gmail.com
+AbdulHameed@810536
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPVAuUwnaSiNKUXlSZoDK3hoLf2CZUj28irPHtJLdxIK dell@abdulhameed
+
+
+access key   AKIAXHE36MT2B5NAPJC5
+secret key    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
+
+provider "aws" {
+	region = "us-east-1"
+	access_key = "AKIAXHE36MT2B5NAPJC5"
+	secret_key = "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"
+}
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+provider "aws" {
+    profile = "default"
+    region = "us-east-1"
+}
+
+
+
+EC2
+S3
+IAM
+VPC
+VPC with EKS
+DynamoDB Table Etc.
+
+Infrastructure
+
+Networks
+Servers
+Storage
+
+Load Balancer
+AutoScalingGroups
+
+                                    Terraform-2
+                                    ===========
+On Premise Data Center [Infracture]
+                                    Terraform-3
+                                    ===========
+Types of Cloud Computing
+------------------------
+Public Clous
+Private Cloud
+Hybrid Cloud and Multi Cloud
+
+Public Cloud ===> AWS Amazon Web service,Microsoft Azure Gcp etc.
+
+AWS-Ec2
+Azure- Virtual Machine
+
+                                   Terraform-4
+                                   ============
+Latency---> How Quickly an Application can be accessible by End Users.
+
+
+                                   Terraform-7
+                                   ============
+Key Concepts of Terraform
+Providers
+Resources
+Variables
+Outputs
+State
+Modules
+
+                                   Terraform-8
+                                   ===========
+if u not set the path u can go "edit enviornment variable"
+
+Setup Terrform.
+Setup Visual Studio Code for Terraform.
+sudo yum update -y
+
+
+Ubuntu
+
+
+set up terraform in Linux
+
+wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install terraform
+
+ terraform -version
+
+Amozon Linux
+
+sudo yum install -y yum-utils shadow-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+sudo yum install terraform
+
+
+
+                                        Terraform-9
+                                        ===========
+Terraform Configuration File Directory Structure
+Go to Visual studio code
+
+1_Terraform_Configuration_Files_Directory     #(Folder)
+
+main.tf                           #comman Terraform block    #VVIMP
+output.tf
+provider.tf                   #Define Provider Information -AWS/Azure or GCP
+terraform.tf 
+variables.tf
+local.tf
+
+Terraform Blocks
+A block in Terraform is a fundamental unit of the configuration, used to define resources, data sources,variables,outputs and more.
+Terraform blocks are essential for organizing the configuration and managing infrastructure.
+
+providers
+providers are a logical abstaction of an upstream API. they are responsible for understanding api interactions and exposing resources
+
+
+                                            Terraform-10
+                                            ============
+
+terraform {
+  required_providers {
+    aws = {
+        source = "hashicorp/aws"
+        version = "6.0.0-beta3"
+    }
+  }
+}
+
+resource "local_file" "createfile" {
+    content = "Welcome to Terraform Infrastructure"
+    filename = "Terraform.txt"
+}
+
+provider block defined access-key secrait-key and region
+
+Terraform Life Cycle
+====================
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply
+terraform destroy
+
+
+                                                  Terraform-11
+                                                  ============
+jenkins_server via EC2-server
+redhat
+t2.micro
+
+Terraform Life Cycle
+====================
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply
+terraform destroy
+terraform apply -auto-approve           #no need to type instead of this
+
+
+terraform {
+  required_providers {
+    aws = {
+        source = "hashicorp/aws"
+        version = "6.26.0"
+    }
+  }
+}
+resource "aws_instance" "web_server" {
+  ami = "ami-069e612f612be3a2b"
+  instance_type = "t2.micro"
+  availability_zone = "us-east-1a"
+  key_name = "abdul.pem"
+
+  tags = {
+    Name = "Terraform_Server"
+  }
+}
+
+
+TERRAFORMINIT
+initializes the working directory contianing Terraform configuration files it downloads the necessary provider plugins and initializes the backend
+
+what does Terraform initialization Do
+download provider plugins {eg:AWS and Azure}
+initializes the backend configuration for state management
+
+TERRAFORM FMT
+the terraform fmt command is used to automatically your terraform configuration files
+
+TERRAFORM VALIDATE
+the terraform validate command is used to validate the syntax and configuration of your terraform files #missing somethig it will be find out easily
+#all the terraform configuration files excute in this location which is part of this directory all the 
+
+"state file is a Heart of the Terraform"
+
+TERRAFORM PLAN
+terraform reads the current state [from .tfstate file or remote state].
+shows an execution plan to modify, add or destroy resources to reach the desired state.
+"can i do a dry run like that"
+terraform evalutes the desired state and compare it to the current state[stored in the current file]
+
+TERRAFORM APPLY
+terraform applies the changes to the infrastructure resources are created updated or destroyed based on the plan
+
+TerraformDestroy
+destroys the infrastructure managed by terraform it removes all resources defined in the configuration
+
+provider "aws" {
+	region = "us-east-1"
+	access_key = "AKIAXHE36MT2B5NAPJC5"
+	secret_key = "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"
+}
+#### variables for ec2 #### 
+variable "ami" {
+  default = "ami-03695d52f0d883f65"
+}
+variable "instance_type" {
+  default = "t3.micro"
+}
+variable "Name" {
+  default = "terraformserver"
+}
+--------------------------------------------
+resource "aws_security_group" "ec2_sg" {
+  name        = "terraform-ec2-sg"
+  description = "Allow SSH inbound"
+
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+                                         TERRAFORM-13
+                                         ============
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply
+terraform destroy
+
+#main.tf
+
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "AKIAXHE36MT2B5NAPJC5"
+  secret_key = "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"
+}
+
+ec2.tf
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+
+resource "aws_instance" "web_server" {
+  ami                    = "ami-068c0051b15cdb816"
+  instance_type          = "t2.micro"
+  availability_zone      = "us-east-1a"
+  key_name               = "abdul.pem"
+  vpc_security_group_ids = [aws_security_group.RedHat_EC2_Security_Group.id]
+
+  tags = {
+    Name = "Terraform_Server"
+  }
+}
+
+security.tf
+
+resource "aws_security_group" "RedHat_EC2_Security_Group" {
+  name        = "Web_Server_5G"
+  description = "OPen 22 SSH Port for Web Server"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+
+                                                TERRAFORM-14
+                                                ============
+InPlaceUpdate and ForceReplacement
+----------------------------------
+inplace update is nothing but making/update changes on existing infrastructure without deleting and recreating the same infrastructure.
+ #just u can change t2.medium to t2.nano
+Example: changing instance type of an EC2 server.
+
+ForceReplacement
+----------------
+Delete an existing infrastructure and recreate the same again as per configuration
+Example: changing availability zone for an EC2 server
+Create
+Update
+Delete
+
+resource "aws_security_group" "ec2_sg" {
+  name        = "terraform-ec2-sg"
+  description = "Allow SSH inbound"
+
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_instance" "myec2" {
+  ami             = "ami-068c0051b15cdb816" # Amazon Linux 2 (us-east-1)
+  instance_type   = "t2.nano"               #InPlaceUpdate
+  availability_zone = "us-east-1a"          #ForceReplacement
+  key_name        = "abdul.pem"
+  security_groups = [aws_security_group.ec2_sg.name]
+
+  tags = {
+    Name = "Terraform-EC2"
+  }
+}
+
+                                         Terraform-15
+                                         ============
+TerraFormStateFile
+------------------
+the statefile is a critical component of terraform's functioning it keeps track of the infrastructure resources managed by terraform and the configuration of those resources
+
+terraform uses this file to amp the resources in the real world to your configuration files
+
+terraform's state file is a central component in managing your infrastructre effectively
+
+
+                                         TERRAFORM-16
+                                         ============
+Types of Terraform State File
+-----------------------------
+Local Terraform Statefile --Which will be created and maintained in local project working directory.
+
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+
+resource "aws_s3_bucket" "bucket1" {                                           #s3 bucket
+  bucket = "bucket8105"
+
+  tags = {
+    Name        = "mybucket8105"
+    Environment = "Dev"
+  }
+
+}
+
+resource "aws_s3_object" "file" {
+  bucket = aws_s3_bucket.bucket1.id
+  key    = "abdul.txt"
+  source = "C:/Users/Dell/Desktop/AbdulTerraform/s3/abdul.txt"
+}
+resource "aws_s3_object" "rukhi" {
+  bucket = aws_s3_bucket.bucket1.id
+  key    = "rukhi.txt"
+  source = "C:/Users/Dell/Desktop/AbdulTerraform/s3/rukhi.txt"
+}
+
+Remote Backend
+--------------
+provision s3 bucket with versioning using AWS management consloe
+
+provison s3 bucket with versioning using terraform
+enabled
+Disabled
+
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "AKIAXHE36MT2B5NAPJC5"
+  secret_key = "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"
+}
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+
+resource "aws_s3_bucket" "docker" {
+  bucket = "docker-kubernates-klndl715124221"
+
+  tags = {
+    ManagedBy   = "Terraform"
+    Enviornment = "Development"
+  }
+}
+
+                                       TERRAFORM-17
+                                       ============
+Versioning Status can either be enabled, disabled or suspended
+update s3 bucket versioning to Enabled [Works]
+
+versioning status can't update
+
+resource "aws_s3_bucket" "docker" {
+  bucket = "docker-kubernates-klndl715124221"
+
+  tags = {
+    ManagedBy   = "Terraform"
+    Enviornment = "Development"
+  }
+}
+
+resource "aws_s3_bucket_versioning" "bucketversioninig" {
+    bucket = aws_s3_bucket.docker.id
+
+    versioning_configuration {
+      status = "Enabled"         #Disbaled first distroy Enabled after that u can run                    #if u can't change Enabled to Disabled u have to create seprate code for Disabled
+    }
+  
+}
+
+"["Enabled" "Suspended" "Disabled"]"
+
+Disabled option can be used while creating s3 bucket.
+Create S3 Bucket versioning Enabled in Realtime
+
+--auto-approve
+This is to avoid prompt to acknowledge while create/destroy infrastrcture
+terraform apply --auto-approve
+terraform destroy --auto-approve
+
+Meta Arguments
+==============
+count
+for_each
+depends_on
+provider
+lifecycle
+
+Meta Arguments are used to reduce dulication of resource blocks while creating same resources.
+create 3 EC2 Instances
+Count Meta Argument accepts only numbers [numeric values like 1, 2 and 3 etc]or list of strings
+Count meta argument index start from zero.
+
+resource "aws_instance" "jenkins_server" {
+  count             = 3
+  ami               = "ami-068c0051b15cdb816"
+  instance_type     = "t2.nano"
+  availability_zone = "us-east-1d"
+
+  key_name = "abdul.pem"
+
+  tags = {
+    Name = "Jenkins_Pipeline_server-${count.index + 1}" #count index alwas start from 1
+
+  }
+
+}
+
+BUCKET COUNT
+
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "AKIAXHE36MT2B5NAPJC5"
+  secret_key = "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"
+}
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+
+resource "aws_s3_bucket" "docker" {
+  count = 4                                   #created 4 buckets
+
+  bucket = "docker-kubernates-klndl715124221-${count.index}"
+
+  tags = {
+    ManagedBy   = "Terraform"
+    Enviornment = "Production"
+  }
+}
+
+resource "aws_s3_bucket_versioning" "bucketversioninig" {
+  count = 4
+
+  bucket = aws_s3_bucket.docker[count.index].id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+
+}
+
+
+
+                                                        Terraform=18
+                                                        ============
+
+provision S3 buckets with random provider using count meta argument.
+
+RandomProvider
+
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "AKIAXHE36MT2B5NAPJC5"
+  secret_key = "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"
+}
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+
+resource "random_string" "string" {
+  count   = 2
+  length  = 7
+  special = false
+  upper   = false
+  lower   = true
+  numeric = false
+}
+
+resource "aws_s3_bucket" "s3_bucket" {
+  count = 2
+
+  bucket = "abdultechnologies-${random_string.string[count.index].id}"
+
+  tags = {
+    Name = "abdultechnologies-${random_string.string[count.index].id}"
+  }
+}
+
+
+                                            TERRAFORM-19
+                                            ============
+depends on 
+EC2 and S3 Bucket
+S3 bucket should be created first and then only ec2 instance should created
+
+depends on can be used to define/specify dependenceis between resource within terraform configuration
+provider
+provider meta argument can be used for multi region infrastacture provising
+
+
+
+
+
+resource "aws_instance" "nexus_server" {
+  ami           = "ami-068c0051b15cdb816"
+  instance_type = "t2.medium"
+  key_name      = "abdul.pem"
+
+  //create Dependency on S3 Bucket Before creating EC2 instance
+  depends_on = [aws_s3_bucket.nexus_bucket]                       #creating s3 bucket before creating EC2 instance
+}
+
+resource "aws_s3_bucket" "nexus_bucket" {
+  bucket = "nexusartifact64djnedkk"
+
+}
+
+
+-------------------------------------------------   
+first create EC2 instances after that s3 bucket
+
+resource "aws_instance" "nexus_server" {
+  ami           = "ami-068c0051b15cdb816"
+  instance_type = "t2.medium"
+  key_name      = "abdul.pem"
+
+  //create Dependency on S3 Bucket Before creating EC2 instance  #it means comments not working
+  //depends_on = [aws_s3_bucket.nexus_bucket]
+
+}
+
+resource "aws_s3_bucket" "nexus_bucket" {
+  bucket = "nexusartifact64djnedkk"
+
+  depends_on = [ aws_instance.nexus_server ]      #first create EC2 instances after that s3 bucket
+
+
+}
+
+------------------------------------------------------
+u can create multiple region using meta argument
+
+
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "AKIAXHE36MT2B5NAPJC5"
+  secret_key = "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"
+
+  alias = "us-east"                #by default it will take but u mentioned it will definently take
+}
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+
+//alternative provider whose alias name will be singapor
+provider "aws" {
+  region     = "ap-southeast-1"
+  access_key = "AKIAXHE36MT2B5NAPJC5"
+  secret_key = "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"
+
+  alias = "singapor"  #if u mentioned like ec2 machine will create this region
+}
+
+//This Resource block will use default provider
+resource "aws_instance" "Default_Region" {
+  ami           = "ami-068c0051b15cdb816"
+  instance_type = "t2.medium"
+  key_name      = "abdul.pem"
+
+  tags = {
+    Name = "Default_Region"
+  }
+}
+
+resource "aws_instance" "singapor_region" {
+  ami           = "ami-05f071c65e32875a8"
+  instance_type = "t2.small"
+  key_name      = "singapor"
+
+  tags = {
+    Name = "Singapor_Region"
+  }
+  provider = aws.singapor  #alias name if u must shuld be provide this then it will create in singgapore region
+}
+
+resource "aws_s3_bucket" "bucket_names" {  #this bucket should be create in Default one
+  bucket = "abdulbucketnkjlnvdz444"
+}
+
+
+LIFE CYCLE ARGUMENT
+-------------------
+create before destroy
+prevent destroy
+ignore changes
+
+
+
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "AKIAXHE36MT2B5NAPJC5"
+  secret_key = "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"
+}
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+
+resource "aws_instance" "kubernates" {
+  ami           = "ami-068c0051b15cdb816"
+  instance_type = "t2.micro"
+  key_name      = "abdul.pem"
+  availability_zone = "us-east-1d"    #we have to change here us-east-1a to us-east-1b
+
+  tags = {
+    Name = "kubernate_client"
+  }
+  //delete EC2 instance in us-east-1a and in us-east-1b
+  //changes EC2 availability zone from us-east-1a to us-east-1b
+  lifecycle {
+    //it will create new EC2 instance in us-east-1b az first and then it will delete old instance us-east-1a
+    create_before_destroy = true
+  }
+}
+-----------------------------
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "AKIAXHE36MT2B5NAPJC5"
+  secret_key = "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"
+}
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+
+resource "aws_instance" "kubernates" {
+  ami           = "ami-068c0051b15cdb816"
+  instance_type = "t2.micro"
+  key_name      = "abdul.pem"
+  availability_zone = "us-east-1d"    #we have to change here us-east-1a to us-east-1b
+
+  tags = {
+    Name = "kubernate_client"
+  }
+  //delete EC2 instance in us-east-1a and in us-east-1b
+  //changes EC2 availability zone from us-east-1a to us-east-1b
+  lifecycle {
+    //it will create new EC2 instance in us-east-1b az first and then it will delete old instance us-east-1a
+    create_before_destroy = false  //true or false
+
+    //when prevent_destroy set to true then we cannot delete any of the resource(then u can change it false)
+    prevent_destroy = false   //true or false
+
+   //when we change configurattion outside terraform like changing tags or instance type etc direct
+   //when we want to keep that changes as it is we can use ignore_changes and then terraform won't override it
+   ignore_changes = [ tags,instance_type ]
+  }
+}
+
+
+
+
+
+                                                             TERRAFORM-20
+                                                             ============
+
+AWS VPC-Virtual Private Cloud
+=============================
+AWS VPC concepts.
+we can create 5VPC per region.vpc's than 5 same region - work with supports.
+to create more 
+
+
+what is network?
+*a network on the internet is a group of connected devices.
+*these devices use standard protocols like TCP/IP to send and recieve information over the internet.
+
+www.google.com Domain name
+
+LoadBalancer [DNS Name]-Virtual machine having some Public IP for each machine.
+
+servers
+
+
+                                                          TERRAFORM-21
+                                                          ============
+AWS VPC concepts
+VPC.
+CIDR Block.  Classless Inter Domain Routing
+Subnets [Public and Private Subnets].
+Internet Gateway.
+Route Table.
+NAT Gateway.
+NACL and Security Groups.
+
+
+CIDR
+we need to define network [IP range] while creating virtual private cloud.
+we need define network range in the form CIDR
+allocating ip address and its routing 
+
+SubnetS
+-------
+we devide/break vpc [network] into multiple subnetworks.
+we can create 'N' number of subnets
+we can create resources like ec2 load balancer and storages etc within subnets
+
+types of subnets.
+public subnet
+subnet which will have access to internet called as public subnet.
+servers created in public subnet can access internet and we can also reach servers from internet.
+subnet wchih will have route [connection]to internet gateway in routetable called as public subnets
+
+private subnet
+subnet whcih will not have access to internet called as private subnet
+server created in private subnet cannot access internet and we also cannot reach servers from internet
+subnet which not route connection to internet getway in routetable called as private subnet.
+
+
+                                                                     Terraform-22
+                                                                     ============
+
+
+
+Note.
+resources created in private subnet cannot be acess from internet
+
+Internet Gateway
+IGW is a virtual router in AWS which will enable internet connectivity to VPC
+1 IGW can be associated with 1 VPC.
+
+create internet gateway attach to vpc  
+
+RouteTable
+==========
+route table routes network traffic to resources in a vpc
+
+subnet which are associated with IGW in route table called as public subnets.
+subnets which are not assocaited with IGW in routetable called as private subnets 
+
+NAT Gateway
+===========
+when private subnet servers needs access to subnet
+we need NAT gateway.
+
+1 VPC  enabling DNS Hostname.
+4 subnets - 2 Public subnets [Enable Auto assign public IP]
+and 2 Private subnets
+create IGW
+create route table and create a route and do subnet associations for private and public subnets
+create NAT Gateway.
+create 1 server in public subnet.
+create 1 server in private subnet.
+
+                                      
+
+
+                                                        Terraform-23
+                                                        ============
+VPC Creation using Terraform
+----------------------------
+1.
+Select Region
+
+2.
+Create VPC.
+CIDR Block - 192.168.0.0/20
+Enable DNS Host names.
+Enable DNA Hostname
+
+3.
+create 4 subnets
+
+us-east-1a
+1 public subnet and 1 private subnet in us-east-1a
+us-east-1b
+2 ppublic subnet and 1 private subnet in us-east-1b
+
+192.168.0.0/23
+192.168.2.0/23
+192.168.4.0/22
+192.168.8.0/21
+
+note
+for Public subnets we need enable "map_public_ip_on_launch"
+
+4.
+create InternetGateway.
+attached created IGW VirtualPrivateCloud
+
+5.
+creaet 1 routeTable with 0.0.0.0/0 [InternetGateway] and attach public [subnets which we want to make then as public subnets.]
+
+6.
+create NAT gateway with ElasticIP
+
+7.
+create 1 routetable with 0.0.0.0/0[Nat Gateway] and attach to private subnet [subnets witch we want to make them as private subnets]
+
+Validate 
+1.
+create EC2 instance in one of the public subnet
+EC2 server should be having an public IP
+we should be able to connect to ec2 server
+
+2.
+create ec2 instance in one of the private subnet
+EC2 sever shouldn't be having a public IP
+
+we should able to reach to private subnet server from public server [Interanet - Local- network]
+
+
+
+
+
+                                                                 Terraform-24
+                                                                 ============
+
+192.168.0.0/23
+192.168.2.0/23
+192.168.4.0/22
+192.168.8.0/21
+
+
+                         VPC
+                         ---
+
+
+resource "aws_vpc" "main" {
+  cidr_block           = "192.168.0.0/20"
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  tags = {
+    Name = "Terraform_VPC"
+  }
+}
+
+resource "aws_subnet" "public_subnet-1" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "192.168.0.0/22"
+  availability_zone       = "us-east-1a"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "Terraform_publicSubnet_1"
+  }
+}
+
+resource "aws_subnet" "privatesubnet-1" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "192.168.4.0/22"
+  availability_zone = "us-east-1a"
+
+  tags = {
+    Name = "Terraform_privateSubnet_1"
+  }
+}
+
+resource "aws_subnet" "public_subnet-2" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "192.168.8.0/22"
+  availability_zone       = "us-east-1b"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "Terraform_publicSubnet_2"
+  }
+}
+
+resource "aws_subnet" "private_subnet2" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "192.168.12.0/22"
+  availability_zone = "us-east-1b"
+
+  tags = {
+    Name = "Terraform_privateSubnet_2"
+  }
+
+}
+
+resource "aws_internet_gateway" "terraform_igw" {
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "Terraform_Internet_Gateway"
+  }
+}
+
+resource "aws_route_table" "publicroutetable" {
+  vpc_id = aws_vpc.main.id
+
+ route {
+  cidr_block = "0.0.0.0/0"
+  gateway_id = aws_internet_gateway.terraform_igw.id
+}
+  tags = {
+    Name = "Public_Subnet_RT"
+  }
+}
+
+resource "aws_route_table_association" "publisubnet-1-rta" {
+  subnet_id      = aws_subnet.public_subnet-1.id
+  route_table_id = aws_route_table.publicroutetable.id
+}
+
+resource "aws_route_table_association" "publicsubnet-2-rta" {
+  subnet_id      = aws_subnet.public_subnet-2.id
+  route_table_id = aws_route_table.publicroutetable.id
+}
+
+resource "aws_eip" "elastip_ip" {
+  domain = "vpc"
+
+  tags = {
+    Name = "NAT_elastic_ip"
+  }
+}
+
+resource "aws_nat_gateway" "nat_gateway" {
+  allocation_id = aws_eip.elastip_ip.id
+  subnet_id     = aws_subnet.public_subnet-1.id
+
+  tags = {
+    Name = "Production_NAT_Gateway"
+  }
+  depends_on = [aws_internet_gateway.terraform_igw]
+
+}
+
+resource "aws_route_table" "privateroutetable" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.nat_gateway.id
+
+  }
+  tags = {
+    Name = "Private_Subnet_RT"
+  }
+}
+
+resource "aws_route_table_association" "privatesubnet-1-rta" {
+  subnet_id      = aws_subnet.privatesubnet-1.id
+  route_table_id = aws_route_table.privateroutetable.id
+
+}
+
+resource "aws_route_table_association" "privatesubnet-2-rta" {
+  subnet_id      = aws_subnet.private_subnet2.id
+  route_table_id = aws_route_table.privateroutetable.id
+
+}
+
+SUPPOSE IF U CONNECT PRIVET NETWORK EC2 #publicsubnet1 enable ip and privatesubnet1 disable ip
+---------------------------------------
+first connect ec2 server successfully connected
+after that exit the server cat abdul.pem take this file again u connected to the server
+u can type vi abdul.pem your key pest it here after that u can run the command
+chmod 400 abdul.pem
+
+i first connected the server
+whoami
+uname
+exit
+ cat abdul.pem
+again connect to the #server ssh -i "abdul.pem.pem" ec2-user@ec2-13-219-221-28.compute-1.amazonaws.com
+vi abdul.pem
+
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAoOyMiud44ZVyvZY40QnvPDKevIfUPJGg92U6j7VgBmX/soLM
+18vtuhNFvRm5dGoBJZajIEtkqzh6cxxDiQLdWyXRbu0tGM67cU1GkUFwDHj18gjc
+OCBL+dkUWhXwi18IiELfOdtLMp0ADZGgTTpEH6rlUDkn6o8w2IIOSXwBxKZ/S+jg
+gbKa3AtO7cZNYpT/LMdVAyZK6lEt379DZRdIgZTgtW7BPa9ohvJHN85N7r2/z8eI
+YiiTKVGbFUYGRYiX8GvmlunlcY6dh3lKmVwLMRBvrS1rF5wPTYm1anOpUvvTCtQW
+FvTvPPU1W1XLDJGctAYlkl2jrmY3IesaOROaXQIDAQABAoIBABX9vYcN8tsBDVkT
+Olh2vxa+5CpndX2BeTnVv5b79k9piPPgJBYpbCdNku4wocNi6R015Lz5EJzFbxZj
++may2YUnOeOqzcriFYN6R/Z5ttI9hX657z5MS5WtMLbO4LxrFENqwA6sBS65fdRc
+3kcvezfIpuW7qdTIFKjBvSoVpDg3QRCR5DA4O4TWrk1tkiOH3/GOVYDyEWMWgCMi
+rP03Zds1CeSfkhrFSZKAV6/3ky+hVbCizf55RlaPHa8UubiN34n9waaDhgj6tsQl
+Km1ycGpuGFZ24N/WDm3LJcJs35UfJhuJJcgZr2601CvObuUdysE/jmTNM36pTklE
+EhZOhBECgYEA04GgWmSfeTuC/VotkDT3wZwsF3Iba14XHCSrWWybj3qbKydXQdHf
+ibPCMYCuAGzvAWOfHHZ4gIDszxXWmRu8U8J8RrHcKiuc0fOW0wYJtwICF6HMEXG0
+lVP+rDAmihkQ07fz0+4WmUwjf0ulzZo0np6Bgt1OEeebU4cpGjV4lnMCgYEAwsbi
+DnT819loyUi1rbYTIv9yrYXZhwSgbD0c1CKpmSrLXxGmzE2HttApDDdu4FaSyywA
+NtT0ptfNSzEaVkJkVOBg8Ut3P6kq20ZAfiHf8FfNb5TzJgEs7bAYBqrZA0VjTTmD
+uOt8Ij/Rg7wlrf7dDalKGvq0F3CskBCvnD6WB+8CgYAkhEXeNW8/LCIygcZKFosM
+F12Zcq7/O5B74GzhFJpLDF0L90/eYlDY4ntNtqzUD/q3365R6LZnYVsBagDSEHLU
+d0ijoAOmGD+MFCVfK7SzrxoTYHDuNhZ6jbTzn6CXyToZg7IKThoCv52FVdc7hzs8
+g5tSr8jR2I39vuE+0CqQtwKBgBTKzk7kxij0mG8ESACnMxvFUSSc6T+0iruDOpSa
+rqgfHV6kr72XeSlWx0r6j+d61mjB5bP0v7kfyFaCg2E57SPyX+biO3ScRmrp8PCG
+BTXO6atDp0EjVvx4k9gCXPAwdA1GWn1fBf1R+repWgxc7JQMwlBm+tqVuJYYcean
+97QZAoGABWhvPZyUufTtCdCT7HknyBjDyffEy40g6+HoZ1RSmWSaHbaKqJjP4FAh
+WZp/Rd77FBdnigRPgsgV+lvYXIoWZkJLZTYMFwZctMDU8mjTyAPLq7Vd1cHmZWvF
+J60Bm6WlUCnfGOZTSsGFoN0bLumggtX6BPpeRC69s9UEQh/P+ZI=
+-----END RSA PRIVATE KEY-----
+
+chmod 400 abdul.pem
+
+ssh -i abdul.pem ec2-user@192.168.7.236   #private ip
+sudo  yum install git -y
+
+
+
+                                                      TERRAFORM-25
+                                                      ============
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+provider "aws" {
+    profile = "default"
+    region = "us-east-1"
+}
+
+
+
+
+VARIABLE
+--------
+terraform plan --var "ec2servercount=4" --var "availability_zone=us-east-1a"
+terraform apply -auto-approve --var "ec2servercount=4" --var "availability_zone=us-east-1a" --var "instance_type=t2.medium"            #u can also give like this while run time
+
+                                                                                                                #this is a override t2.nano to t2.medium #force to replace                                     
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+provider "aws" {
+  profile = "default"
+  region  = var.region
+}
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+//input variables
+//variable is a way to store and re-use values throught the terraform code
+provider "aws" {
+  profile = "default"
+  region  = var.region
+}
+
+variable "region" {
+  type        = string
+  default     = "us-east-1"
+  description = "region for resource to be provisioned"
+}
+variable "instance_type" {
+  type        = string
+  default     = "t2.micro"
+  description = "enterEC2serverinstance"
+}
+variable "ec2servercount" {
+  type        = number
+  description = "number of ec2 server to be provisioned"
+}
+variable "availability_zone" {
+  type        = string
+  description = "availability zone for ec2 servers to be provisioned"
+}
+
+
+resource "aws_instance" "server" {
+  count = var.ec2servercount
+
+  ami               = "ami-069e612f612be3a2b"
+  instance_type     = var.instance_type #we are not Hardcoding here(did't write manually)
+  availability_zone = var.availability_zone
+  key_name          = "abdul.pem"
+
+  tags = {
+    Name = "EC2_server-${count.index + 1}"
+  }
+
+}
+
+terraform plan asking the values #us-east-1a#2        #this is is first run
+
+again u destroy the variables then plan and apply
+
+terraform plan --var "ec2servercount=4" --var "availability_zone-us-east-a" 
+terraform apply --var "ec2servercount=4" --var "availability_zone-us-east-a" 
+
+processing 25th video
+
+vpc
+public subnet
+private subnet
+public routetable
+private routetable
+public route_table_assocaition
+private route_table_assocation
+internet_gateway
+elastic_ip (eip)
+nat_gateway
+public route
+private route
+
+
+resource "aws_vpc" "mainvpc" {
+  cidr_block = "10.0.0.0/24"
+  tags = {
+    Name = "mainvpc"
+  }
+}
+
+resource "aws_subnet" "pubsub" {
+  vpc_id                  = aws_vpc.mainvpc.id
+  cidr_block              = "10.0.0.0/25"
+  availability_zone       = "us-east-1a"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "pubsub"
+  }
+}
+
+resource "aws_subnet" "prisub" {
+  vpc_id            = aws_vpc.mainvpc.id
+  cidr_block        = "10.0.0.128/25"
+  availability_zone = "us-east-1a"
+
+  tags = {
+    Name = "prisub"
+  }
+}
+
+resource "aws_route_table" "pubrt" {
+  vpc_id = aws_vpc.mainvpc.id
+  tags = {
+    Name = "pubrt"
+  }
+}
+resource "aws_route_table" "prirt" {
+  vpc_id = aws_vpc.mainvpc.id
+  tags = {
+    Name = "prirt"
+  }
+}
+resource "aws_route_table_association" "pubasso" {
+  subnet_id      = aws_subnet.pubsub.id
+  route_table_id = aws_route_table.pubrt.id
+}
+resource "aws_route_table_association" "priasso" {
+  subnet_id      = aws_subnet.prisub.id
+  route_table_id = aws_route_table.prirt.id
+}
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.mainvpc.id
+}
+resource "aws_eip" "eip" {
+}
+resource "aws_nat_gateway" "nat" {
+  subnet_id         = aws_subnet.pubsub.id
+  allocation_id     = aws_eip.eip.id
+  connectivity_type = "public"
+}
+resource "aws_route" "pubroute" {
+  route_table_id         = aws_route_table.pubrt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw.id
+}
+resource "aws_route" "priroute" {
+  route_table_id         = aws_route_table.prirt.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.nat.id
+}
+
+
+
+VARIABLES.TF
+============
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+//input variables
+//variable is a way to store and re-use values throught the terraform code
+provider "aws" {
+  profile = "default"
+  region  = var.region
+}
+
+variable "region" {
+  type        = string
+  default     = "us-east-1"
+  description = "region for resource to be provisioned"
+}
+variable "instance_type" {
+  type        = string
+  default     = "t2.micro"
+  description = "enterEC2serverinstance"
+}
+variable "ec2servercount" {
+  type        = number
+  description = "number of ec2 server to be provisioned"
+}
+variable "availability_zone" {
+  type        = string
+  description = "availability zone for ec2 servers to be provisioned"
+}
+
+
+resource "aws_instance" "server" {
+  count = var.ec2servercount
+
+  ami               = "ami-069e612f612be3a2b"
+  instance_type     = var.instance_type #we are not Hardcoding here(did't write manually)
+  availability_zone = var.availability_zone
+  key_name          = "abdul.pem"
+
+  tags = {
+    Name = "EC2_Server-${count.index + 1}"
+  }
+
+}
+                                                                 TERRAFORM-26
+                                                                 ============
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+provider "aws" {
+  profile = "default"
+  region  = var.region
+}
+
+variable "region" {
+  type        = string
+  default     = "us-east-1"
+  description = "region for resource to provisioned"
+}
+variable "instance_type" {
+  type        = string
+  default     = "t2.micro"
+  description = "number of ec2 server to be provisioned"
+}
+variable "availability_zone" {
+  type        = string
+  description = "availabilty zone for ec2 server to be provisioned"
+}
+
+
+
+-----------------------------------------------------
+
+
+
+resource "aws_iam_user" "users" {
+  count = length(var.users)      // 0, 1, 2, and 3
+  name  = var.users[count.index] //pavan //kumar //reddy //mithun
+
+  tags = {
+    Name        = var.users[count.index]
+    Project     = "Cloud"
+    Environment = "Production"
+  }
+}
+
+resource "aws_instance" "name" {
+  ami               = var.ami
+  instance_type     = var.instance_type_of_ec2server
+  availability_zone = "us-east-1b"
+  key_name          = var.pem_file_name
+
+  tags = merge({ "Name" : "MithunTechnologies" }, var.comman_tags)
+}
+
+-----------------------------------------------------------------                     LIST OF STRING MAP OF STRING
+IAM
+
+variable "users" {
+  type        = list(string)
+  default     = ["pavan", "kumar", "reddy", "mithun"]
+  description = "IAM Users to be Created for Production Environment"
+}
+
+variable "ami" {
+  type        = string
+  default     = "ami-068c0051b15cdb816"
+  description = "Ami to used to provision EC2 Intance"
+}
+variable "instance_type_of_ec2server" {
+  type        = string
+  default     = "t2.micro"
+  description = "instance type of ec2 server"
+}
+variable "pem_file_name" {
+  type        = string
+  default     = "abdul.pem"
+  description = "PEM which will be used to connect to the ec2 server"
+}
+variable "comman_tags" {
+  type = map(string)
+  default = {
+    "Project"    = "DevOps"
+    "Enviroment" = "Production"
+  }
+}
+
+
+
+                                                    TERRAFORM-27
+                                                    ============
+1st Way
+Declared variable with default values.
+terraform plan /terraform apply/terraform destroy
+us-east-a
+
+2nd Way
+terraform plan /terraform apply/terraform destroy
+terraform plan --var "VariableName=value"
+
+3rd way
+instance_type = default value[t2.micro] is already set in Terraform configuration.
+terraform plan --var "instance_type=t2.medium"
+
+#terraform plan -var-file "Development.tfvars"  #39:00sec
+#terraform apply -auto-approve -var-file "Development.tfvars"
+
+Terraform variable order of precedence
+======================================
+1.Environment variables.
+
+2.variable definition that is "terraform.tfvars" [when file is present.] [custom_file_name .tfvars file - - var-file with terraform apply/destroy]
+
+3.auto variables files [terraform.auto.tfvars] [when file is present]
+
+4.command line [-var and -var-file on command]
+
+5.variables defined in terraform configuration. #terraform destroy -auto-approve -var-file "Development.tfvars"
+
+variable created with default value.
+
+map(object)
+
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+provider "aws" {
+  profile = "default"
+  region  = "us-east-1"
+}
+
+//Declared variables with default value
+//Terraform will user interactive prompt us to pass value at runtime
+variable "ec2_server_instance_type" {
+  type        = string
+  description = "Ec2 server instance type"
+}
+
+//using default argument in a variable block
+//passing default value in a variable block which will be taken automatically at runtime
+variable "ec2_ami" {
+  type        = string
+  default     = "ami-068c0051b15cdb816"
+  description = "AMI for EC2 server"
+}
+
+//assing value to variable run time using -var command
+//even when value is set - it will override with the value we provide at runtime
+//we can pass value to variable for which default value is not defined using -var command line option
+
+//terraform apply -var "Variablename-value "
+
+variable "ec2_availability_zone" {
+  type        = string
+  default     = "us-east-1a"
+  description = "availability zone in which ec2 server will be created"
+}
+
+
+//terraform.tfvars ==> Default name for .tfvars file
+//pass values to variables from terraform.tfvars file - it will load automatically
+//we maintes values to the variables [variableName - value to that variable]
+//it will load automatically and values what we've defined in that terraform.tfvars will be prioritised passed
+//terraform apply
+//when .tfvars file name is diffrent then we need to pass command like below
+//terraform apply -var-file "filename.tfvars" #
+
+resource "aws_instance" "ec2-server" {
+  ami               = var.ec2_ami
+  instance_type     = var.ec2_server_instance_type
+  availability_zone = var.ec2_availability_zone
+  key_name          = "abdul.pem"
+
+  tags = {
+    Name = "MithunTechnologies_Terraform"
+  }
+
+}
+-------------------------
+terraform.tfvars  ------>  Development.tfvars  #change this name then apply
+
+ec2_server_instance_type = "t2.medium"
+ec2_availability_zone = "us-east-1b"
+
+
+
+                                                                     TERRAFORM-28
+                                                                     ============
+MAP ofobject complex type of input variables
+--------------------------------------------
+create multiple ec2 instance
+
+terraform output block
+
+
+
+merge function
+refrencing resource block
+splat experssion
+interpolation
+
+
+variable.tf
+----------------------------------------------------------
+variable "ec2_instances" {   #don't use this code
+  type = map(object({
+    ami               = string,
+    instance_type     = string,
+    availability_zone = string,
+    key_name          = string,
+    tags              = map(string)
+  }))
+  default = {
+    "serverOne" = { ami_id = "ami-069e612f612be3a2b", instance_type = "t2.micro", availability_zone = "us-east-1a", key_name = "abdul.pem",
+      tags = {
+        Name = "RedHat_Server", ManagedBy = "Terraform"
+      }
+
+    },
+    "serverTwo" = { ami_id = "ami-0ecb62995f68bb549", instance_type = "t2.medium", availability_zone = "us-east-1b", key_name = "abdul.pem",
+      tags = {
+        Name = "Ubuntu_Server", ManagedBy = "Terraform"
+      }
+    }
+  }
+}
+----------------------------------------------------------------------------------------------------
+main.tf
+
+resource "aws_instance" "ec2_server" {
+  for_each = var.servers
+
+  ami               = each.value.ami_id
+  instance_type     = each.value.instance_type
+  availability_zone = each.value.availability_zone
+  key_name          = each.value.key_name
+
+  tags = merge({ "Instance" : each.key }, each.value.tags)
+
+
+}
+
+variable.tf
+
+variable "servers" {
+  type = map(object({
+    ami_id            = string
+    instance_type     = string
+    availability_zone = string
+    key_name          = string
+    tags              = map(string)
+  }))
+
+  default = {
+    serverOne = {
+      ami_id            = "ami-069e612f612be3a2b"
+      instance_type     = "t2.micro"
+      availability_zone = "us-east-1a"
+      key_name          = "abdul.pem"
+      tags = {
+        Name      = "RedHat_Server"
+        ManagedBy = "Terraform"
+      }
+    }
+    serverTwo = {
+      ami_id            = "ami-0ecb62995f68bb549"
+      instance_type     = "t2.medium"
+      availability_zone = "us-east-1b"
+      key_name          = "abdul.pem"
+      tags = {
+        Name      = "Ubuntu_Server"
+        ManagedBy = "Terraform"
+      }
+    }
+  }
+}
+
+provider.tf
+
+provider "aws" {
+  profile = "default"
+  region  = "us-east-1"
+}
+terraform.tf
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.99.1"
+    }
+  }
+}
+
+
+OutPut Block  #see the values on linux server
+============
+
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+provider "aws" {
+  profile = "default"
+  region  = "us-east-1"
+}
+
+resource "aws_instance" "server" {
+  ami               = "ami-0ecb62995f68bb549"
+  instance_type     = "t2.medium"
+  availability_zone = "us-east-1a"
+  key_name          = "abdul.pem"
+
+  tags = {
+    Name = "OutPutBlockserver"
+  }
+}
+
+//output values are similar to return value in any programming language
+//output values will be written in consol after terraform configuration scripts excution
+
+//when we use count or foreach in creating ec2 instance then the syntax will be change
+
+output "ec2_server_public_ip" {
+  value       = aws_instance.server.public_ip
+  description = "get ec2 server public ip address"
+}
+output "ec2_server_private_ip" {
+  value       = aws_instance.server.private_ip
+  description = "get ec2 server private ip address"
+}
+output "ec2_server_instance_state" {
+  value       = aws_instance.server.instance_lifecycle
+  description = "get ec2 server instance state"
+}
+
+
+
+                                                      TERRAFORM-29
+                                                      ============
+terraform local blocks
+
+local values IAM EC2 VPC
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+provider "aws" {
+  profile = "default"
+  region  = "us-east-1"
+}
+
+locals {
+  name = "Production"
+}
+resource "aws_instance" "ec2_user" {
+  ami               = "ami-069e612f612be3a2b"
+  instance_type     = "t2.medium"
+  availability_zone = "us-east-1a"
+  key_name          = "abdul.pem"
+
+  tags = {
+    Name = "${local.name} server"
+
+  }
+
+}
+resource "aws_iam_user" "user" {
+  name = "abdulasma"
+
+  tags = {
+    Name = "${local.name}user"
+
+  }
+
+}
+
+resource "aws_vpc" "virtual_private_cloud" {
+  cidr_block = "192.168.0.0/16"
+
+  tags = {
+    Name = "${local.name}vpc"
+
+  }
+}
+
+------------------------------------------------------------
+main.tf
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+provider "aws" {
+  profile = "default"
+  region  = "us-east-1"
+}
+variable "availability_zone" {
+  type    = string
+  default = "us-east-1b"
+}
+variable "ec2_instance_type" {
+  type    = string
+  default = "t2.micro"
+}
+variable "project" {
+  type    = string
+  default = "walmart"
+}
+variable "team" {
+  type    = string
+  default = "DevOps"
+}
+
+//we can refer variables within local block 
+locals {
+  name = "${var.project}_${var.team}"
+}
+
+resource "aws_instance" "production_server" {
+  ami               = "ami-069e612f612be3a2b"
+  instance_type     = "t2.medium"
+  availability_zone = "us-east-1a"
+  key_name          = "abdul.pem"
+
+  tags = {
+    Name = "${local.name}_server"
+  }
+}
+
+resource "aws_vpc" "production_vpc" {
+  cidr_block = "192.168.0.0/16"
+  tags = {
+    Name = "${local.name}_vpc"
+  }
+}
+
+
+
+                                                    Terraform=30
+                                                    ============
+
+refrence resource block
+interpolation
+merge function
+splat experstion
+element function
+
+provisoin VPC but with more customised
+Variables.
+output blocks, local block workspaces
+
+refrence resource block
+-----------------------
+refrencing resource blocks means using the attributes of one resource in another resource.
+
+resource_type.resource_name.attribute                         #just understanding purpose
+aws_security_group.redhat_ec2_Security_Groups_id
+
+resource "aws_security_group" "ec2_sg" {
+  name        = "terraform-ec2-sg"
+  description = "Allow SSH inbound"
+
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_instance" "myec2" {
+  ami             = "ami-068c0051b15cdb816" # Amazon Linux 2 (us-east-1)
+  instance_type   = "t2.nano"               #InPlaceUpdate
+  availability_zone = "us-east-1a"          #ForceReplacement
+  key_name        = "abdul.pem"
+  security_groups = [aws_security_group.ec2_sg.name]
+
+  tags = {
+    Name = "Terraform-EC2"
+  }
+}
+
+awssecurity_group.redhat_ec2_security_group.id
+retrieves the ID of the security group and assigns it to the EC2 instance.
+this creates an implicit dependency and terraform knows it must create the security group before the ec2 instance is created
+
+Interpolation
+-------------
+interpolation allows to refrence variables and resource attributes etc withing strings using ${}
+
+Terraform uses ${} to indicate an Interpolated value withing a string.
+the experssion inside ${} is evaluted its result is converted to a string
+
+"EC2_Server-${Jenkins}"
+
+EC2_server-Jenkins         #just understanding purpose
+
+Variables
+Refrence variables using var.variable_name as ${var.instance_name}
+
+variable "instance_name"
+{
+   type = string
+   default = "Web_Server"
+   descrption = "Instance Name for EC2 Server"
+}
+
+
+resource "aws_instance" "myec2" {
+  ami             = "ami-068c0051b15cdb816" 
+  instance_type   = "t2.nano"               
+  availability_zone = "us-east-1a"          
+  key_name        = "abdul.pem"
+  security_groups = [aws_security_group.ec2_sg.name]
+
+  tags = {
+    Name = "Terraform-EC2"
+  }
+}
+Name of the EC2 ===> My
+
+this will create an instance with the tag name set to My_Web_Server
+
+After interpolation ==> My_Web_Server
+
+Merge Function
+==============
+Merge Function combines multiple maps into a single map.
+
+we can use merge function to assign tags to an ec2 instance and vpc etc.
+
+tags = merge ({"Name" : "MithunTechnologies"}, var.common_tags)
+
+variable "common_tags" {
+   type = map(string)
+   default = {
+    "Project"   = "DevOps"
+    "Environment" = "Production"
+   }
+}
+
+resource "aws_instance" "server" {
+  ami               = var.ami
+  instance_type     = var.instancetype_of_ec2server
+  availability_zone = "us-east-1a"
+  key_name          = var.pem_file_name
+
+  tags = merge({"Name" : "MithunTechnologies" }, var.common_tags)
+}
+
+how merge funtion work
+
+Map_1
+{ "Name" : "MithunTechnologies" }
+
+Map_2
+
+var.common_tags
+{
+    "Project"   = "DevOps"
+    "Environment" = "Production"
+}
+
+merged_result
+
+{
+     "Name" : "MithunTechnologies"
+      "Project"   = "DevOps"
+    "Environment" = "Production"
+}
+
+This Final map is assigned to the tags argument of ec2 instance so that will apply all the 3 tags to EC2 instance.
+
+Advantages
+Customization,
+we can add specific tags [Name] while still applying standard tags.
+reusability,
+we can define common tags once [var.common_tag] and reuse them across resources within a project
+
+the merge function in terraform code combines a specific tags ["Name" : "MithunTechnologies"] and reusable set of [comman_tags] into a single
+set of tags for an ec2 instance
+
+Splat Experssion
+================
+Splat Experssion [*] is used to extract/get single/multiple values from a resource that returns a list or map.
+
+Syntax
+resource_type.rresource_name[*].attribute
+this tells terraform to give a list of attribute value from all instances of a resource.
+
+splat experstion can be used when we've create multiple instances of a resources using count or for_each meta argumets.
+splat expersstion can be used when we want to extract same attribute from each instance.
+
+resource "aws_instance" "Default_Region" {
+  count = 3  
+
+  ami           = "ami-068c0051b15cdb816"
+  instance_type = "t2.medium"
+  key_name      = "abdul.pem"
+
+  tags = {
+    Name = "Jenkins_pipeline_server-${count.index+1}"
+  }
+}
+
+server_1
+server_2
+server_3
+
+id/name etc
+
+extract id ech instance
+
+output "jenkins_sever_ids"
+{
+  value = aws_instance.jenkins_server[*].id
+}
+
+gives ID of all 3 instances
+server_1_ID
+server_2_ID
+server_3_ID
+
+Element Funtion
+===============
+Element function is used to select a single element from a list by specified index and it's particularly useful when we're looping over lists
+
+element(list, index)
+
+list
+list of values/objects
+
+index
+index value always start from 0.
+index value of an element that we want to retrieve from the list.
+
+locals{
+  availability_zones =["us-east-1a, "us-east-1b", "us-east-1c"]
+}
+
+output "availability_zones"
+{
+     valuee = element(local,availabilty_zone, 1)
+}
+output
+us-east-1a
+
+Element function can be used when we need to rotate values across multiple resources like assigning availability zones and subnets etc.
+
+resource "aws_instance" "Default_Region" 
+{
+  count = 3  
+
+  ami           = "ami-068c0051b15cdb816"
+  instance_type = "t2.medium"
+  availability_zone = element(["us-east-1a", "us-east-1b", "us-east-1c"], count.index)
+}
+
+This assigns each ec2 instance a diffrent availability zone in a round robin strategy.
+
+
+
+                                                             Terraform=31&32
+                                                             ============
+
+variable.tf
+
+variable "aws_region" {
+  type        = string
+  default     = "us-east-1"
+  description = "select aws region where resource to be provisioned "
+}
+
+variable "vpc_cidr" {
+  type        = string
+  default     = "192.168.0.0/16"
+  description = "CIDR Range for virtual private cloud"
+}
+variable "enable_dns_hostnames" {
+  type        = bool #suppose if come true or false that u can use bool(boolean)
+  default     = true
+  description = "Enable DNS Host name to True"
+}
+variable "enable_dns_support" {
+  type        = bool
+  default     = true
+  description = "Enable DNS support to true"
+}
+variable "common_tags" {
+  type = map(string)
+  default = {
+    Enviornment = "Production"
+    ManagedBy   = "Terraform"
+  }
+  description = "comman tags for all VPC resources"
+}
+variable "project_name" {
+  type        = string
+  default     = "Production"
+  description = "Enviornment for virtual private cloud"
+}
+variable "public_subnets_cidrs" {
+  type        = list(string)
+  default     = ["192.168.0.0/18", "192.168.64.0/18"]
+  description = "Public subnet CIDRs for virtual private cloud"
+}
+
+variable "availability_zones" {
+  type        = list(string)
+  default     = ["us-east-1a", "us-east-1b"]
+  description = "availability zone for virtual private cloud"
+}
+
+variable "map_public_ip_on_launch" {
+  type        = bool
+  default     = true
+  description = "Assign public ip for servers Provisioned in public subnets"
+
+}
+variable "private_subnet_cidrs" {
+  type        = list(string)
+  default     = ["192.168.128.0/18", "192.168.192.0/18"]
+  description = "Private subnet CIDRs for virtual private cloud"
+}
+
+variable "environment" {
+  type = string
+}
+-------------------------------
+terraform.tf
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+
+provider "aws" {
+  profile = "default"
+  region  = "us-east-1"
+}
+-----------------------
+main.tf
+
+resource "aws_vpc" "main" {
+  cidr_block           = var.vpc_cidr
+  enable_dns_hostnames = var.enable_dns_hostnames
+  enable_dns_support   = var.enable_dns_support
+
+  tags = merge({ "Name" = "${local.name}-VPC" }, var.common_tags)
+}
+
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+  tags   = merge({ "Name" = "${local.name}-VPC" }, var.common_tags)
+}
+
+resource "aws_subnet" "public_subnets" {
+  vpc_id = aws_vpc.main.id
+
+  count = length(var.public_subnets_cidrs)
+
+  cidr_block              = element(var.public_subnets_cidrs, count.index)
+  availability_zone       = element(var.availability_zones, count.index)
+  map_public_ip_on_launch = var.map_public_ip_on_launch
+
+  tags = merge({ "Name" = "${local.name}-VPC-PublicSubnet-${count.index + 1}" }, var.common_tags)
+} #interpolustion means count.index
+
+resource "aws_subnet" "private_subnet" {
+  vpc_id = aws_vpc.main.id
+
+  count = length(var.private_subnet_cidrs)
+
+  cidr_block        = element(var.private_subnet_cidrs, count.index)
+  availability_zone = element(var.availability_zones, count.index)
+
+  tags = merge({ "Name" = "${local.name}-VPC-PrivateSubnet-${count.index + 1}" }, var.common_tags)
+}
+
+resource "aws_route_table" "public_route_table" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.main.id
+  }
+
+  tags = merge({ "Name" = "${local.name}-VPC-PublicRouteTable" }, var.common_tags)
+}
+
+resource "aws_route_table_association" "public_route_table_association" {
+  count          = length(var.public_subnets_cidrs)
+  route_table_id = aws_route_table.public_route_table.id
+  subnet_id      = element(aws_subnet.public_subnets[*].id, count.index)
+  #splat experstion means we don't want to write code again and again
+}
+
+resource "aws_eip" "nat_elastic_ips" {
+  count  = length(var.public_subnets_cidrs)
+  domain = "vpc"
+
+  tags = merge({ "Name" = "${local.name}-elastic-ip-${count.index + 1}" }, var.common_tags)
+}
+
+resource "aws_nat_gateway" "nat_gateway" {
+  count = length(var.public_subnets_cidrs)
+
+  allocation_id = element(aws_eip.nat_elastic_ips[*].id, count.index)
+  subnet_id     = element(aws_subnet.public_subnets[*].id, count.index)
+
+  tags = merge({ "Name" = "${local.name}-VPC-NAT-Gateway-${count.index + 1}" }, var.common_tags)
+}
+
+resource "aws_route_table" "private_route_table" {
+  count  = length(var.private_subnet_cidrs)
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = element(aws_nat_gateway.nat_gateway[*].id, count.index)
+  }
+
+  tags = merge({ "Name" = "${local.name}-VPC-PrivateRouteTable-${count.index + 1}" }, var.common_tags)
+}
+
+resource "aws_route_table_association" "private_route_table_association" {
+  count = length(var.private_subnet_cidrs)
+
+  route_table_id = element(aws_route_table.private_route_table[*].id, count.index)
+  subnet_id      = element(aws_subnet.private_subnet[*].id, count.index)
+
+
+}
+-----------------------------------------------------------
+local.tf
+
+locals {
+  name = "${var.project_name}-${var.environment}"
+}
+
+------------------------------------------------------------
+output.tf
+
+                                             TERRAFORM-33
+                                             ============
+
+
+terraform plan -var-file Development/development.tfvars
+terraform.tfstate file will be created.
+
+terraform plan -var-file Production/production.tfvars
+terraform.tfstate file will be created
+
+terraform apply -var-file Development/development.tfvars -auto-approve
+terraform apply -var-file Production/production.tfvars -auto-approve
+
+it will delete existing infrastructure provisioned for development environment and recreate same infrastructure for production enviornment.
+because same terraform.tfstatefile [Local terraform state file] is being used to provision infrastructure for both enviornment
+
+
+Terraform workspace
+===================
+Terraform workspaces can be used to isolate terraform state files in same terraform
+
+terraform plan -var-file Development/development.tfvars
+terraform.tfstate file will be created.
+
+workspace production
+terraform plan -var-file Production/production.tfvars
+terraform.tfstate file will be created
+
+Terraform workspaces can be used to isolating terraform state files for same terraform configuration
+
+note
+when we use remote backend to maintain terraform state files then we do not need to use terraform workspaces ###########vvimp
+
+
+terraform workspace list
+list terraform workspaces
+default terraform workspace will be already available
+
+create new terraform workspace for Dev and Prod
+terraform workspace new <Workspace_Name> # terraform workspace new development
+
+terraform workspace new development
+terraform workspace new production
+terraform workspace list
+
+switch to Development environment
+terraform workspace select <workspace_Name>
+
+terraform workspace select development
+
+Display terraform point to wchich workspace
+terraform workspace show
+
+terraform plan -var-file Development/development.tfvars
+terraform apply -var-file Development/development.tfvars
+-----------------------------------------------------
+
+
+                                                                   TERRAFORM-34
+                                                                   ============
+
+Data Source
+-----------  userdata
+
+
+terraform.tf
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+
+provider "aws" {
+  profile = "default"
+  region  = "us-east-1"
+}
+--------------------------
+#!/bin/bash           #don't write this code this code is not working
+yum install nginx -y
+echo "<h1>Welcome to Terraform World : $(hostname -l) </h1>" > /usr/share/nginx/html/index.html
+systemctl start nginx                           #headers,hyphen yall
+systemctl enable nginx
+-----------------------------------------------------------
+provider.tf
+
+provider "aws" {
+  region  = var.aws-region
+  profile = "default"
+}
+----------------------------
+main.tf
+
+resource "aws_instance" "ec2_server" {
+  ami               = var.ami
+  instance_type     = var.instance_type
+  availability_zone = var.availability_zone
+  key_name          = var.key_name
+
+  tags = merge({ "Name" = "EC2-server" }, var.common_tags)
+
+  user_data = file("NginxInstall.sh")
+
+  vpc_security_group_ids = [aws_security_group.ec2_server_security_group.id]
+
+}
+
+resource "aws_security_group" "ec2_server_security_group" {
+  name        = "EC2_Server_Security_Group"
+  description = "Allow TLS Inbound Traffic and All Outbound Traffic"
+
+  tags = merge({ "Name" = "EC2_Server_Security_Group" }, var.common_tags)
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1" #anywhere
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+} 
+----------------------
+output.tf
+
+output "ec_public_ip" {
+  value = aws_instance.ec2_server.public_ip
+
+}
+--------------------------
+Nginxinstall.tf
+
+#!/bin/bash
+
+yum install -y nginx
+
+systemctl start nginx
+systemctl enable nginx
+
+echo "<h1>Welcome to New Journey AbdulHameed : $(hostname)</h1>" > /usr/share/nginx/html/index.html
+------------------------
+variable.tf
+
+variable "aws-region" {
+  type        = string
+  default     = "us-east-1"
+  description = "Select region for ec2 server to be created"
+}
+variable "ami" {
+  type        = string
+  default     = "ami-069e612f612be3a2b"
+  description = "AMI to be used to create Ec2 server"
+}
+variable "instance_type" {
+  type        = string
+  default     = "t2.micro"
+  description = "instance type to be used to create ec2 server"
+}
+variable "availability_zone" {
+  type        = string
+  default     = "us-east-1a"
+  description = "availability zone in which ec2 server will be created"
+}
+variable "key_name" {
+  type        = string
+  default     = "abdul.pem"
+  description = "key pair to be attachecd to ec2 server"
+}
+variable "common_tags" {
+  type = map(string)
+  default = {
+    "Enviornment" = "Production"
+    ManagedBy     = "Terraform"
+  }
+  description = "Common tags for all Resources"
+}
+--------------------------------------------http://3.210.203.180:80
+uname
+whoami
+cd /usr/share/nginx/html/
+cat index.html
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply -auto-approve
+terraform destroy -auto-approve
+------------------------------------------------------------
+
+                                                 TERRAFORM-35
+                                                 ============
+Data Source
+create EC2 instance
+availabilityzone and ami
+
+Dynamic Blocks
+--------------
+terraform.tf
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+-----------------
+provider.tf
+
+provider "aws" {
+  profile = "default"
+  region  = "us-east-1"
+}
+------------------
+main.tf
+
+data "aws_availability_zones" "availability_zones" {
+  state = "available"
+}
+
+data "aws_ami" "ami_id" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+locals {
+  availability_zone = data.aws_availability_zones.availability_zones.names
+}
+
+
+
+resource "aws_instance" "ec2_server" {
+  ami               = data.aws_ami.ami_id.id #Fetches AMI Details Dynamically
+  instance_type     = var.instance_type
+  availability_zone = local.availability_zone[0] #Fetches Availability Zone Dyanamically
+  key_name          = "abdul.pem"
+
+  tags = {
+    Name = "Production Server"
+
+  }
+
+}
+
+output "availability_zone" {
+  value = data.aws_availability_zones.availability_zones
+}
+
+output "ami_id" {
+  value = data.aws_ami.ami_id
+}
+------------------------------------
+variable.tf
+
+variable "instance_type" {
+  type        = string
+  default     = "t2.micro"
+  description = "instance type for ec2 server"
+
+}
+-----------------------------
+
+                                                 Terraform-36
+                                                 ============
+terraform.tf
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+-------------------------------
+provider.tf
+
+provider "aws" {
+  region  = "us-east-1"
+  profile = "default"
+
+}
+--------------------------
+main.tf
+
+resource "aws_instance" "web_server" {
+  ami               = data.aws_ami.ami_id.id
+  instance_type     = var.aws_instance
+  availability_zone = var.availability_zone
+  key_name          = var.key_name
+
+  tags = merge({ "Name" : "Production_Server" }, var.comman_tags)
+
+  vpc_security_group_ids = [aws_security_group.web_server_security_group.id]
+}
+
+resource "aws_security_group" "web_server_security_group" {
+  name = "Web_Server_Security_Group"
+
+  dynamic "ingress" {
+    for_each = var.webserver_sg_inbound_rules
+    content {
+      from_port   = ingress.value.from_port
+      to_port     = ingress.value.to_port
+      cidr_blocks = ingress.value.cidr_blocks
+      protocol    = ingress.value.protocol
+      description = ingress.value.description
+    }
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow All Outbound Traffic"
+  }
+}
+----------------------
+variable.tf
+
+variable "aws_instance" {
+  type        = string
+  default     = "t2.micro"
+  description = "instance type to be used for provising ec2 server"
+}
+variable "availability_zone" {
+  type        = string
+  default     = "us-east-1a"
+  description = "availabality zone in which ec2 server to be provisioned"
+}
+variable "key_name" {
+  type        = string
+  default     = "abdul.pem"
+  description = "key pair for my ec2 server"
+}
+variable "comman_tags" {
+  type = map(string)
+  default = {
+    "Project"     = "Amazon"
+    "Enviornment" = "Production"
+    "ManagedBy"   = "Terraform"
+  }
+}
+variable "webserver_sg_inbound_rules" {
+  type = list(object({
+    from_port   = number,
+    to_port     = number
+    protocol    = string
+    description = string
+    cidr_blocks = list(string)
+  }))
+
+  default = [{
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    description = "Allow SSH Port"
+    cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      description = "Allow HTTP Port"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      description = "Allow HTTPS Port"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  ]
+}
+variable "ami_filters" {
+  type = list(object({
+    name  = string,
+    value = list(string)
+  }))
+  default = [
+    { name = "root-device-type", value = ["ebs"] },
+    { name = "name", value = ["RHEL-9.3*"] },
+    { name = "architecture", value = ["x86_64"]
+  }]
+
+}
+--------------------
+datasource.tf
+
+data "aws_ami" "ami_id" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  dynamic "filter" {
+    for_each = var.ami_filters
+    content {
+      name   = filter.value.name
+      values = filter.value.value   #no need give values here give value
+    }
+  }
+}
+---------------------------------
+
+
+                                                TERRAFORM-37
+                                                ============
+   #just practice purpose
+
+resource "aws_vpc" "myvpc" {
+    cidr_block = "10.0.0.0/24"
+    tags = {
+      Name="myvpc"
+    }
+}
+resource "aws_subnet" "mysub" {
+    vpc_id = aws_vpc.myvpc.id
+    cidr_block = "10.0.0.0/25"
+    availability_zone = "us-east-1a"
+    map_public_ip_on_launch = true
+    tags = {
+      Name="mysub"
+    }
+}
+resource "aws_route_table" "myrt" {
+    vpc_id = aws_vpc.myvpc.id
+    tags = {
+      Name="myrt"
+    }
+}
+resource "aws_route_table_association" "myasso" {
+    subnet_id = aws_subnet.mysub.id
+    route_table_id = aws_route_table.myrt.id
+}
+resource "aws_internet_gateway" "myigw" {
+    vpc_id = aws_vpc.myvpc.id
+    tags = {
+      Name="myigw"
+    }
+}
+resource "aws_route" "myroute" {
+    route_table_id = aws_route_table.myrt.id
+    destination_cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.myigw.id
+}
+resource "aws_key_pair" "sumikey" {
+    public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDiXu4z3uQgDTJSsNkZX8BcXdRjY7V1XbE0gIj4XTUB8jpCqnitUqKnCVPqHBei0L1PKUz2e6/3ydNZcWtmlij/PXfhoZGnJEFCLJTpyo/4gaHfyL8eoGBYhuhLaJ84PbtL4E+8G4+pOk6cQ4KXO0DRyVVgDrm5KSf8xG9/z/vNYqbn/++ZAyB3cRAvWULLp++iuSCNAgRa1SjrL0IPNND0c2G+ICWYPNjg2aMxbUak+5qGIXScDu3a4m9EWICUgdmF/qNHJ/FT9rvlyI/Yvrbr53qdrJuElBS/6qebMyDkTA+1QJFzBNa2IIXttXJe0BF7LFVZS3nxuraeAXpiAyBMM7gleHw7PzkUblGuGsEAhMj0p/VDFg5LxYSFenTkfLyap1GxehQJwLdWtXi+eNb1FtD4CvhJUBCgjWfnh9Fjd5y3ex34++4baA0R8+6+Wg1OBbyI9Jk6CykBcDHQET7egpq3p0HECQZmO4c9v2ZEfpbMytSDuMca16N/1n/YZXc= dell@abdulhameed"
+}
+resource "aws_security_group" "mysec" {
+    vpc_id = aws_vpc.myvpc.id
+    name = "mysec"
+    ingress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+}
+---------------------------------------Terraform=37
+                                       ============
+
+terraform.tf
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.26.0"
+    }
+  }
+}
+-------------------------
+provider.tf
+
+provider "aws" {
+  region  = "us-east-1"
+  profile = "default"
+
+}
+-------------------
+main.tf
+
+resource "aws_instance" "ec2_server" {
+  ami               = "ami-069e612f612be3a2b"
+  instance_type     = "t2.micro"
+  availability_zone = "us-east-1a"
+  key_name          = "abdul.pem"
+
+  tags = {
+    Name = "Production _Server"
+  }
+  vpc_security_group_ids = [aws_security_group.security_group.id]
+
+  provisioner "local-exec" {
+    command    = "touch mithuntechnologies.txt"
+    on_failure = continue
+  }
+  provisioner "local-exec" {
+    command = "echo Local Excution Provisioner"                  #maybe not working this code
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo yum install httpd -y",
+      "sudo systemctl start httpd",
+      "sudo systemctl enable httpd",
+      "sudo chmod 777 -R /var/www"
+    ]
+    connection {
+      type        = "ssh"
+      user        = "ec2-user"
+      private_key = file("C:/Users/Dell/Downloads/abdul.pem")
+      host        = self.public_ip
+    }
+    on_failure = continue
+  }
+
+  provisioner "file" {
+    source      = "index.html"
+    destination = "/var/www/html/index.html"
+
+    connection {
+      type        = "ssh"
+      user        = "ec2-user"
+      private_key = file("C:/Users/Dell/Downloads/abdul.pem")
+      host        = self.public_ip
+    }
+  }
+}
+
+resource "aws_security_group" "security_group" {
+  name        = "Webserver_Security_group"
+  description = "Webserver Security Group"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow SSH for all the sources"
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow HTTP for all the sources"
+  }
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow HTTPS for all the sources"
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all traffic to all destination"
+  }
+
+}
+------------------------
+index.html
+
+Your Journey To Be success AbdulHameed..!!
+
+--------------------------------------
+
+                                           Terraform=38
+                                           ============
+EKS-Elastic Kubernetes Service
+==============================
+Amazon EKS is a fully Managed k8s service that makes easy for us to run k8s on AWS.
+
+Managed Control Plane
+AWS EKS a scalable and highly available kubernates control plane running across multiple aws availability zones.
+AWS EKS runs the k8s control plane across 3 availability zones to ensure high availability.
+AWS EKS automatically deletes and replaces unhealthy control plane nodes.
+
+Managed Node Groups
+Amazon EKS lets us create, update scale and terminate nodes for our cluster with a single command
+
+Advantages
+high Availability
+Fault Tolerance
+Scalability and Elasticity
+
+Pratical
+--------
+go to IAM service go to role create a role and search EKS inside eks select EKS-Cluster next next 
+Role name=EKS_Cluster_Role click create role
+
+search cloud formation service
+create a stack click on create stack
+Choose an existing template
+
+
+#aws vpc for eks#
+#u have to paste it#
+https://s3.us-west-2.amazonaws.com/amazon-eks/cloudformation/2020-10-29/amazon-eks-vpc-private-subnets.yaml
+
+click on next
+Stack name = EKS-Production
+click on next
+scroll down click next
+scroll down submit
+
+then u click u were creating 
+Stack info
+
+Events-Resources-Outputs-Parameters-Template-Change-sets#just checking resource or creating or not
+
+it will take some to completing the vpc
+go to vpc and check all those resources
+after created the all the resourecs go to search for  EKS service
+
+click on EKS i have to create a click on create a cluster
+click on Custom configuration
+Name Amazon-production-cluster
+Cluster IAM role select the role which your created EKS_Cluster_Role
+and i choose the verstion 1.34
+choose EKS API and ConfigMap
+click on next
+Networking select which is created custom then select all subnets
+select all the security group
+(Cluster endpoint access )select public and private click on next
+(Configure observability) this page no need to select just next
+
+Amazon VPC CNI=CoreDNS I=Node monitoring agent =kube-proxy=Amazon EKS Pod Identity Agent=External DNS=Metrics Server "select all this" #based on your recuirment
+click on next
+this page u can select next
+this page u click on create #Eks cluster should be provisioned means ready#it will take 7 or 8 minutes
+
+{vpc,cloudformation,eks}#don't forget to delete all those things
+
+after Active then create a Iam role
+go to IAM role select role then click create role and search Ec2 and click next
+AmazonEKSWorkerNodePolicy,AmazonEKS_CNI_Policy,AmazonEC2ContainerRegistryReadOnly and click on the next enter the name Eks_worker_Role click create role
+
+then i go to EKs cluster click EKS-Production click compute scroll down click on add node group
+name eks_nodes select the role click on next
+search t2.medium instance nodes 2,2,3 click on next
+removing all default subnets
+select private1 private2
+Configure remote access to nodes-enable this
+select key abdul.pem
+Selected security groups select all security group click next
+click on create then go to compute refresh the page may be nodes will come 40:00sec
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TERRAFORM-39
+============
+Open Tofu
+---------
+using open source terraform code,
+you can build a new product top of terraform open source code to create infrastructure and provide it for users to use 
+
+opentofu uses the same hashicorp configuration language as terraform
+opentofu uses the same terraform register for provider and fully compatible with terraform providers.
+
+install opentofu in machine
+
+complete process remain same as we've worked with terraform
+we just need to replace terraform commands with "tofu" command
+
+terraform init - tofu init
+terraform fmt - tofu fmt
+terraform validate - tofu validate
+terraform apply -auto-approve - tofu apply
+terraform destroy - tofu destroy              #Instead of Terraform, you need to write Tofu.
+tofu -version
+brew update                                   #just run in GitBash or CMD #just write a code in Terraform open tofu folder
+brew install opentofu
+
+brew update
+brew install opentofu
+tofu -version
+
+#winget install --exact --id=OpenTofu.Tofu# already installed
+#tofu -version
+
+create an Ec2 indstance using opentofu
+
+
+
+
+                                        TERRAFORM-40
+                                        ============
+
+resource "aws_vpc" "main" {
+  cidr_block           = var.vpc_cidr
+  enable_dns_hostnames = var.enable_dns_hostnames
+  enable_dns_support   = var.enable_dns_support
+
+  tags = merge({ "Name" : "${var.Project}_${var.enviornment}_VPC" }, var.common_tags)
+}
+
+resource "aws_subnet" "public_subnets" {
+  count = length(var.public_subnets_Cidrs)
+
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = element(var.public_subnets_Cidrs, count.index)
+  availability_zone       = data.aws_availability_zones.availability_zones[count.index]
+  map_public_ip_on_launch = var.map_public_ip_on_launch
+
+  tags = merge({ "Name" : "${var.Project}_${var.enviornment}_VPC_PublicSubnet-${count.index + 1}", "kubernetes.io/role/eld" : "1" }, var.common_tags)
+}
+
+resource "aws_subnet" "private_subnets" {
+  count = length(var.private_subnet_cidrs)
+
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = element(var.private_subnet_cidrs, count.index)
+  availability_zone = data.aws_availability_zones.availability_zones[count.index]
+
+  tags = merge({ "Name" : "${var.Project}_${var.enviornment}_VPC_PrivateSubnet-${count.index + 1}", "kubernetes.io/role/internal-eld" : "1" }, var.common_tags)
+}
+
+resource "aws_internet_gateway" "internet_gateway" {
+  vpc_id = aws_vpc.main.id
+
+  tags = merge({ "Name" : "${var.Project}_${var.enviornment}_VPC_Internetgateway" }, var.common_tags)
+}
+
+resource "aws_route_table" "public_route_table" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.internet_gateway.id
+  }
+
+  tags = merge({ "Name" : "${var.Project}_${var.enviornment}_VPC_PublicRouteTable" }, var.common_tags)
+}
+
+resource "aws_route_table_association" "public_route_table_association" {
+  count = length(var.public_subnets_Cidrs)
+
+  route_table_id = aws_route_table.public_route_table.id
+  subnet_id      = aws_subnet.public_subnets.id[count.index].id
+}
+
+resource "aws_eip" "elastic_IPs" {
+  count = length(var.public_subnets_Cidrs)
+
+  domain = "vpc"
+
+  tags = merge({ "Name" : "${var.Project}_${var.enviornment}_VPC_ElasticIP-${count.index + 1}" }, var.common_tags)
+}
+
+resource "aws_nat_gateway" "nat_gateways" {
+  count = length(var.public_subnets_Cidrs)
+
+  allocation_id = aws_eip.elastic_IPs[count.index].id
+  subnet_id     = aws_subnet.public_subnets[count.index].id
+
+  depends_on = [aws_internet_gateway.internet_gateway]
+
+  tags = merge({ "Name" : "${var.Project}_${var.enviornment}_VPC_NATGateway-${count.index + 1}" }, var.common_tags)
+}
+
+resource "aws_route_table" "private_route_table" {
+  count = length(var.private_subnet_cidrs)
+
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.nat_gateways[count.index].id
+  }
+
+  tags = merge({ "Name" : "${var.Project}_${var.enviornment}_VPC_Private_RouteTable}" }, var.common_tags)
+}
+
+resource "aws_route_table_association" "private_route_table_association" {
+  count = length(var.private_subnet_cidrs)
+
+  route_table_id = aws_route_table.private_route_table[count.index].id
+  subnet_id      = aws_subnet.private_subnets[count.index].id
+
+}
+
+
+
+                                             Terraform-41
+                                             ============
+Complete EKS cluster creatings #don't destroy the cluster after complete this then destroy
+
+
+                                              Terraform-42
+                                              ============
+Connect to EKS Cluster
+----------------------
+Get Kubeconfig File to Local System.
+aws eks update-kubeconfig --name <Cluster_Name> --region us-east-1 profile default
+
+To Get KubeConfig AWS CLI should be installed
+
+To interact with Cluster using KubeConfig - We need kubectl installed
+
+aws eks list-clusters --profile --region us-east-1 --profile default
+
+aws eks update-kubeconfig --region us-east-1 --name Amazon_Production_EKS_Cluster --profile default    #assume default it won't work u can add terraform
+
+cat .kube/config
+
+#install kubectl   #linux server
+   curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+kubectl get nodes
+
+#deploy an application and access
+
+
+#MithunTechnologiesDevOps/web-application   #this is mithun git hub  #MavenWebApplication.yaml  take data from this file
+
+vi Deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webpage-deployment
+  namespace: production
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      application: webpage
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 30
+  template:
+    metadata:
+      name: webpage-pod
+      labels:
+        application: webpage
+    spec:
+      containers:
+      - name: webpage-container
+        image: 149536451818.dkr.ecr.ap-south-1.amazonaws.com/maven-web-application:Build_Tag
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webpage-service
+  namespace: production
+spec:
+  type: LoadBalancer
+  selector:
+    application: webpage
+  ports:
+  - port: 80
+    targetPort: 8080
+
+
+kubectl create ns production
+
+kubectl apply -f Deployment.yaml
+
+kubectl get all -n production
+                                      #becouse of checking cluster creating or not
+kubectl get all -n production
+
+#go to ec2 machine running or not #then go to load balances upper or not
+
+#let me try to access on browser
+#then take DNS name adesjnnjdn4d4v54d njdnjmnd544v.us-east-1-elb.amazon.com/maven-web-application  #try to access it on browser
+
+
+kubectl delete -f Deployment.yaml
+
+Create Kubernates POD and Service Etc using Terraform
+======================================================
+Kubernates should be created
+kubectl should be installed
+kubectl should be configured with aws credential.
+fetch kubeconfig file
+
+27_Terraform_kubernates #new project #take the code from the folder
+
+cd .kube/config   #linux  14:00sec  #this file have the creadential
+
+#kubernates_namespaces   #search in k8s offical documentation
+
+kubectl get all -n production
+
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply -auto-approve
+
+kubectl delete all -n production
+kubectl get ns
+kubectl get namespaces
+kubectl get all -n production
+
+then take DNS name on linux server then add maven-web-application/ thesn its access
+
+
+
+                                      Terraform-43
+                                      ============
+
+#only creating DynamoDB
+
+                                      Terraform-44
+                                      ============
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

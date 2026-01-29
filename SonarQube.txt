@@ -1,0 +1,682 @@
+install Slack NotificationVersion                        SonarQube-1
+slack details                                            ===========
+newworkspace-3346574
+Sl2ZhijvBZpUI1Paom4EFue6
+
+
+
+                                                                     sonarqube token          squ_ab17e7099c579ac9f77e496bf89143951bcf0dd4
+sonarqube is code quality management tool Continuos Code Quality
+
+github is source code management tool
+maven it is build tool
+tomcat is application server we deploy the application
+
+CodeReview: Line by line -validating.. the source code..
+
+Peer to Peer code Review
+
+Code Coverage:
+
+HelloWorld.java --> Source Code
+HelloWorldTest.java --> Junit Test case
+
+100 Lines
+
+95 Lines of code
+
+95% code coverage
+
+80 % code coverage                    #LTA (long term suppoprt)
+
+Maven/Tomcat/Wildfly/Jboss --> Supports only for java
+
+SonarQube/Nexus/Jenkins --> Java --> Supports Many Lanuages
+
+VeraCode
+Hp Fortyfy
+
+create a new server take t2.medium server            #create a new SonarQube server 53:35sec
+go with Amazon Linux
+sudo su -
+cd /opt/
+
+                                      #https://www.sonarsource.com/products/sonarqube/downloads/historical-downloads/
+
+wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.7.0.96327.zip?_gl=1*bmmtfj*_gcl_au*NDI0Mzg1MzYuMTc2NTM4MzQ0NQ..*_ga*MTY4Mzc0OTE3Ny4xNzY1MzgzNDQx*_ga_9JZ0GZ5TC6*czE3NjUzODM0NDEkbzEkZzEkdDE3NjUzODQyOTUkajYwJGwwJGgw
+
+wget -o sonarqube.zip https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.7.0.96327.zip?_gl=1*bmmtfj*_gcl_au*NDI0Mzg1MzYuMTc2NTM4MzQ0NQ..*_ga*MTY4Mzc0OTE3Ny4xNzY1MzgzNDQx*_ga_9JZ0GZ5TC6*czE3NjUzODM0NDEkbzEkZzEkdDE3NjUzODQyOTUkajYwJGwwJGgw
+
+ls -lh
+ls
+rm -rf *                     #deleted all
+rm -rf *
+
+
+original download
+
+curl -o sonarqube.zip https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.7.0.96327.zip?_gl=1*bmmtfj*_gcl_au*NDI0Mzg1MzYuMTc2NTM4MzQ0NQ..*_ga*MTY4Mzc0OTE3Ny4xNzY1MzgzNDQx*_ga_9JZ0GZ5TC6*czE3NjUzODM0NDEkbzEkZzEkdDE3NjUzODQyOTUkajYwJGwwJGgw
+
+ls
+
+unzip sonarqube.zip
+
+mv sonarqube-10.7.0.96327/ sonarqube
+
+ls
+cd sonarqube/
+ls
+cd jres/
+ls
+cd ..
+ls
+useradd sonar
+cd ..
+ls -l
+chown sonar:sonar sonarqube
+chmod -R 777 sonarqube
+ls -l
+sudo su - sonar
+cd /opt/sonarqube/
+ls
+cd bin/
+ls
+cd linux-x86-64/
+ls
+        sudo yum install java-17-amazon-corretto-devel -y   #i didn't give any password here enter enter enter
+sonar@ip-172-31-26-194 bin]$ cd linux-x86-64/
+exit
+
+sudo yum install java-17-amazon-corretto-devel -y      #[root@ip-172-31-16-19 opt]#
+java -version
+clear
+sudo su - sonar                             #sonarqube is not runnning root user it's running normal user
+cd /opt/sonarqube/bin/
+cd linux-x86-64/
+sh sonar.sh start
+sh sonar.sh status
+
+go to the settings enable the port number  #by default it's running 9000
+click Security
+click sg-0ca2a2cf8b4b50bdb   #ec2 security group
+edit inbound rule
+add rule
+all TCp  ipv4 0.0.0.0/0
+save rules
+                           #SonarQube is running (26574). like this come then SonarQube is running
+
+54.234.192.34:9000
+
+admin                 #by deault username and password
+admin
+Hameed@81053
+
+
+                           
+
+
+
+                                 SONARQUBE-2  # i have to watch must and should sonarqube2 and tomcat2 becouse output is not coming so i have to understand those videos
+                                 ===========
+let me start the sonar qube server
+sudo su -
+cd /opt/sonarqube/bin/linux-x86-64/
+it's not support to root user switch to the normal user           #sh sonar.sh  start
+                                                                  #sh sonar.sh  status
+su - sonar       #swith to the normal user
+cd /opt/sonarqube/bin/linux-x86-64/
+sh sonar.sh start
+sh sonar.sh status    #now also it's not running
+ cd ../
+cd ..
+ls
+cd temp/
+ls -l
+cd ..
+ls
+exit       #only give enter
+cd ..
+cd ..
+rm -rf temp/     #am deleting temp directory
+ls
+sudo su - sonar
+cd /opt/sonarqube/bin/linux-x86-64/
+sh sonar.sh start             #now it's working#SonarQube is running (26574)
+sh sonar.sh status
+
+login 
+admin
+Hameed@81053                   #8:36sec
+
+connect to maven server  (it's another one server)
+sudo su -
+cd projects/
+cd maven-web-application/
+ls
+vi pom.xml                         #/root/projects/maven-web-application
+
+#<properties>     #change only two lines publicIP and Password
+                <jdk.version>1.8</jdk.version>
+                <spring.version>5.1.2.RELEASE</spring.version>
+                <junit.version>4.11</junit.version>
+                <log4j.version>1.2.17</log4j.version>
+                <sonar.host.url>http://54.196.11.160:9000/</sonar.host.url>  #here sonarQube url to add
+                <sonar.login>admin</sonar.login>
+                <sonar.password>Hameed@81053</sonar.password>                #here password
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+                <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        #</properties>
+
+
+    #plugin name  #this plugin work as a scanner
+#mvn sonar:sonar
+                #goal name  
+
+
+mvn clean sonar:sonar              #here start the command
+
+
+if u need more information about the sonarqube u can go sonar cloud mithun technologies
+
+
+
+
+
+
+
+                                                    SonarQube-1  Installion 45:00sec
+                                                    =======================
+create EC2Amazon Linux server select t2.medium then launch 
+sudo su -
+cd /opt/                         #https://www.sonarsource.com/products/sonarqube/downloads/historical-downloads/
+
+wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.7.0.96327.zip?_gl=1*bmmtfj*_gcl_au*NDI0Mzg1MzYuMTc2NTM4MzQ0NQ..*_ga*MTY4Mzc0OTE3Ny4xNzY1MzgzNDQx*_ga_9JZ0GZ5TC6*czE3NjUzODM0NDEkbzEkZzEkdDE3NjUzODQyOTUkajYwJGwwJGgw
+
+curl -o sonarqube.zip https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.7.0.96327.zip?_gl=1*bmmtfj*_gcl_au*NDI0Mzg1MzYuMTc2NTM4MzQ0NQ..*_ga*MTY4Mzc0OTE3Ny4xNzY1MzgzNDQx*_ga_9JZ0GZ5TC6*czE3NjUzODM0NDEkbzEkZzEkdDE3NjUzODQyOTUkajYwJGwwJGgw
+
+ls
+ls -l
+
+unzip sonarqube.zip
+
+mv sonarqube-10.7.0.96327/ sonarqube
+cd sonarqube/
+pwd                                 #/opt/sonarqube
+ls
+cd jres/
+ls
+cd ..
+ls
+useradd sonar                   #add sonar user #SonaQube server is not going to run with root user
+cd ..
+ls -l
+chown sonar:sonar sonarqube
+chmod -R 777 sonarqube
+ls -l
+sudo su - sonar
+cd /opt/sonarqube/
+ls
+cd bin/
+ls
+cd linux-x86-64/
+ls
+
+sonar@ip-172-31-26-194 bin]$ cd linux-x86-64/
+exit
+cd /opt/
+#[root@ip-172-31-16-19 opt]#
+sudo yum install java-17-amazon-corretto-devel -y      #[root@ip-172-31-16-19 opt]#
+java -version
+clear
+sudo su - sonar                             #sonarqube is not runnning root user it's running normal user
+cd /opt/sonarqube/bin/
+cd linux-x86-64/
+sh sonar.sh start
+sh sonar.sh status              #suppose showing the process id then SonarQube is runnig
+
+go to the settings enable the port number  #by default it's running 9000
+click Security
+click sg-0ca2a2cf8b4b50bdb   #ec2 security group
+edit inbound rule
+add rule
+all TCp  ipv4 0.0.0.0/0
+save rules
+                           #SonarQube is running (26574). like this come then SonarQube is running
+
+http://34.228.140.179:9000     #u can access this page on browser
+
+username #admin    passwd #admin             #by deault username and password
+admin
+Hameed@810536
+
+
+                           
+
+
+
+                                 SONARQUBE-2     #Alert u don't follow this steps u can scroll down then u can follow that steps i wrote clearlly all things#when u stop and start the server that time u can go down
+                                 ===========
+let me start the sonar qube server             #admin #Hameed@810536
+sudo su -
+cd /opt/sonarqube/bin/linux-x86-64/
+it's not support to root user switch to the normal user           #sh sonar.sh  start
+only SonarQube is run Normal user    #sudo su -# cd /opt/sonarqube/bin/linux-x86-64/ #sh sonar.sh start #it's not working u have log in normal user like #su - sonar                                                   #sh sonar.sh  status
+su - sonar       #swith to the normal user              
+cd /opt/sonarqube/bin/linux-x86-64/
+sh sonar.sh start
+sh sonar.sh status    #now also it's not running  5:00sec
+cd ../
+cd ..
+ls
+cd temp/
+ls -l
+cd ..
+ls
+exit       #only give enter
+cd ..
+cd ..
+rm -rf temp/     #am deleting temp directory
+ls
+sudo su - sonar
+cd /opt/sonarqube/bin/linux-x86-64/
+sh sonar.sh start             #now it's working#SonarQube is running (26574)
+sh sonar.sh status
+
+login 
+admin
+Hameed@810536                 
+
+connect to maven server  (it's another one server)         ##########maven server u can start here itself
+sudo su -
+cd projects/
+cd maven-web-application/
+ls
+vi pom.xml                         #/root/projects/maven-web-application
+
+#<properties>     #change only two lines publicIP and Password
+                <jdk.version>1.8</jdk.version>
+                <spring.version>5.1.2.RELEASE</spring.version>
+                <junit.version>4.11</junit.version>
+                <log4j.version>1.2.17</log4j.version>
+                <sonar.host.url>http://54.196.11.160:9000/</sonar.host.url>  #here sonarQube url to add
+                <sonar.login>admin</sonar.login>
+                <sonar.password>Hameed@81053</sonar.password>                #here password
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+                <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        #</properties>
+
+
+    #plugin name  #this plugin work as a scanner
+#mvn sonar:sonar
+                #goal name  
+
+
+mvn clean sonar:sonar              #here start the command
+
+
+if u need more information about the sonarqube u can go sonar cloud mithun technologies
+
+--------------------------------------------------------------------------------
+
+
+after stop and start this are the commands below    #after stop and start the server this are the Original Steps i have to follow
+
+
+let start the SonarQube connect EC2 server
+sudo su -
+cd /opt/sonarqube/bin/linux-x86-64/    #it's not going to work
+sh sonar.sh start                      #it's not running
+sh sonar.sh status
+su - sonar
+cd /opt/sonarqube/bin/linux-x86-64/
+sh sonar.sh start                      #again it's not running
+sh sonar.sh status
+cd ../                                 #/opt/sonarqube
+cd ..
+ls
+cd temp/
+ls -l 
+cd ..
+exit               #suppose if not working come outside of sonar user
+cd ..
+cd ..
+ls
+rm -rf temp/
+ls
+-------------------------------------------#same server then u can start here itself #suppose if u start stopped sonarQube server then u can follow these are the steps 
+then u can change the public ip on maven server don't forget it########################################
+u take SonarQube server IP then u goto maven server u past in vi pom.xml
+http://3.87.125.164:9000/
+
+sudo su -  #optional
+sudo su - sonar     #now u can switch to the sonar user
+cd /opt/sonarqube/bin/linux-x86-64/
+sh sonar.sh start           #now it's running u can go and check the status
+sh sonar.sh status          #SonarQube is running (3503).
+
+http://3.87.125.164:9000/   #take this public ip and goto the browser then run this then it's working
+
+login 
+admin
+Hameed@810536       #after that go to Maven Change the PublicIP in vi pom.xml
+
+login 
+admin
+Hameed@810536
+
+
+connect to maven server  (it's another one server) #restart the Maven Server
+sudo su -
+cd projects/
+cd maven-web-application/      #Always change Public IP here don't forget SonarQube PublicIP  
+ls
+              #take sonarqube url http://54.242.238.135:9000/      #/root/projects/maven-web-application#if u need to configure the sonarqube details here then it's working properly
+
+vi pom.xml
+
+#<properties>     #change only two lines publicIP and Password
+                <jdk.version>1.8</jdk.version>
+                <spring.version>5.1.2.RELEASE</spring.version>
+                <junit.version>4.11</junit.version>
+                <log4j.version>1.2.17</log4j.version>
+                <sonar.host.url>http://54.196.11.160:9000/</sonar.host.url>  #add sonarQube url here
+                <sonar.login>admin</sonar.login>
+                <sonar.password>Hameed@81053</sonar.password>                #here password
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+                <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        #</properties>
+
+
+mvn clean package    #mvn clean package  #mvn clean package  #mvn clean package
+mvn clean sonar:sonar   #suppose it's not working u can add mvn clean package
+
+mvn clean sonar:sonar         #here start the command       #plugin name  #this plugin going to work as a scanner
+                                                            #mvn sonar:sonar
+                                                                       #goal name  
+
+
+go and see the sonarqube server   
+http://54.242.238.135:9000/projects/create
+http://54.242.238.135:9000/projects          #u can remove the create 16:08sec start to watch must and should from here
+
+u can go to the sonarqube dash board u can click the project the u can click here maven-web-application Public                
+then u go the issues click the issues then u check the all details about the code
+
+click right side a is showing click on my account
+then go to security Generate Tokens                                                                                        #SONARQUBE TOKEN GENARATE
+SonarQube usertoken 30 days generate
+
+squ_ab17e7099c579ac9f77e496bf89143951bcf0dd4           #only one time activity                                # squ_ab17e7099c579ac9f77e496bf89143951bcf0dd4
+
+got to the maven server                                                                  # http://52.91.138.213:9000
+sudo su -
+cd projects/maven-web-application/
+ls
+vi pom.xml   #press i come to insert mode
+
+
+ <properties>
+                <jdk.version>1.8</jdk.version>
+                <spring.version>5.1.2.RELEASE</spring.version>
+                <junit.version>4.11</junit.version>
+                <log4j.version>1.2.17</log4j.version>
+                <sonar.host.url>http://54.242.238.135:9000/</sonar.host.url>
+                <sonar.login>squ_18e643b104e8f32b3b5300acb8241db29411fd4f</sonar.login>   #i removed admin name instead of this added Token
+                <!-- <sonar.password>Hameed@81053</sonar.password> -->                    #this line is a commented
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+                <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        </properties>
+
+:wq                       25:00sec
+
+-------------------------------------------#Always remember put the sonarqube ip address here DON'T FORGET:
+vi pom.xml
+
+ <properties>
+                <jdk.version>1.8</jdk.version>
+                <spring.version>5.1.2.RELEASE</spring.version>
+                <junit.version>4.11</junit.version>
+                <log4j.version>1.2.17</log4j.version>
+                <sonar.host.url>http://13.220.106.104:9000/</sonar.host.url>     #whenever u upload new war files here please check ip address u have to update
+                <sonar.login>squ_18e643b104e8f32b3b5300acb8241db29411fd4f</sonar.login>   #i removed admin name instead of this added Token
+                <!-- <sonar.password>Hameed@81053</sonar.password> -->                    #this line is a commented
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+                <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        </properties>
+
+:wq
+
+mvn clean package    #mvn clean package  #mvn clean package  #mvn clean package
+mvn clean sonar:sonar   #suppose it's not working u can add mvn clean package
+
+clear
+mvn clean sonar:sonar    #one more time exucute this command 30:00sec#this SonarQube 2 videos
+
+#30:00sec SonarQube-2 videos I HAVE TO SEE THE VIDEO AND I HAVE TO THE VIDEO WHATEVER SIR TOLD
+
+what is a quality profile?
+quality profile is a collection of rules which we are going to apply when we are excuting the sonarqube report
+
+then go to the quality profile see right side and click create 
+
+New Quality Profile----Language *----Java----icicibank-qp---click create
+u click on Quality Profiles u scroll down then u see taht 
+Java, 2 profile(s)  icicibank-qp  click on this one icicibank-qp
+click on Activate More
+i randomly activete some more 5 
+
+".equals()" should not be used to test the values of "Atomic" classes
+Intentionality
+Reliability
+Java
+Bug
+multi-threading
+
+Change
+Deactivate    Deactivate   Deactivate   Deactivate   Deactivate     
+
+
+then u click the quality profile then u Quality Profile
+then u go to the java and see icicibank 5 rules added
+i want to use this rules to my java project
+then go to the Project then click to maven-web-application 
+Project Settings
+click Quality profile
+
+java instance default 512 click pencil symbol Change Java Quality Profile Always use a specific Quality Profile
+then  choose icicibank-qp save
+
+u can go to linux server then Maven server log in linux server suppose if u log out
+sudo su -
+cd projects/maven-web-application      [root@ip-172-31-24-121 maven-web-application]#
+mvn clean sonar:sonar                     #build success
+
+#quality profiles like a collection of rules 
+#quality gates like a collection of conditions
+#by default sonar is a quality of Default gate
+
+then click on Quality Gates Create Quality Gates Create Quality Gate icicibank-qg then click on create
+scroll down and click 
+ 
+Coverage is less than 80.0%  click on pencil mark update condtion    #no changes
+Duplicated Lines (%) is greater than 3.0% click on pencil mark update condtion #no changes
+
+click on add condition  select Conditions to Cover
+
+Operator is greater than Value 80  Add Condition
+
+u can apply this u can click Project click maven-web-application  #u can apply this
+click Project Settings click Quality Gate click (.)always use a specific quality gate select icicibank-qg
+click on save
+goto project then excute this one
+
+then go to Maven Linux server
+sudo su -
+cd projects/maven-web-application/
+mvn clean sonar:sonarmvn           #build Successfully excuted
+u go to Projects then u can go to sonarqube server and refresh the page
+click maven-web-application     #like this we are going to create quality gate
+
+then click on Administration
+check all languages
+then click on Security click users create user
+mithuntechnologies
+login admin
+Name Abdul Hameed
+Email abdulhameed@810536
+password Hameed@810536
+confirm password Hameed@810536
+click on create
+
+letme log out and log in new user click on A symbol right side logout
+am going to log in
+login admin             #admin this is log in page
+password Hameed@810536         #password same admin
+
+click on right side corner a showing abdulhameed
+am not able to see that admistration app
+
+let provide admin access log out and login in admin Hameed@81053
+
+go to administation click on then click to security click on user showing the user abdul
+admin
+admin                        click on three dots: then click on all u can sighn sonar-administrators click on Done
+abdulhameed@810536
+
+then u can logout then u can login admin Hameed@810536
+now i can able to see admistration and create the groups also multiple
+
+inside the administration click projects click on management
+u can create the package and delete the package using administion deleted the project go to Project u are not able to see
+
+
+then go to the administration click system u can see the id here
+u can click the system it will show the which edition
+then click marketplace
+
+u learn more about the sonar qube u can go through the video Sonar Cloud Mithun Technologies #SAAS
+how to change the sonar port number sonar qube integration with postgress sql data base
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

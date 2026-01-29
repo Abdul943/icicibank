@@ -1,0 +1,708 @@
+                                           SECTION-1
+                                           =========
+Maven is an Open source java based build tool.
+
+Build: Process of automate the creating packages.
+
+a) Standalone Applications  (jar --> Java Archive)
+Java Code
+
+.class files
+
+b) Web Applications     (war --> Web Archive)
+Java Code + WebContent (HTML/Images/XML/CSS/JS)
+
+.class files + jar files + web content
+
+c) Enterprise Applications  (ear --> EnterPrise Archive--ear is a bigger model)
+Java Code  Web Content
+
+ear --> jar files + war files
+
+jar/war/ear
+
+Hello.java  --> Source Code
+
+javac Hello.java
+
+Hello.class   -->Byte Code --> JVM (java virtual mistion)
+
+java Hello
+
+
+Maven Directory Structure
+-------------------------
+
+boot: jar file
+
+bin:
+mvn
+
+conf:
+settings.xml
+
+lib:
+jar files
+
+Maven Installation
+------------------
+
+java
+
+JDK --> Java Development Kit (Maven)
+JRE --> Java Runtime Environment 
+
+java -version
+
+javac -version
+
+create EC2 machine  t2.micro is enough
+
+sudo su -
+
+        sudo dnf install java-21-amazon-corretto-devel -y
+
+java -version
+javac -version
+
+cd /opt/
+pwd
+ls
+
+wget https://dlcdn.apache.org/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.zip
+
+ls
+
+unzip apache-maven-3.9.11-bin.zip
+ cd apache-maven-3.9.11/
+pwd
+ls
+(apache-maven-3.9.11 --->maven home directory)
+
+pwd
+ls
+cd bin/
+pwd
+ls
+cd ../boot/
+ls
+cd ../conf/
+pwd
+ls
+cd ../lib/
+pwd
+ls
+cd ..
+pwd
+ls
+[root@ip-172-31-70-25 apache-maven-3.9.11]#
+
+
+vi ~/.bash_profile
+
+# User specific environment and startup programs
+#
+export M2_HOME=/opt/apache-maven-3.9.11              #add this line in this file
+export PATH=$PATH:$M2_HOME/bin                       #add this line in this file
+
+mvn -version
+source ~/.bash_profile
+
+mvn -version
+
+Ant --> build.xml
+Maven --> pom.xml
+Gradle --> build.gradle
+
+icicibank.xml
+
+xml --> extensible markup language
+
+HTML --> all tags are pre defined
+
+pom.xml
+-------
+
+<project>
+
+  <groupId>com.mt</groupId>
+  <artifactId>icicibank</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.17</version>
+    </dependency>
+
+  </depenencies>
+
+</project>
+
+
+com.companyname
+
+the maven local repository is a local folder that is used to store all your project dependencies
+
+Maven Repos
+-----------
+
+a) Maven Local Repo
+
+~/.m2/repository           #default maven local repository path
+
+Window: C:\\users\\mithun\.m2\repository
+
+Linux -->/home/mithun/.m2/repository
+
+settings.xml
+
+<localRepository>Path</localRepository>      #in this repository R should be upper case
+
+b) Maven Central Repo
+
+c) Remote Repo
+
+Source Code
+
+
+mvn package
+mvn clean
+
+mvn clean package
+mvn test
+
+mvn package
+mvn install
+mvn deploy
+
+                                              SECTION-2
+                                              =========
+3 Life Cycles
+-------------
+
+
+LC                               Goals
+---                              -----
+clean                            clean: It wll deletes the previous build files
+
+site                             site: It will generates the documentation
+
+default                          validate: It will validates the project dir structure and resources files
+                                 compile: It will compiles the java source code and unit test cases
+                                 test: It will run the junit test casesss
+                                 package: It will create the packages build artifacts (jar/war and ear)
+                                 install: It will store the build artifacts into local repo
+                                 deploy: It will store the build artifact into remote repo.
+
+
+
+mvn clean package -DskipTests
+mvn claen package -Dmaven.test.skip=true    #16.43minutes
+
+
+connect EC2 server
+
+ls
+mvn -version
+sudo su -
+mvn -version
+
+cat /etc/*release       #for checking purpose
+
+ls
+mkdir projects
+cd projects
+
+sudo yum install git -y
+
+git clone https://github.com/MithunTechnologiesDevOps/maven-standalone-application.git
+     
+cd maven-standalone-application/
+
+ls
+
+rm -f *file                 #Dockerfile  Jenkinsfile 
+
+ls
+
+yum install tree -y
+tree
+
+ls -la ~/.m2
+
+ls
+mvn clean package
+
+ ls -la ~/.m2
+ls -la ~/.m2/repository/
+
+#maven-standalone-application-0.0.1-SNAPSHOT.jar #package got created
+
+ls
+
+mvn clean package
+
+ls
+
+mvn clean       #target file deleted
+ls
+mvn clean
+mvn clean package
+
+tree
+
+
+mvn clean package -Dsests
+
+mvn clean package -Dmaven.test.skip=true
+
+tree
+
+pwd
+cd ~
+pwd
+
+mkdir mavencustomlocalrepo
+
+cd mavencustomlocalrepo/
+
+pwd
+
+ls
+cd /opt/apache-maven-3.9.11/conf/
+ls
+ vi settings.xml
+
+  | Default: ${user.home}/.m2/repository
+  <localRepository>/path/to/local/repo</localRepository>
+  -->
+<localRepository>/root/mavencustomlocalrepo/</localRepository>  #only this line added
+  <!-- interactiveMode
+   | This will determine whether maven prompts you when it needs input. If set to false,
+
+
+
+#/root/mavencustomlocalrepo
+
+#<localRepository>/root/mavencustomlocalrepo/</localRepository>  #i added this lines up
+
+
+ cd ~/projects/maven-standalone-application/
+
+mvn clean package
+
+ls ~/mavencustomlocalrepo/
+
+cd ..
+pwd
+
+git clone https://github.com/MithunTechnologiesDevOps/maven-web-application.git
+
+ls
+
+cd maven-web-application/
+
+ls
+ rm -f *file
+
+rm -f JenkinsFile*
+
+rm -f MavenWebApplication.yaml
+
+rm -rf target/
+ls
+pom.xml  src
+
+mvn clean package
+
+less pom.xml
+cd ..                  #come to project dir
+
+git clone https://github.com/MithunTechnologiesDevOps/maven-enterprise-application.git
+
+ls
+
+cd maven-enterprise-application/
+
+ls
+tree
+mvn clean package
+
+mvn clean package -pl MavenEnterpriseApp-web   #project list     #specific module
+
+
+jar
+war
+ear
+
+java -jar jarfilename
+
+
+Application Server
+------------------
+
+JBoss 1.x to 7.x                          #free
+Wildfly 8.x --latest version              #free
+Websphere Application server (WAS) --> IBM --> Citi Bank
+WEblogic Server --> Bea --> Oracle  --> HDFC
+
+Apache Tomcat
+
+Micro Services Arch
+
+Springboot
+
+Tomcat is an Open Source , java based, Web Application Server
+
+war files
+
+
+Tomcat Directory Structure
+--------------------------
+
+bin:       #contains all the binary files
+startup.sh --->Linux                     #for starting the tomcat server
+startup.bat -->Windows #batch
+
+shutdown.sh                              #for stopping the tomcat server
+shutdown.bat
+
+verssion.sh                              #for check the version
+version.bat
+
+catalina.sh     start|stop|restart
+catalina.bat
+
+conf:        #it contains cofiguration files
+server.xml
+tomcat-user.xml
+
+lib:          #it contains all the liberary files #if any java packages it contains jar files
+jar files
+
+logs:          #it contains log file by default it's Empty
+manager.log
+hostmanager.log
+catalina.out
+localhost.log
+
+webapps:
+5 Default Web application are there  #once if u deploy the application where it's going to store ans:webapps
+
+work:
+once if u run the application what are the files we are going to work
+
+temp:         #it's Empty
+
+
+
+Tomcat Server Installation
+--------------------------
+
+Linux --> 1GB RAM
+
+Java
+
+JRE
+JDK 
+
+connect a new server
+
+sudo su -
+
+cd /opt/
+
+pwd
+ls
+
+sudo yum install java-21-amazon-corretto-devel
+
+java -version
+javac -version
+
+wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.112/bin/apache-tomcat-9.0.112.zip
+
+ls
+unzip apache-tomcat-9.0.112.zip
+ls
+
+cd apache-tomcat-9.0.112/    #tomcat hom directory
+pwd
+ls
+cd bin/
+pwd
+ls
+cd ../conf/
+pwd
+ls
+cd ../lib/
+pwd
+ls
+cd ../logs/
+pwd                      #it's empty directory
+ls 
+cd ../webapps/
+ls
+cd ../work/
+pwd
+cd ../temp/
+ls
+ls -l
+cat safeToDelete.tmp    #it's empty file      
+cd .. #back to previous directory
+cd ../
+cd apache-tomcat-9.0.112/bin/
+pwd
+ls
+ls -l                   #we don't have the excute permistion
+
+chmod u+x *.sh           #give all the sh shell script have permition
+
+clear
+#we need to create a SoftLink from anyware we can start the Tomcatserver
+
+pwd
+ln -s /opt/apache-tomcat-9.0.112/bin/startup.sh /usr/bin/startTomcat
+ln -s /opt/apache-tomcat-9.0.112/bin/shutdown.sh /usr/bin/stopTomcat
+
+cd ~
+
+startTomcat
+
+http:54.89.170.174:8080          #try to access in web
+
+we have to enable all traffic    #then refresh the page
+
+cd /opt/apache-tomcat-9.0.112/bin/
+
+cd ../webapps/
+
+pwd
+ls
+cd manager/                         52.00minutes
+cd META-INF/
+ls
+#context.xml#  u see this file
+
+ <!--  <Valve className="org.apache.catalina.valves.RemoteCIDRValve"  #only commented 
+          allow="127.0.0.0/8,::1/128" />
+  -->
+  
+cd ../../../conf/
+
+vi tomcat-users.xml
+
+<user username="abdulhameed" password="asma" roles="manager-gui,admin-gui"/>
+</tomcat-users>          #add this line last
+
+cd ../logs/
+ls
+
+cd ../webapps/
+cd host-manager/META-INF/
+ls
+
+vi context.xml
+
+
+ <!--  <Valve className="org.apache.catalina.valves.RemoteCIDRValve"
+          allow="127.0.0.0/8,::1/128" />
+  -->
+
+
+refresh the page u can access
+
+manager-gui  --> ManagerApp and Server Status
+admin-gui   --> HostManager
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

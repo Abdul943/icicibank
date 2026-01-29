@@ -1,0 +1,1183 @@
+                                  SECTION-1(LINUX)
+                                  ================
+SSH---secure shell (22 Port)
+
+Linux---Directory (means folder)
+
+FTP----tools (21 for data transfer 20)
+----------
+file transfer protocal
+
+multiuser (we can create n number of user)
+
+C Laungauge (collection of C program)
+
+OpenSource
+
+Casesensitive (Lower case) Linux is like a flovers (Redhat,CentOS,Ubuntu)
+
+/ -----Root Dir  (sub directory means directory inside the directory)
+
+home  ------(all the user information collected)
+----
+mithun  (we have 10 directory we can create 10 user)
+manan
+bhaskar
+pavan
+
+bin -----binary files (access by any user including root user also) 
+---
+ls
+mkdir
+
+sbin ----system binary files (root user only access)
+----
+shutdown
+useradd
+
+Types of Users
+--------------
+a) root user /super user /admin user
+root (default)
+
+b) normal users (create by the root user)
+mithun
+/home/mithun
+devops.txt
+manan
+/home/mana
+devops.txt
+bhaskar
+pavan
+
+c) system users ---(software installition)
+Jenkins-- CI tools --Jenkins
+
+Apache HTTP (80) Server --apache
+       HTTPS (443)
+
+etc      ------all the configurations file(as a normal user can't access this directory)
+----
+
+passwd
+shadow
+group
+sudoers
+motd
+
+opt  ---(3rd party software it's empty direcory)
+---
+
+proc ---(process id )
+----
+
+cpuinfo ---(cpu information)
+-------
+
+lib  ----(all liberary)
+---
+
+dev ----(all external devices)
+----
+
+tmp  ----(anyone can access)
+---
+
+var ----(logs files are stored in this directory, variable)
+---
+
+
+                                                               SECTION-2
+                                                               =========
+
+Navigation and Directory Control Commands 
+-----------------------------------------
+
+uname ----- check connect or not
+
+mkdir ---- create folder 
+mkdir Test 
+mkdir DevOps
+mkdir Python
+
+mkkdir -v Python (v verbose is option showing the creating directory)
+
+ls -- list
+
+DevOps
+Linux
+ShellScript
+Git
+Maven
+Tomcat
+SonarQube
+Nexus
+Jenkins
+
+mkdir -p DevOps/Liux/ShellScript/Git/Maven/Tomcat/SonarQube/Nexus/Jenkins 
+
+create multiple directory inside the directory u can use -p (parent)
+
+mkdir  DevOps/LiuxShellScript/Git/Maven/Tomcat/SonarQube/Nexus/Jenkins/Ansible/aws
+
+clear ---clear the screen
+ls ---- check the list
+
+tree (u can install tree command see hirerical format)
+
+yum install tree
+yum update tree
+yum remove tree
+
+ec2-user --- normal user
+root -- admin user/super user
+
+
+ec2-user ---- root ---sudo su -
+
+
+yum install tree -y
+
+exit --- log out for the root user connect to ec2-user
+
+ls 
+tree
+
+mkdir -vp (-v showing how to create directory  -p create inside directory)
+
+touch ---- create empty files
+
+touch devops.txt
+
+ls -l (long listing give the all information)
+
+d----directory
+- ---file
+
+cd /            switch to root user
+pwd              parent working directory
+cd Devops       (going inside the directory)
+
+cd etc/          (going inside the ect directory)
+ls
+
+ls -lh      (long listing `human` redaable formate)
+clear
+
+cd ~  or cd  (go to home directory)
+pwd
+tree
+cd DevOps/LiuxShellScript/Git/Maven/Tomcat/SonarQube/Nexus/Jenkins/Ansible/aws
+cd .. (one step back)
+cd ../../ (two step back)
+cd ../../../ (three step back)
+cd ~   (back to home directory)
+pwd
+cd -   (back to previous directory)
+cd    (user home directory)
+ls -l (long listing)
+
+mkdir -m 700 (mode default permistion now custom permistion)
+
+Inode: inode is data structure, it can be used to store the file or dir information.
+
+ls -li    (i means inode 8536899)
+
+ls -i  (check inode information)
+
+ls -lt  (access time first create directoy or file it's display in the last recently create first one)
+
+ls -ltr  (reverce order)
+
+ls -la     (hidden files or directory)
+
+hidde file or directory start with .   (dot)
+
+mkdir .Ansible  (creating hidden directory touch .Jenkins)
+
+ls -la
+
+rmdir Test/
+rmdir Python/        (using rmdir command we can delete empty directory)
+rmdir Jenkins/
+
+rm -rf DevOps     (u can use this command and delete empty or full directory)
+
+rm -f devops.txt    (delete file take this command -f file)
+
+touch devops.txt     (create empty file)
+ls
+
+Editors
+-------
+
+vi 
+vim
+nano
+
+vi devops.txt   (type i come into insert mode then press esc and shift : colon wq to save the file)w=save and q=quite
+Hello Guys
+this file is created by using vi editors
+
+cat > abdul.txt  (u can create file like this)
+cat >>abdul.txt (u can add this content)
+cat devops.txt   (if u want to see the content)
+
+ls -l DevOPs/   (to check Devops 
+
+mkdir -vp DevOPs/Linux/ShellScript   (showing directory creating and inside the directory)
+
+touch Py/test.txt  (inside the directory create a file)
+
+
+find . -type f -empty            (. current directory all the files in current directory)
+find . -type d -empty            (finding empty directory)
+
+
+
+                                             SECTION:3
+                                             =========
+
+uname (to chek server)
+
+touch --- create empty file (file already existeted it will not created it will change the name)
+
+umask --- (default permistion going to set) umask 222 (change u mask permition)
+
+         umask     d file per    d dir file
+root      0022         622        755
+
+nuser     0022         622        755
+
+
+Base permission for file is : 0666
+                         (-)  0022
+                             ------
+                               644
+
+Base Permistion for dir is : 0777
+                         (-) 0022
+                             ----
+                             0755     
+
+User          Other
+rwx    r-x    r-x ---->  Devops     
+       Group
+
+r --> read     -->4
+w --> write    -->2
+x --> execute  -->1
+
+7 5 5
+
+rw- r-- r--
+6   4   4
+
+(if u change umask value it will update now creating file not exsting file ok)
+
+
+~/.bash_profile   (always fix value in umask)
+
+ls -l
+
+chmod   (u can give the permistion)
+chmod 000 remove all the permistion
+
+chmod 000 devops.txt
+ls -l
+----------. 1 ec2-user ec2-user 52 Nov 23 06:43 devops.txt
+
+if u don't have permistion u can't open the file
+chmod 400 devops.txt  (user have read access group & others don't have permistion)
+chmod 444 devops.txt
+cat devops.txt  (now we give the permition)
+chmod 777 devops.txt   (full permistion)
+
+chmod 777 DevOps   (no subdirctory not get this permistion)
+
+chmod -R 777 DevOPs/          (if u give permition to subdirectory u can use this command)
+
+
+
+_wx _wx _wx      (without read permistion how can u change it)
+
+Hello  ----(can i change it Hi no)
+
+Hello 
+
+chmod 333 devops.txt
+ cat devops.txt
+
+chmod 777 devops.txt
+cat devops.txt
+
+chown   (change the ownership)
+
+chown bhaskar devops.txt   (bhaskar user is invalid)
+
+sudo su -  (it will switch to the root user it will point to root user home directory and will load the root cofiguration)
+
+sudo su    ()
+
+what is the root user home directory? / root directory,/home/root users home directory ,/root root user home directory)
+ans) /root
+
+sudo su -         # means root user  $ normal user
+
+exit
+sudo su
+pwd
+
+chown root devops.txt
+chown root DevOps
+
+ls -l DevOPs/
+
+chgrp -R root DevOPs/          #change the permistion to all subdirectory also changed
+
+cat /etc/group        #to check the group
+
+chgrp wheel devops.txt
+
+chown ec2-user:ec2-user devops.txt   (change the group name and owner name it's possible to change at a time)
+
+
+                                                          SECTION=4
+                                                          =========
+uname
+cp -----  copy the file
+
+cp filename destinationdir
+
+cp -r dirname destinationdir    (-r recursively one directory to another directory)
+ls 
+ls -l
+
+cp test.java DevOps/   (files copy to DevOps Directory)
+
+ls -l DevOPs/    (to check the list)
+
+cp *.txt DevOps    all the test file copy * means all .txt extentstion files
+
+cp -r Py/ DevOPs/    (dir to dir)
+
+sudo su                #as a normal user we are not able to access /etc/
+cd /etc/
+pwd
+ls
+cp sudoers /home/ec2-user/         #sudoers file to home/ec2-user/
+cd /home/ec2-user/
+
+chown ec2-user:ec2-user sudoers          #change the owner ship
+
+exit
+
+cd /   ----- / root 
+cd ~    ----- home/ec2-user
+
+ls -l
+
+mv Py/ Python          #for renaming
+
+mv test.java DevOPs/    #for renaming and moving purpose 
+
+
+file sudoers    #which file is this
+ 
+file DevOPs     #DevOPs/: directory
+
+wc sudoers     #120  620 4375 sudoers
+wc -l sudoers  #only lines -l
+wc -w sudoers
+wc -c sudoers
+wc -w *.txt     #how many words are there in each file
+
+ln   of  linkfile
+
+ln -s of linkfile
+
+Hardlink                     Softlink              
+---------                   ---------
+for files only            we can create for files and directory
+                       
+original file and        original file and link file having diffrent 
+linkfile have same        properties  
+properties
+
+inode number is same      inode number is diffrent
+link file and original
+file
+
+once u delete original file   if u delete the original file not able to
+still we can able to access   access the link file contents
+the link file
+
+
+ls -l
+ln devops.txt lntest.txt
+ls -l
+cat devops.txt
+vi devops.txt    #add some contents and check to both files
+ls -l
+cat lntest.txt
+ls -li
+
+              create softlink
+
+ln -s devops.txt lnsoft.txt     #-s soft link
+cat lnsoft.txt
+cat >>devops.txt   #u can add like this
+ rm -f devops.txt  #remove the file
+cat lnsoft.txt     #u will not get the data
+ln DevOPs/ LinkDevOps  #will not create the directory
+ln -s DevOPs/ LinkDevOps #directory will be created
+rm -f lnsoft.txt       #removing
+
+
+Editors
+-------
+
+vi
+vim
+nano
+
+a) vi devops.txt
+type i --> INSERTMODE
+.......
+......
+....
+press the esc
+:wq
+
+b) vi devops.txt
+
+type i --> INSERTMODE
+
+Hello
+Hello --> Hi
+
+press the esc
+:q!                            #close the file without saving
+
+c) vi devops.txt
+:q
+
+vi devops.txt
+i--insert mode esc shift: wq
+
+ls
+cat devops.txt
+vi
+:q
+
+vim    #advance editor 
+
+vim vimtest.txt esc :wq
+
+vim sudoers   ----press i 
+
+:se nu        ----set numbers
+:se nonu      ----no number
+:69           -----go 69 number
+
+/root
+/user
+
+:q       ---come to outside
+
+nano nanotest.txt
+
+ctrl + o enter ---save
+ctrl + x  ---exit
+
+clear
+
+echo Hello Guys
+echo Hello       Guys
+echo 'Hello       Guys'  #u can use this dingle code or double code will display the space
+"Hello       Guys"
+
+ctlr c    terminate the process
+
+cat devops.txt        # display all the content
+cat -n devops.txt     #line numbers also display
+
+head filename    #first 10 lines
+
+
+head sudoers         #first 10 lines
+
+head -12 sudoers     #first 12 lines
+head -20 sudoers     #first 20 lines display or head -n 20 sudoers
+tail sudoers         #last 10 lines display
+
+tail -n 15 sudoers   #last 15 lines display
+
+tail -f sudoers  #continuos updating that file display suppose if any changes in file displaying
+
+
+
+
+                                                               SECTION-5
+                                                               =========
+uname
+more sudoers   #ctrl f===forward ctrl b==backword    more & less page by page checking
+ctrl f    # u have to see next page  end of the page it will go the forward direction
+hit by hit one enter one line like this is displaying
+less              #page by page  
+if u come out side of the file u can press q
+
+     using sort command
+vi friend.txt
+bhaskar
+mithun
+pavan
+manan
+suresh
+satya
+prakash
+
+sort friend.txt  #it will be set up serial wise
+sort -r friend.txt    #if u display reverce oredr u can use -r
+clear
+cat friend.txt | sort    #using pipe symbol | one command output it's going to give the other command output
+cat friend.txt | sort -r           #if u using cat command then output will sort command using pipe symbol -r reverce
+cat friend.txt | sort | tr [a-z] [A-Z]  #tr means translate lower case to upper case
+
+without using pipe line symbol | we can't run multiple command
+clear
+vi sample.txt
+red red red
+red red red
+red
+red red
+red red
+
+red ---> blue    where erver red is there i want to change in blue
+
+sed "s/red/blue/" sample.txt           #s stand for stream  #sed means strin editor
+blue red red
+blue red red
+blue
+blue red
+blue red        #only first line change
+
+sed "s/red/blue/g" sample.txt      #i want to change all so that time we can use g g is a stand for globally
+blue blue blue
+blue blue blue
+blue
+blue blue
+blue blue
+
+sed "s/red/blue/2" sample.txt    #u have to change only second line u can use 2
+cat sample.txt  #it's not replace actual content
+sed -i "s/red/blue/g" sample.txt  #it's replaced and saved -i ignore in sample.txt
+cat sample.txt
+blue blue blue
+blue blue blue
+blue
+blue blue
+blue blue
+
+head sudoers  #first 10 lines
+cat -n sudoers
+
+sed -n "107p" sudoers     #if u display 107 contand only display u can use this command
+                          #-n numbers p print
+
+sed -n "107,110p" sudoers  #107 to 110 display
+
+grep "global regular expertion print"
+
+grep bhaskar friend.txt   #if it's available it will show
+bhaskar
+grep devops.txt friend.txt    # bhaskar name is not in the file that's why not showing
+
+grep -i Bhaskar friend.txt    # -i means ignore then show the Bhaskar name
+
+clear
+
+who   #how many users are log in
+who -H   #headder
+w        #showing cpu
+uptime #  server timing cpu utilition
+
+sudo yum install stress -y  
+
+exit  #log out
+
+stress -c 8 --timeout 10    #increase the utilition
+uptime
+w
+
+1st    5th    15th   cpu utilition
+2.00s  0.02s  0.00s 
+
+users
+ec2-user
+
+whoami   #currently which user we are using
+
+whereis java   #to check the file
+
+date
+
+timedatectl list-timezones   #to check all the list
+
+df  #diskfree
+df -h  #human readable format
+
+ls
+du -h DevOPs/    #human readable
+du -sh DevOPs/   #summary
+hostname          #each server having a hostname
+ip-172-31-31-246.ec2.internal
+
+ hostname -i     #displaying the ip address
+172.31.31.246
+
+ifconfig         #to check ip address
+
+sudo su -        #swith to the root user
+hostname AbdulAsmaHameed
+hostname
+exit
+man mkdir
+man ls
+info mkdir
+whatis ls
+whatis mkdir
+
+systemctl list-unit-files
+
+service options (status|stop|start|restart)
+
+service sshd status
+
+sudo su -
+stop sshd.service
+service sshd status
+sudo service sshd status
+
+last   #complete details here
+
+
+ps       #process id 
+
+ps -ef   #process id ps=process,ef all formated
+
+ps -ef | grep jenkins
+
+kill -l
+ps
+kill -9 2244         #signalkill lost ur ec2-user signal SIGKILL
+
+ 2244 pts/0    00:00:00 bash
+   4668 pts/0    00:00:00 ps
+
+top #all resource information
+
+press q #quite
+
+kill -9 4818
+
+sar
+
+
+                                                   SECTION-6
+                                                   =========
+zip -r devops.zip DevOPs/
+unzip devops.zip
+unzip devops.zip -d /tmp/            #specify the path
+rm -rf DevOPs/
+rm -rf LinkDevOps
+unzip devops.zip
+tar -cvf devops.txt DevOPs/         #create verbose file system
+ rm -rf DevOPs/  
+tar -xvf devops.tar                #extract
+
+USER AND GROUP ADDMISTRAION COMMAND
+-----------------------------------
+
+useradd bhaskar                 #              
+
+
+cat /etc/passwd    #to check list of user  #as a normal user can't create user we need to switch to the root user
+
+/home/
+
+bhaskar
+
+/etc/
+
+passwd
+shadow
+group
+
+sudo su -
+ls /home/     
+
+useradd bhaskar
+ls /home/       #to check home directory bhaskar user also there
+cat /etc/shadow
+cat /etc/passwd
+
+passwd bhaskar                           #to store the passwd in shadowd
+devops
+
+cat /etc/shadow
+
+passwd ec2-user
+devops             #password
+passwd root
+devops
+                                #rootuser $normaluser
+
+cat /etc/passwd
+cat /etc/shadow
+
+chage bhaskar
+
+ Minimum Password Age [0]: 90
+        Maximum Password Age [99999]: 90
+        Last Password Change (YYYY-MM-DD) [2025-11-25]:
+        Password Expiration Warning [7]: 14
+        Password Inactive [-1]:
+        Account Expiration Date (YYYY-MM-DD) [-1]:
+
+
+chage bhaskar
+
+cat /etc/group
+
+groupadd devops
+
+cat /etc/groupuser
+
+usermod bhaskar devops              #add bhaskar user to devops group
+
+lid -g devops                   #to check user in group
+
+id bhaskar 
+
+groups bhaskar            #bhaskar user belong to bhaskar group only
+
+usermod -g devops bhaskar              #add bhaskar into the group
+lid -g devops
+id bhaskar
+
+usermod -L bhaskar         #lock the user    once it's lock bhaskar user got !
+usermod -U bhaskar         #unlock the user  once it's unlock ! exlamtri mark automatically gone
+
+cat /etc/shadow               
+
+groups ec2-user       #ec2-user belong to how many groups
+
+su  - bhaskar    #if u want to switch one user to another user u can use this command
+
+normal user to narmal user ----user password is required
+normal user to root user   ----password is required
+root user to normal user    ---password is not required
+
+su - bhaskar
+
+su - ec2-user
+devops
+su - root
+devops
+
+visudo            #it's correct practice
+vi /etc/sudoers     #if u give the full permistion then u can use this command
+
+## Allow root to run any commands anywhere
+root    ALL=(ALL)       ALL
+bhaskar ALL=(ALL)       ALL                   #give permistion to bhaskar user
+
+ctrl o ctrl x
+
+su - bhaskar  
+
+sudo useradd mithun
+devops
+ls -l /home/
+sudo passwd mithun                     #once if u switch to normal u can use sudo previlages
+devops
+devops
+
+sudo groupadd dba
+cat /etc/group
+
+sudo userdel -r mithun         #delete user
+
+groupdel dba                #delete group
+
+ls -l /home/
+
+sudo groupdel dba
+
+
+                                                               SECTION-7
+                                                               =========
+ssh -i "abdul.pem.pem" ec2-user@ec2-98-91-211-20.compute-1.amazonaws.com
+
+sudo su -
+
+      #after using this command   yes  service sshd restart                            
+
+sudo vi /etc/ssh/sshd_config
+PasswordAuthentication yes
+HostbasedAuthentication no                     #30:00   sudo vi /etc/ssh/sshd_config
+
+
+
+server-2
+--------
+sudo vi /etc/ssh/sshd_config
+PasswordAutentication yes
+
+service sshd restart
+who -H
+
+scp   #secure copy  one server to another server copy the file we are using this command
+
+create one more EC2-server connect that server
+
+sudo vi /etc/ssh/sshd_config
+service sshd status
+scp devops.zip ec2-user@98.91.211.20:/tmp/
+
+scp devops.zip ec2-user@44.210.83.171:/tmp/        #server2 public ip
+password
+devops                                          #always check service running or not
+sudo service sshd restart  #both server turn on this service
+
+press q come out
+
+cd /tmp/            #u have to check in server2
+ls
+
+free          #total ram 
+free -h
+free -m
+free -g
+
+sudo yum install dmidecode -y
+sudo dmidecode
+
+on premise servers?
+the server physically existed in your company
+
+
+                              CRONTAB:47:00
+                              =======
+
+cron is daemon that executes scheduled commands 
+every one min cronjob will trigger
+
+if u want to shedule the job so and so u can use cron tab
+
+crontab -l  #how many jobs available
+
+crontab -e   #edit
+
+crontab -r  #remove
+
+sudo yum install cronie -y
+
+crontab -l
+
+sudo service crond.service status
+sudo service crond.service start
+sudo service crond.service stop
+
+press q
+
+crontab -l
+
+sudo vi /etc/cron.allow         #create the file remove all user permition
+ec2-user                        #give only permition to ec2-user
+crontab -l
+
+vi hello.sh
+
+echo "Hello Guys"
+echo "GM/GA/GE"
+echo "Welcome to Crontab"
+echo "Today date is: "
+date
+
+:wq
+
+ls -l
+
+./hello.sh                              #there is no permition that's why showing error
+
+chmod u+x hello.sh 
+
+./hello.sh              #run script
+
+
+>  --> redirect standard output
+>> --> append the standard output
+
+file descriptors
+---------------
+0------> standard input
+1------> standard output
+2------> standard error
+
+sudo crontab -e
+*/1 * * * * /home/ec2-user/hello.sh > /home/ec2-user/hello.log 2>&1
+crontab -l
+ls
+cat hello.log         #to check the file
+cat hello.log         #every one minute running
+*/1 * * * * /home/ec2-user/hello.sh >> /home/ec2-user/hello.log 2>&1   #here added >> for append 
+cat hello.log       #after one minute will come output
+
+
+                                                   SECTION:8
+                                                   =========
+crontab -ir    #n means not delete #y means deleted
+crontab -r      #deleted
+
+SMTP             #simple mail transfer protocal
+
+log in bash in bhaskar user and one Linux server same server don't create new server
+
+wall "Hello Everyone, restarting the Linux Server in 10 mins, please plan your work"
+
+you have to login in root user then u can apply this command
+
+
+
+
+vi jenkisdetials.txt
+
+JENKINS_USER=mithuntechnologies
+JENKINS_TOKEN=14254dne4545454545454
+JENKINS_URL=http://98-93-238-55:8080/
+
+
+cat jenkisdetials.txt
+
+grep JENKINS_USER jenkisdetials.txt
+
+grep JENKINS_USER jenkisdetials.txt | cut -d "=" -f2
+
+
+-d         #delingvitor
+
+clear  #clear the screen
+cal  #display the calender
+cal 2025 #entire calender
+cal 3  2020  #march 2023 calender dispay
+cal -3   #previous 3month
+cal -1    #previous a month
+wget https://dlcdn.apache.org/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.zip
+ls
+curl -o maven.zip https://dlcdn.apache.org/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.zip
+
+        #specify the file name maven.zip
+
+wget ---supporting very less protocals
+curl ----supporting very less protocals useful for calling the Api's
+
+ls > lsopt.txt   #redirect in the file
+
+ls | tee teeopt.txt
+
+tee  #display in the consol 
+
+ script
+
+date
+hostname
+
+script bhaskar.txt    
+ls
+cal
+exit
+
+script -a bhaskar.txt
+hostname
+date
+exit
+
+ping google.com
+ctlr c
+
+ping -c  5  google.com        #  -c  ccount
+
+sudo yum install telnet -y
+telnet google.com 80
+
+ctrl c
+
+ping command is check the conectivity
+telnet command is check along with the conectivity port is open or not
+
+history           #to check all the command
+ history -c     #clear the history
+history > history.txt
+
+uname
+uname -a
+
+os-release
+redhat-release
+
+cat /etc/*release    
+
+clear
+
+netstat -tunlap  #tcp protocal udp protocal n number l listining a all p program name
+
+sudo netstat -tunlap
+
+date    #i want to update date command every 5 seconds
+
+watch  date     #every 2 seconds output will be change
+
+watch -n 5 date
+
+exit
+sudo shutdown
+sudo shutdown -c
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
