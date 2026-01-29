@@ -1,0 +1,428 @@
+kubectl get all (to check runnig containers)
+kubectl get ns   (to check name space)
+kubectl get all -n abduldefault (to check how many containers are running in these name space)
+kubectl delete pod podwebapp -n abduldefault (to delete name space of the pod)
+kubectl delete svc mavenwebapp -n abduldefault (to delete name space of the service )
+Kubectl get nodes (to check get all nodes)
+Kubectl get pods (to check get all pods)
+Kubectl get namespace (to check all name space)
+Kubectl get all
+Kubectl run jawawebapp --image=dockerhandson/jawa-web-app:1 --port=8080 (using cmd to create a pod)
+Kubectl apply -f <filename.yml> (to deploy the yml file)
+Kubectl get events (to check all events)
+Kubectl get pods -o wide (to check details of the pod)
+Kubectl describe pod jawawebapp (to check describe means inspect details about these pod)
+Kubectl get all -n kube-system (check name space of kube-system)
+kubectl delete pod podname (delete the default pod)
+kubectl describe pod podwebapp -n abduldefault (describe pod details)
+Kubectl describe svc mavenwebapp -n abduldefault    (check the services  svc means service)
+kubectl create ns abduldefault   (create a namespace)
+kubectl delete ns abduldefault  (delete created the namespace)
+kubectl apply -f abdul.yml --dry-run=client (to check yml file correct or not)
+kubectl get pod --show-labels -n abduldefault  (show the labels)
+kubectl describe node nodeip                                                       (check details of the node)
+kubectl scale rc abdulrc --replicas=2 (using cmd scale the replicas  only use in replicaset or replica controller)
+kubectl describe pod abdulpod -n abduldefault (to check where is running our container)
+kubectl get pod -o wide                                                             (to check details of the default pod)
+kubectl get pod -o wide -n abduldefault  (to check details of the -n abduldefault) 
+Kubectl delete -f abul.yml (deleted service & replica set,pods also deleted)
+Kubectl apply -f Abdul.yml
+Kubectl describe pod abdulrs-sb6bt (replica pod name)
+
+kubectl exec -it abdulpod /bin/bash -n abduldefault  (go to inside the pod)
+curl -L 10.111.127.88/maven-web-application  (take service ipcheck inside the pod)
+
+NodePort insted of ClusterIP  (create a new yml use same pod & change only NodePort)
+kubectl describe node -n abduldefault (to check pod is running on which node)
+
+ kubectl get secrets (to check secret in k8s)
+
+
+(how to push the image in docker private registry)
+docker tag abdu1992/abdulprivate abdul1992
+docker tag abdu1992/abdulprivate abdul1992/abdulprivate:abdul1992     (tag image name & private path)
+docker push abdul1992/abdulprivate:abdul1992
+
+
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: abdulpod
+  labels:
+    app: abdulhameed
+  namespace: abduldefault
+spec:
+  containers:
+  - name: abdulcont
+    image: dockerhandson/maven-web-application:2
+    ports:
+    - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: abdulsvc
+  namespace: abduldefault
+spec:
+  type: ClusterIP
+  selector:
+    app: abdulhameed
+  ports:
+  - port: 80
+    targetPort: 8080
+
+ kubectl create secret docker-registry dockerhubsecret --docker-server=docker.io --docker-username=abdul1992 --docker-password=hameed@1992 -n abduldefault (create a secrete dockerhub)
+
+kubectl delete pod abdulpod -n abduldefault (app pod ko delete karo phir apply karo jab vo create hoga)
+kubectl delete -f abdul.yml
+apiVersion: v1 
+kind: Pod
+metadata:
+  name: abdulpod
+  labels:
+    abdul: hameed
+  namespace: abduldefault
+spec:
+  containers:
+  - name: abdulcont
+    image: abdul1992/abdulprivate:abdul1992
+    ports:
+    - containerPort: 8080
+  imagePullSecrets:                                       (only two lines added)  access inside the cluster ClusterIp
+  - name: dockerhubsecret                                                         access outside the cluster NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: abdulsvc
+  namespace: abduldefault
+spec:
+  type: NodePort                            NodePort instead of cluster ip  take public ip & search in google 3.235.99.80:32275/maven-web-application/
+  selector:
+    abdul: hameed
+  ports:
+  - port: 80
+    targetPort: 8080
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pythonpod
+  labels:
+    sumi: mylove
+  namespace: abduldefault
+spec:
+  containers:
+  - name: pythoncont
+    image: dockerhandson/python-app:1
+    ports:
+    - containerPort: 5000
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: abdulsvc
+  namespace: abduldefault
+spec:
+  type: NodePort
+  selector: 
+   sumi: mylove
+  ports:
+  - port: 80
+    targetPort: 5000
+
+Cp create one more application
+Kubectl get pods -n abduldefault
+(Delete the name space in this pod)
+Kubectl exec -it python /bin/bash
+FQDN (fully qualified domain name)one application name space communicate with another name space FQDN
+Curl -L abdulsvc.abduldefault.svc.cluster.local/maven-web-application  (to access diffrent name spaces use this cmd)
+kubectl scale rc abdulrc --replicas=2 (using cmd scale the replicas  only use in replicaset or replica controller)
+(replication controller)
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: abdulrc
+spec:
+  replicas: 2
+  template: # Pod template
+    metadata:
+      name: pythonappod
+      labels:
+        abdul: myself
+    spec: 
+      containers:
+      - name: abdulcont
+        image: dockerhandson/maven-web-application:2
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: abdulsvc
+spec:
+  type: NodePort
+  selector:
+    abdul: hameed
+  ports:
+  - port: 80
+    targetPort: 8080
+kubectl get pod -o wide
+kubectl get node -o wide
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: abdulrc
+spec:
+  replicas: 2
+  template: # Pod template
+    metadata:
+      name: abdulpod
+    labels:
+      abdul: hameed
+    spec:
+      containers:
+      - name: abdulcont
+        image: nginx
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: abdulsvc
+  namespace: abduldefault
+spec:
+  type: NodePort
+  selector:
+    abdul: hameed
+  ports:
+  - port: 80
+    targetPort: 8080 
+kubectl delete rc abdulrc  (delete the ReplicationController)
+kubectl delete svc  abdulsvc (delete the service )
+
+(Replication set)
+apiVersion: apps/v1                                                       (if replicaset come use api version apps/v1 )
+kind: ReplicaSet
+metadata:
+  name: abdulrs
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      abdul: myself
+  template: # Pod template
+    metadata:
+      name: abdultemp
+      labels:
+        abdul: myself
+    spec:
+      containers:
+      - name: abdulcont
+        image: dockerhandson/maven-web-application:2
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: abdulsvc
+spec:
+  type: NodePort
+  selector:
+    abdul: myself
+  ports:
+  - port: 80
+    targetPort: 8080
+
+
+kubectl get all -o wide                                               (resources)
+kubectl scale rs abdulrs --replicas=2
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: abdulrs
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      abdul: hameed
+  template: # Pod template
+    metadata: 
+      name: abdulpod
+      labels:
+        abdul: hameed
+    spec:
+      containers:
+      - name: abdulcont
+        image: nginx
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:                               request menas fix memory (minimum cpu,ram)
+            cpu: 0.5
+            memory: 512Mi
+          limits:                                 limits means not fix it's available (maximum cpu ram)
+            cpu: 1
+            memory: 1Gi                              The term "Mi" in "1Mi" stands for mebibytes
+---                           
+                                                     The term "Gi" in "512Gi" stands for gigibytes.
+apiVersion: v1                                          .
+kind: Service
+metadata:
+  name: abdulsvc
+spec:
+  type: ClusterIP,NodePort
+  selector:
+    abdul: hameed
+  ports:
+  - port: 80
+    targetPort: 8080
+
+
+                           (daemonset)  no need to use replicas for daemonset(remove replicas)daemonset is running on each all worker node
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: abdulds
+spec:
+  selector:
+    matchLabels:
+      mubeen: abdul
+  template: # Pod template
+    metadata:
+      name: abdulpod
+      labels:
+        mubeen: abdul
+    spec:
+      containers:
+      - name: abdulcont
+        image: dockerhandson/maven-web-application:2
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: abdulsvc
+spec:
+  type: NodePort
+  selector:
+    mubeen: abdul
+  ports:
+  - port: 80
+    targetPort: 8080 
+
+                            (deployment) two types of deployment 1)Recreate,2)RollingUpdate(recreate means deleting all pod at a time & recreate it's down time
+                                    rollingupdate means create a new pod & old pod will be delete it's no down time (deployment create replicaset,replicaset will manage pod) 
+
+apiVersion: apps/v1
+kind: Deployment             kubectl apply -f abdul.yml (login one more master in use 'watch kubectl get pod showing pod details)delete & recreate
+metadata:
+  name: abduldeployment                              watch kubectl get pods
+spec:
+  replicas: 2                              kubectl scale deployment abduldeployment --replicas 2
+  strategy:                                
+    type: Recreate                             (just add two lines)
+  selector:
+    matchLabels:
+      mubeen: abdul
+  template: # Pod template
+    metadata:
+      name: abdulpod
+      labels:
+        mubeen: abdul 
+    spec:
+      containers:
+      - name: abdulcont
+        image: dockerhandson/java-web-app:1          (change the versions here 1,2,) we have a down time   watch kubectl get pods
+        ports:                                    kubectl apply -f abdul.yml --record (stored the records) (change the versions here 1,2,)  (after updating check in one more master node ip)                            
+        - containerPort: 8080                     kubectl get deployment (check the deployments)
+---                                               kubectl rollout history deployment abduldeployment (check the deployment history)                                     
+apiVersion: v1                                    kubectl apply -f abdul.yml --record (to change cause also)
+kind: Service                                     kubectl rollout undo deployment abduldeployment (if you not mention the revision just one version go back check public ip)
+metadata:                                         kubectl rollout history deployment abduldeployment --revision=1
+  name: abdulsvc                                  kubectl apply -f abdul.yml --record  (if you use the record will be saved)
+spec:                                             kubectl rollout history deployment abduldeployment
+  type: NodePort
+  selector:
+    mubeen: abdul
+  ports:
+  - port: 80
+    targetPort: 8080
+
+                                                          (rolling update)default deployment strategy is 'rolling update' there is no down time
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: abduldeployment
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 30
+  selector:
+    matchLabels:
+      abdul: rukhi
+  template: # Pod template
+    metadata:
+      name: abdulpod
+      labels:
+        abdul: rukhi
+    spec:
+      containers:
+      - name: abdulcont
+        image: dockerhandson/java-web-app:5
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: abdulsvc
+spec:
+  type: NodePort
+  selector:
+    abdul: rukhi
+  ports:
+  - port: 80
+    targetPort: 8080
+
+                                        kubectl apply -f abdul.yml --record 
+                                        kubect get all
+                                       kubectl rollout history deployment abduldeployment
+                                       (change the image versions here 1,2,)
+                                       kubectl rollout undo deployment abduldeployment
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
