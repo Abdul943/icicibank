@@ -1,0 +1,866 @@
+/bin/bash                              SHELLSCRIPT1
+                                        ============
+cat /etc/shells
+sudo yum install ksh -y
+
+bash is the "default shell" advanced linux server (bash/bourne again shell)
+ksh --- default shell in AIX (OS)
+$ echo $0 ---- currently which shell we are using
+
+/bin/ksh ---- switch to the shell
+/bin/sh  ----  diffrent shells
+/bin/csh  --- diffrent shells
+/bin/bash ---- back to bash shell
+
+$ -- if u want to display any variable value u can use this dollor symbol
+echo $0   ---> current location
+echo SHELL
+echo $SHELL   ---> current location
+
+shellScript is a normal file, it contains the series of commands.
+
+     ".sh" all the extenston is .sh
+why we need to learn scripting?
+*)automate your regular jobs
+*)taking database backup
+*)portable
+     
+Database Names
+--------------
+
+Oracle          DBA means (data base administarte)
+MySQL
+PostgresSQL  ------storing the data (collection of information)
+MS SQL Server
+
+               "#!/bin/bash ----> Shebang Line"
+
+vi FirstScript.sh
+
+echo "Hello Guys"
+echo "GM/GA/GE"
+echo "Welcome to First Shell Script"
+echo "Today date is: "
+date
+
+esc --command mode
+press i :wq i--insert mode w--save q--quite
+
+give user to excute permistion
+
+u --user 
+o --other
+g --group
+
+chmod u+x FirstScript.sh  give the permistion to FirstScript.sh                         #
+ 
+to run the shell script in deffrent ways
+
+./FirstScript.sh
+. FirstScript.sh
+sh FirstScript.sh
+bash FirstScript.sh
+ksh FirstScript.sh
+zsh FirstScript.sh
+csh FirstScript.sh
+
+uname ----username
+
+mkdir shellscripts ---create a directory
+cd shellscripts ----go to these particular directory
+
+ ls -l --- to check check file information
+
+chmod u+x FirstScript.sh  give permistion to the file
+ls -l
+./FirstScript.sh
+
+echo "Hello World"
+echo "GM/GA/GE"
+echo "Welcome to First Shell Script"
+echo "Today date is: "
+date                                                           #u can add more line here
+touch file1 file2 file3
+mkdir -p Abdul/asma/sumi/rukhi
+mkdir -v dev1 dev2 dev3
+echo "Hi Sumi You are my always heartbeat">sumihameed
+cp sumihameed Hameed
+mv Hameed AbdulAsmaHameed
+
+
+
+Debug Mode   (command output command output)
+----------
+
+sh FirstScript.sh
+
+sh -x FirstScript.sh    (if u use -x it will run in Debug mode)
+
+set -x -----start
+
+set +x  ------stop
+
+(echo "Hello Guys"
+set -x
+echo "GM/GA/GE"        #command output previous script u can run don't run these
+set +x                 # +x means not run in debug mode forcebally stop the debug mode
+echo "Welcome to First Shell Script"   #after that these line in normal mode
+echo "Today date is: "
+date)                  #if use these command manually u can run thsese script
+
+sh FirstScript.sh
+
+sh -x FirstScript.sh  (u can run these command output will come easily)
+
+
+                              SHELLSCRIPT2
+                              ============
+
+uname
+
+Variables
+
+Functions
+
+Single Line Comments
+
+#
+
+Multi Line Comments
+
+<<Comment   #what ever giving here like case sencitive
+
+
+Comment     #maintain same here also                 # sh comments
+
+vi comments                         # sh comments   *if use like this no need to give the excute permistion
+
+echo "Comments demo starts.."         # comments #if u give like this u have to give excute permistion
+echo "Single Line Comments"
+echo "Comments are very useful to understand the code"
+#echo "This is a single line comment"                     #this is single line comment not displaying
+echo "M L comment starts.."
+<<Bhaskar                                                 #whatever u give the name here       
+ls
+mkdir test
+hostname
+cal
+Bhaskar                                                 #same name also give here
+echo "Multi Line Comments over"           #just understand purpose we are using thise script
+
+cat -n comments  #to check number of the lines -n= numbers (# & << not excute the lines)
+
+ls -l  (thise file don't have excute permistion)
+
+                        Variable:
+variable is a memory location where we can store the values.
+
+1)System Defined vars    (store in the server location)
+
+env
+printenv                #thise are commands
+
+env
+
+(SHELL=/bin/bash
+HISTCONTROL=ignoredups
+SYSTEMD_COLORS=false
+HISTSIZE=1000
+HOSTNAME=ip-172-31-27-64.ec2.internal  #just practice purpose
+PWD=/home/ec2-user/shellscripts
+LOGNAME=ec2-user
+XDG_SESSION_TYPE=tty
+MOTD_SHOWN=pam
+HOME=/home/ec2-user
+LANG=C.UTF-8)
+
+variable  =   values
+(uppercase)   (lowercase or command)
+
+if u want to display the value u can use $ symbol
+echo $SHELL
+echo $PWD or echo ${PWD}
+
+"lowercase pwd is command & uppercase PWD is a variable"
+
+echo $HISTSIZE         #history size
+export HISTSIZE=200  #u can decrese the value it's tempvary change no varries if u log out then same value it will come
+echo $HISTSIZE
+
+                           User Defined vars
+                          =====================
+int a; -- decrlare a variable
+int a = 10; -- initiliastion
+
+int a = 10;             #abc name; variables  int,string; data types
+int b = 20;
+int c = 30;             #10,20,30; values
+
+String Name; = "Mithun Technologies";
+
+a=10
+b=20
+c=30
+name=MithunTechnologies
+
+echo $a
+echo $b                #if u want to display the variable value u can use like thise
+echo $c
+echo $name
+-------------------
+
+a=10                      #if any cost don't give space here
+b=20
+c=30
+name=MithunTechnologies                  #3rd (echo "a variable value is: $a")
+                                         #2nd(add a=40 here 2nd time run) sh udvars.sh
+echo "a variable value is: $a"           
+echo "b variable value is: $b"
+echo "c variable value is: $c"
+echo "name variable value is: $name"
+                                        #4th (echo "User name is: $USER")
+vi udvars.sh        #user defind variable.sh first run same cmd 2nd time a=40 3rd time echo "a variable value is: $a"
+ls
+sh udvars.sh
+
+                        
+                                   SHELLSCRIPT3
+                                   ------------
+
+while excuting script the arg through command promt is called as commandline argumnents.
+
+echo $0 ---- script name --dbbackup.sh
+echo $1 ---- 1st arg value
+echo $2 ---- 
+echo $3 ----
+echo $* ---- all the arguments value----all the args as a one string
+echo $@ ----- all the arguments value----each args as a one string
+echo $# ----- 2 (number of argument means that's it to run condtion)
+echo $$ ----- process id (dynamatically genarate)
+date
+echo $? ----previous command excution status if succussfully it will give 0 
+            127------standard error code for command not found
+
+
+vi clargsdemo.sh
+
+echo "Cl args demo starts.."
+echo $0
+echo $1
+echo $2
+echo $3
+echo $11                #2nd{11}
+echo $*
+echo $@
+echo $#
+echo $$
+date                    #2ndDate
+echo $?
+
+sh clargsdemo.sh devdb /opt/     #uhave to run this command
+
+vi clargsdemo.sh  #2d
+
+sh clargsdemo.sh qadb /opt/  #2nd
+
+
+
+
+if [ $# -eq 2 ]             #[ $# -ge 2 ] 2nd
+then
+echo $0
+echo $1
+echo $2
+echo $3
+echo ${11}               
+echo $*
+echo $@
+echo $#
+echo $$
+date                    
+echo $?
+else
+echo "Please pass the correct arguments"
+echo "Usage: $0 dbname pathtostore"             # sh $0 2nd u can specify like this 
+fi
+
+vi dbbackup.sh
+
+sh dbbackup.sh proddb /etc/
+
+sh dbbackup.sh proddb /etc/ qadb               # we are passing 3rd arguments it's working
+
+-eq -- = (equal)
+-ne -- != (not equal)
+-ge -- >= (greater than equal)
+-gt -- > (greater than)
+-le -- <= (less then or equal)
+-lt -- < (less than)
+
+
+String:
+
+'BhaskarReddy'
+"MithunTechnologiesDevops"
+
+string_var="Hi Team, My name is Mithun Reddy L, working in IBM, Manyatha Techpark"
+                                       #variable   =    value
+
+
+echo $string_var
+echo ${string_var}
+
+echo $string_var
+echo ${string_var:20}  -- Mithun Reddy L, working in IBM, Manyatha Techpark (it will be ignore 20 characters after that it's dipalying)
+
+echo ${string_var:20:14}  --- Mithun Reddy L  (it's ignore first 20 characters after that  character dislpay)
+
+echo ${string_var:20: -8}  -- Techpark(it's display last 8 characters)
+
+echo ${string_var:0:2} -- Hi
+
+
+
+vi stringdemo.sh 
+
+string_var="Hi Team, My name is Mithun Reddy L, working in IBM, Manyatha Techpark"
+
+
+                                       #variable   =    value
+#echo $string_var
+echo ${string_var}
+                               #2nd (echo ${#string_var} using # showing the number of charector # means
+echo ${string_var:20}          #ignore first 20 charectors after that remaining display charetors
+
+echo ${string_var:20:14}       #it will ignore first 20 charectors remaing 14 charector it will display
+                                          #string is not important this is java related we need some knowldege
+echo ${string_var: -8}        #-8 means last 8 charectors
+
+echo ${string_var:0:2}        #it means first 2 charector 0 means ignore#
+
+string_var="Hi Team, My name is Mithun Reddy L, working inIBM,Manyatha Techpark"
+
+echo $sting_var
+echo ${string_var}
+echo ${#string_var}
+echo ${string_var:20}
+
+echo ${string_var:20:14}
+
+echo ${string_var: -8}
+
+echo ${string_var:0:2}
+
+
+cat -n stringdemo.sh   (to check the containt numbers)
+
+sh stringdemo.sh
+
+sh stringdemo.sh
+
+
+lenth()
+substring(1:3)
+
+
+ArithoMatic Operation
+--------------------
+
+expr              #experstion
+
+expr 2 + 3
+expr 2 - 3
+expr 2 * 5             # \* 2nd(star is a special character if u want to use multiplaction character u have to use \ backward slash we are calling x cap character
+expr 10 / 2             # * is special charector it's not working \* is not going to work le't c how to fix it
+expr 20 % 3            # %modular symbol
+
+vi arops.sh
+
+sh arops.sh
+
+vi arops.sh
+
+echo "The addition of 2 and 3 is: "  `expr 2 + 3`  #u can use invited coma above the tilda symbol
+expr 2 - 3
+expr 2 * 5             
+expr 10 / 2
+expr 20 % 3
+
+
+
+                                       SECTION4
+                                       ========
+
+uname
+cd shellscripts
+
+
+read command           read=command name=variable #it's not going to ask any input from the user it means interactive mode name is variable read is a command
+------------
+
+echo "Please enter your name"
+read name
+echo "The name which you have typed is: " $name
+
+sh read1.sh
+
+Mithun Technologies
+
+---------------------------------------------
+
+echo "Please enter the DevOPs tools"
+read devOpsTools
+echo "The DevOps tools which you have typed are: " $devOpsTools 
+
+git github maven tomcat sonarqube nexus jenkins ansible
+
+vi read2.sh
+sh read2.sh
+-------------------------------------------------
+
+echo "Please enter the DevOPs tools"
+read -a devOpsTools      #-a menas aray   whatever the value u want
+echo "The DevOps tools which you have typed are: " ${devOpsTools[*]}
+echo "The 4th element is " ${devOpsTools[3]}
+
+#Please enter the DevOPs tools 
+git github maven tomcat sonarqube nexus jenkins ansible
+The DevOps tools which you have typed are:  git github maven tomcat sonarqube nexus jenkins ansible
+The 4th element is  tomcat#
+
+
+
+vi read3.sh
+sh read3.sh
+
+git github maven tomcat sonarqube nexus jenkins ansible
+
+---------------------------------------------------------
+
+echo "Please enter your cource name"
+read
+echo "The Cource name is: " $REPLY
+
+vi read4.sh
+sh read4.sh
+
+DevOps with AWS
+
+-------------------------------------------------------
+
+read -p "Please enter your username: " username
+read -p "Please enter your password: " password    #-sp 2nd(hide your password u can use thise)
+#echo ""   3rd                                          
+echo "The username is: " $username
+echo "The password is: " $password
+
+mithuntechologies
+devops
+
+vi read5.sh    #2nd & #3rd time this script 
+sh read5.sh
+---------------------------------------------------------
+              INPUT AND OUTPUT REDIRECTION CONTROLED
+              --------------------------------------
+> ---- redirect standard output
+
+>> ----append the standard output
+
+< ----- standard input
+
+ls > lsopt.txt      #ls command output redirect into this file
+cat lsopt.txt       #cat lsopt.txt
+date > lsopt.txt
+cat lsopt.txt
+
+ls >> lsopt.txt
+ls >> lsopt.txt
+
+cat < lsopt.txt
+
+#!/bin/bash
+
+echo "Hello Guys"
+echo "GM/GA/GE"
+echo "Welcome to First Shell Script"
+echo "Today date is: "
+Date                                        #for checking purpose we are using Date
+
+vi FirstScript.sh   #old file we have changed in thise file the we will run
+sh FirstScript.sh
+
+sh FirstScript.sh  > FirstScript.log    #redirect FirstScript.sh to FirstScript.log  (only output is redirect)
+
+
+File Descriptors
+----------------
+0 ---- standard input 
+
+1 -----standard ouput
+
+2 ------standard error
+
+sh FirstScript.sh  > FirstScript.log 2>&1    #out put and error both display
+
+cat FirstScript.log
+
+sh FirstScript.sh 2> error.log 1>output.log   #redirect output into one file error into another file
+
+cat error.log
+
+cat output.log
+
+
+Control Statements
+------------------
+
+if [ condition ]  #the condition is true here we are using then key word
+then
+----
+----
+else           #the condition is false (if is a key word open the condition fi is a close the condition)
+----
+----
+fi    
+
+
+
+a=10
+b=20
+
+if [ $a -gt $b ]
+then
+echo "$a is biggerthan $b"
+else
+echo "$b is biggerthan $a"
+fi
+
+
+vi ifcodition.sh
+sh ifcodition.sh
+------------------------
+
+a=10
+b=20
+c=30
+
+if [[ ($a -gt $b) && ($a -gt $c)]]   ##&& logical
+then
+echo
+echo "$a is biggerthan $b and $c"       #elif (nestedifelse)
+elif [[ ($b -gt $a) && ($b -gt $c) ]]
+then
+echo "$b is biggerthan $a and $c"
+else
+echo "$c is biggerthan $a and $b"
+fi
+
+vi nestedifelse.sh
+sh nestedifelse.sh
+------------------------------------
+
+
+echo "Please enter the file name which you want to search in current dir"
+read fileName
+if [ -f $fileName ]   #-f means file
+then
+echo "$fileName is existed in current dir"
+else
+echo "$fileName is not existed in current dir"
+fi
+
+
+vi fileifcon.sh
+sh fileifcon.sh
+bhaskar.sh  #bhaskar name is not there in list so we can exited name like FirstScript.sh
+ls
+sh fileifcon.sh
+FirstScript.sh
+
+
+echo "Please enter the file name which you want to search in current dir"
+read fileName
+if [ -f $fileName ]   #-f means file
+then
+echo "$fileName is existed in current dir"  #suppose file is not existed it wil be create 
+echo "$fileName content is"
+cat $fileName
+else
+echo "$fileName is not existed in current dir"
+echo "$fileName is creating"
+touch $fileName
+fi
+
+vi filecon.sh
+sh filecon.sh
+abdulhameed
+
+                                     
+
+                          section-5
+                          ==========
+
+
+forloop
+-------
+                       #creating a variable and assigning a value called initilisation
+write a shellscript to print the numbers from 1 to 5 by using for loop.
+
+echo "Forloop demo starts.."     
+
+for (( a=1;a<=5;a== ))
+        1<=5  1++
+        2<==5 2++
+        3<=5  3++
+        4<=5  4++
+        5<=5  5++
+        
+do
+echo $a
+done
+
+echo "For loop demo over"
+
+output
+------
+Forloop demo starts..
+1
+2
+3
+4
+5
+for loop demo over
+-------------------------
+vi forloopdemo.sh
+
+echo "Forloop demo starts.."
+
+for (( a=1;a<=5;a++ ))
+do
+echo $a
+done
+----------------------------
+echo "For loop demo over.."
+
+sh forloopdemo.sh 
+
+echo "Forloop demo starts.."
+
+for (( a=1;a<=100;a++ ))             #instead of 5 we are using 100
+do
+echo $a
+done
+-----------------------
+                                         #we have 3 good example are there
+echo "For loop demo over.."
+
+
+echo "Forloop demo starts.."
+
+for (( a=100;a>=1;a-- ))
+do
+echo $a
+done
+
+echo "For loop demo over.."
+
+
+                                whilelopp
+                                ---------
+
+echo "Whileloop demo starts..."
+
+a=1
+
+while [ $a -le 5 ]
+         1 <= 5
+         2 <= 5
+         3 <= 5
+         4 <= 5
+         5 <= 5
+do
+echo $a
+a=`expr $ a + 1`
+          1 + 1
+          2 + 1
+          3 + 1
+          4 + 1
+          5 + 1
+
+done    
+
+echo "Whileloop demo over"
+
+
+
+echo "Whileloop demo starts.."
+
+a=1
+
+while [ $a -le 5 ]
+do
+echo $a
+a=`expr $a + 1`
+done
+
+echo "While loop demo over.."
+
+
+
+
+
+OutPut
+Whileloop demo starts
+
+vi whileloopdemo.sh
+sh whileloopdemo.sh
+
+switch case
+-----------
+
+sh sonar.sh start|stop|restart
+
+
+
+
+echo "Switchcase demo starts"
+
+case $1 in
+
+start) echo "Starting the SonarQube Server"
+       echo "Started SonarQube"
+       ;;
+stop) echo "Stopping the SonarQube Server"
+      echo "Stopped the SonarQube server"
+       ;;
+restart) echo "Restarting the SonarQube Server"
+         echo "Restarted the SonarQube server"
+          ;;
+*) echo "Please pass the correct arguments"
+   echo "Usage: sh $0 start|stop|restart"
+   ;;
+esac
+
+echo "Switch case demo over"
+
+
+
+
+echo "Type the number which you want to display"
+read number
+
+case $number in
+
+1) echo "You have typed one"
+   echo "Typed the correct number"
+   ;;
+2) echo "You have typed two"
+   echo "Typed the correct number"
+   ;;
+3) echo "You have typed three"
+   echo "Typed the correct number"
+   ;;
+4) echo "You have typed four"
+   echo "Typed the correct number"
+   ;;
+5) echo "You have typed five"
+   echo "Typed the correct number"
+   ;;
+*) echo "INVALID NUMBER"
+   echo "Please type the numbers from 1 to 5 only"
+   ;;
+esac
+
+vi switchdem.sh
+sh switchdem.sh
+sh switchdem.sh
+sh switchdem.sh
+2
+4
+5
+3
+1
+6  # invalid number
+
+vi switchcasedemo.sh
+sh switchcasedem.sh
+
+sh switchcasedem.sh  start
+sh switchcasedem.sh  restart
+
+
+functions                                         VVIMP
+---------
+
+functionName
+
+
+echo "Functions demo"
+
+greetFn()
+{
+echo "Hello Guys"
+echo "GM/GA/GE"
+echo "Welcome to functions"
+echo "I am from greetFn body"
+}
+
+echo "Calling the greetFn function"
+greetFn                                     #first time don't call 2nd round u can call
+
+
+
+             or 
+
+echo "Functions demo"
+
+greetFn()
+{
+        echo "Hello Guys"
+        echo "GM/GA/GE"
+        echo "Welcome to functions"
+        echo "I am from greetFn body"
+}
+
+echo "Calling the greetFn function"
+greetFn
+
+
+
+output
+------
+Functions demo
+Calling the greetfn function
+
+
+
+vi utilities.sh
+
+add(){
+echo "I am from add function"
+echo "Adding the number"
+}
+
+sub(){
+echo "I am from sub function"
+echo "This function can be used to do substration"
+}
+
+
+vi a.sh                               #create two shellscript here utilities.sh a.sh
+source ./utilities.sh
+
+add
+sub
+
+sh a.sh
+
+
+
+
+
+
+
+
+
+

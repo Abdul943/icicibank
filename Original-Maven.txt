@@ -1,0 +1,1195 @@
+                                           SECTION-1
+                                           =========
+Maven is an Open source java based build tool.
+
+Build: Process of automate the creating packages.
+
+a) Standalone Applications  (jar --> Java Archive)
+Java Code
+
+.class files
+
+b) Web Applications     (war --> Web Archive)
+Java Code + WebContent (HTML/Images/XML/CSS/JS)
+
+.class files + jar files + web content
+
+c) Enterprise Applications  (ear --> EnterPrise Archive--ear is a bigger model  (package))
+Java Code  Web Content
+
+ear --> jar files + war files
+
+jar/war/ear
+
+Hello.java  --> Source Code
+
+javac Hello.java
+
+Hello.class   -->Byte Code --> JVM (java virtual mistion)
+
+java Hello
+
+
+Maven Directory Structure
+-------------------------
+
+boot: jar file
+
+bin:
+mvn
+
+conf:
+settings.xml
+
+lib:
+jar files
+
+Maven Installation   24:06  #t2.micro
+------------------
+
+java      #is the pre request software
+
+JDK --> Java Development Kit (Maven)
+JRE --> Java Runtime Environment 
+
+java -version
+
+javac -version
+
+create EC2 machine #t2.micro                             
+
+sudo su -                         #command start(1)
+sudo yum install java-21-amazon-corretto-devel -y
+
+#sudo dnf install java-21amazon-corretto-devel -y#
+#sudo yum install java-21amazon-corretto-devel -y#
+
+
+java -version
+javac -version
+
+cd /opt/
+pwd
+ls
+                          #rm -rf wget
+wget https://dlcdn.apache.org/maven/maven-3/3.9.12/binaries/apache-maven-3.9.12-bin.zip
+
+ls
+unzip apache-maven-3.9.11-bin.zip
+cd apache-maven-3.9.11/
+pwd
+ls
+                            #(apache-maven-3.9.11 --->maven home directory)
+pwd
+ls
+cd bin/                           #m2.conf  
+pwd
+ls
+cd ../boot/
+ls
+cd ../conf/                         #logging  settings.xml  toolchains.xml
+pwd
+ls
+cd ../lib/
+pwd
+ls
+cd ..
+pwd
+ls                               #cd /opt/
+[root@ip-172-31-70-25 apache-maven-3.9.11]#
+
+
+vi ~/.bash_profile
+press i
+
+# User specific environment and startup programs
+#
+export M2_HOME=/opt/apache-maven-3.9.11              #add this line in this file
+export PATH=$PATH:$M2_HOME/bin                       #add this line in this file   #s
+
+:wq
+
+mvn -version                  #to check which version of maven installed
+
+source ~/.bash_profile      #maven command end here and start down
+
+mvn -version                #maven command end here and start down
+
+#Ant --> build.xml
+#Maven --> pom.xml
+#Gradle --> build.gradle
+
+#icicibank.xml                 #suppose it's logout #/opt/apache-maven-3.9.11
+
+#xml --> extensible markup language
+
+#HTML --> all tags are pre defined #hyper text markup language
+
+pom.xml
+-------
+
+<project>           
+
+  <groupId>com.mt</groupId>
+  <artifactId>icicibank</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.17</version>
+    </dependency>
+
+  </depenencies>
+
+</project>
+
+
+com.companyname
+
+#Local Repository    .m2 
+the maven local repository is a local folder that is used to store all your project dependencies
+
+Maven Repos
+-----------
+
+a) Maven Local Repo     #maven local repository like a .m2 folder
+
+~/.m2/repository           #default maven local repository path#m2 is local path
+
+Window: C:\\users\\mithun\.m2\repository
+
+Linux -->/home/mithun/.m2/repository
+
+settings.xml
+
+<localRepository>Path</localRepository>      #in this repository R should be upper case
+
+b) Maven Central Repo 
+the central repository is the repository provided by the maven community it contains a large repository
+of commonly used libraries.this repository comes into play when maven does not find libraries in the local repository.
+
+c) Remote Repo
+enterprises usually maintain their own repositories for the libraries that are being used for the project.
+these differnt from the local repository; a repository is maintained on a seprate serer,diffrent from the developer's 
+machine and is accessible within the oranization.
+
+Source Code
+
+
+mvn package
+mvn clean
+
+mvn clean package
+mvn test
+
+mvn package
+mvn install
+mvn deploy
+
+                                              SECTION-2
+                                              =========
+3 Life Cycles
+-------------
+
+
+LC                               Goals
+---                              -----
+clean                            clean: It wll deletes the previous build files
+
+site                             site: It will generates the documentation
+
+default                          validate:  It will validates the project dir structure and resources files
+                                 compile:   It will compiles the java source code and Unit test cases
+ "these are the very             test:      It will run the junit test casesss
+ very important CMD"             package:   It will create the packages build artifacts (jar/war and ear)
+                                 install:   It will store the build artifacts into local repo
+                                 deploy:    It will store the build artifact into remote repo.
+                   
+
+
+mvn clean package -DskipTests                 #DT both are capital
+mvn claen package -Dmaven.test.skip=true      #16.43minutes
+
+
+connect EC2 server
+
+ls
+mvn -version                         #again start the command(2)
+sudo su -
+mvn -version
+
+cat /etc/*release       #for checking purpose
+
+ls
+mkdir projects
+cd projects
+
+sudo yum install git -y     #pom.xml build file src source code
+
+git clone https://github.com/MithunTechnologiesDevOps/maven-standalone-application.git
+     
+
+ls
+
+rm -f *file                 #Dockerfile  Jenkinsfile 
+
+ls
+
+yum install tree -y
+tree
+
+ls -la ~/.m2         #this file is not available
+
+ls
+mvn clean package
+
+ ls -la ~/.m2
+ls -la ~/.m2/repository/           #target directory got created
+
+#maven-standalone-application-0.0.1-SNAPSHOT.jar #package got created
+
+https://dlcdn.apache.org/maven/maven-3/3.9.12/binaries/apache-maven-3.9.12-bin.zip
+ls
+
+mvn clean package        
+ls
+
+mvn clean       #target file deleted
+ls
+mvn clean
+mvn clean package
+
+tree
+
+
+mvn clean package -Dsests
+
+mvn clean package -Dmaven.test.skip=true
+
+tree
+
+pwd
+cd ~
+pwd
+
+mkdir mavencustomlocalrepo
+
+cd mavencustomlocalrepo/
+
+pwd
+
+ls
+cd /opt/apache-maven-3.9.11/conf/
+ls
+
+
+ vi settings.xml                   
+  | Default: ${user.home}/.m2/repository
+  <localRepository>/path/to/local/repo</localRepository>
+  -->
+<localRepository>/root/mavencustomlocalrepo/</localRepository>  #only this line added
+  <!-- interactiveMode
+   | This will determine whether maven prompts you when it needs input. If set to false,
+
+
+
+                #/root/mavencustomlocalrepo
+
+                #<localRepository>/root/mavencustomlocalrepo/</localRepository>  #i added this lines up
+
+
+ cd ~/projects/maven-standalone-application/
+
+mvn clean package
+
+ls ~/mavencustomlocalrepo/
+
+cd ..
+pwd
+
+git clone https://github.com/MithunTechnologiesDevOps/maven-web-application.git
+
+ls
+
+cd maven-web-application/
+
+ls
+ rm -f *file
+
+rm -f JenkinsFile*
+
+rm -f MavenWebApplication.yaml
+
+rm -rf target/
+ls
+#pom.xml  src
+
+mvn clean package
+ls
+#pom.xml  src  target
+
+
+less pom.xml           #checking file data pressq come outside
+cd ..                  #come to project dir
+
+git clone https://github.com/MithunTechnologiesDevOps/maven-enterprise-application.git
+
+ls
+
+cd maven-enterprise-application/
+
+ls
+tree
+mvn clean package
+less pom.xml        #for checking the module
+
+mvn clean package -pl MavenEnterpriseApp-web   #maven command end here#project list     #specific module by using this pl#
+
+
+#jar
+#war
+#ear
+
+java -jar jarfilename
+
+
+Application Server                                             TOMCAT-1
+------------------                                             ========
+
+JBoss 1.x to 7.x                          #free
+Wildfly 8.x --latest version              #free
+Websphere Application server (WAS) --> IBM --> Citi Bank
+WEblogic Server --> Bea --> Oracle  --> HDFC
+
+Apache Tomcat
+
+Micro Services Arch           C:\ProgramData\Microsoft\Windows\Start Menu\Programs\FileZilla FTP Client
+
+Springboot
+
+Tomcat is an Open Source , java based, Web Application Server
+
+war files
+
+
+Tomcat Directory Structure
+--------------------------
+
+bin:       #contains all the binary files
+startup.sh --->Linux                     #for starting the tomcat server
+startup.bat -->Windows #batch
+
+shutdown.sh                              #for stopping the tomcat server
+shutdown.bat
+
+verssion.sh                              #for check the version
+version.bat
+
+catalina.sh     start|stop|restart
+catalina.bat
+
+conf:        #it contains cofiguration files
+server.xml
+tomcat-user.xml
+
+lib:          #it contains all the liberary files #if any java packages it contains jar files
+jar files
+
+logs:          #it contains log file by default it's Empty
+manager.log
+hostmanager.log
+catalina.out
+localhost.log
+
+webapps:
+5 Default Web application are there  #once if u deploy the application where it's going to store ans:webapps
+
+work:
+once if u run the application what are the files we are going to work
+
+temp:         #it's Empty
+
+
+
+Tomcat Server Installation          29m:30s  #we are not deploying all in dev server #depends on the client
+--------------------------
+
+Linux --> 1GB RAM
+
+Java
+
+JRE          #for tomcat
+JDK          #for Maven suppos u install no problum #JDK java development kit
+
+connect a new server EC2-server
+
+sudo su -
+
+cd /opt/
+
+pwd
+ls
+
+sudo yum install java-21-amazon-corretto-devel -y
+
+java -version
+javac -version
+
+wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.112/bin/apache-tomcat-9.0.112.zip
+
+ls
+unzip apache-tomcat-9.0.112.zip
+ls
+
+cd apache-tomcat-9.0.112/    #tomcat hom directory
+pwd
+ls
+cd bin/        #don't put two slash here
+pwd
+ls
+cd ../conf/
+pwd
+ls
+cd ../lib/
+pwd
+ls
+cd ../logs/
+pwd                      #it's empty directory
+ls 
+cd ../webapps/         #whatever we are going to deploy that files are available here
+ls
+cd ../work/
+pwd
+cd ../temp/
+ls
+ls -l
+cat safeToDelete.tmp    #it's empty file      
+cd .. #back to previous directory
+cd ../
+cd apache-tomcat-9.0.112/bin/
+pwd
+ls
+ls -l                   #we don't have the excute permistion
+
+chmod u+x *.sh           #give all the sh shell script have permition
+
+clear         #contrl l clear the screen
+#we need to create a SoftLink from anyware we can start the Tomcatserver
+
+pwd
+ls
+ln -s /opt/apache-tomcat-9.0.112/bin/startup.sh /usr/bin/startTomcat
+####################ln -s /opt/apache-tomcat-9.0.112/bin/shutdown.sh /usr/bin/stopTomcat #don't use this command
+
+cd ~
+
+startTomcat
+
+http:54.89.170.174:8080          #try to access in web #we are not able to access
+
+we have to enable all traffic    #then refresh the page     click the ec2 instance then go to security group add rules all traffic anywhere add the rules                                      
+
+once if u go to manager app in Tomcat u will get errors
+
+cd /opt/apache-tomcat-9.0.112/bin/
+
+cd ../webapps/
+
+pwd
+ls
+cd manager/                         52.00minutes
+cd META-INF/
+ls
+vi context.xml           #  u can see this file  53:00    #only u can add <!-- to --> down here #-rw-r--r--. 1 root root 1357 Nov  6 07:46 context.xml
+
+
+ <!--  <Valve className="org.apache.catalina.valves.RemoteCIDRValve"  #only commented 
+          allow="127.0.0.0/8,::1/128" />
+  -->
+
+esc shift:wq
+
+u can go to tomcat manager app and refresh the page
+they are asking  usr name and password thne u can go to conf directory
+cd ../../../conf/
+pwd
+ls
+vi tomcat-users.xml
+press i
+
+<user username="abdulhameed" password="asma" roles="manager-gui,admin-gui"/>  #add this line last
+</tomcat-users>          #this is a default line above this line u can add this line
+
+esc shift :wq
+
+cd ../logs/
+ls
+go back and click server status  #tomcat homepage
+and go back and see here host manager #tomcat homepage
+
+cd ../webapps/                          #cd /opt/apache-tomcat-9.0.112/bin/
+cd host-manager/META-INF/               #cd ../webapps/  #suppose ur not able not able to go inside na so u can use this directory
+ls
+
+vi context.xml                            #cd host-manager/META-INF/  #in this path u get it file here
+
+
+ <!--  <Valve className="org.apache.catalina.valves.RemoteCIDRValve"   #u can add this yarrow mark here
+          allow="127.0.0.0/8,::1/128" />
+  -->
+
+esc shift:wq
+
+then u can go to Host manager app and click that app asking user name passwd u can add 
+
+refresh the page u can access
+asking user name and password  #username:abdulhameed #passwd:asma
+
+go to manager app and u can type ctrl+shift D  if u like this delete na chashey it will ask usr name passwd 
+
+manager-gui  --> ManagerApp and Server Status
+admin-gui   --> HostManager
+
+
+
+   
+
+
+
+
+                                                                TOMCAT-2
+                                                                ========
+Ec2-instance log out and then u log in  showing errorss
+go to ec2-instances again start the server
+connect in git bash server (linux server)
+
+sudo startTomcat                                       #don't forget to run this command#if u not able access tomcat server u can use sudo startTomcat
+
+then am going to access refresh the page
+click on managerapp
+give the user name and password
+abdulhameed
+asma
+
+it's running with default port number 8080  Tomcat/jboss/wildfly/jenkins-->8080
+
+is this possible install jenkins server in this same Linux server it's not possible becouse 8080 port number using tomcat server
+still if u install same linux server u can change the port number
+
+what is the command which port is using by which service?
+
+netstat -tunlap   #wchich service is which pod u can use this command
+
+if u want to change the port number
+
+sudo su -
+cd /opt/apache-tomcat-9.0.112/conf/       #cd /opt/apache-tomcat-9.0.112/conf/
+ls
+ vi server.xml     #if u do any changes in this file u can restart the service
+
+:se num     #to check the numbers
+
+ #<Connector port="8080" protocol="HTTP/1.1"            #u can change port number here 8105 or 1994
+ #72                connectionTimeout="20000"
+ #73                redirectPort="8443"
+ #74                maxParameterCount="1000"#     0-1024 -->Reserved Port Number
+                                                  1025 -65535 #u can give any port number#in between u can give any number
+esc shift:wq
+
+exit
+sudo su -
+[root@ip-172-31-24-53 ~]# cd /opt/apache-tomcat-9.0.112/bin/    #u stay in bin directory then u can stop the tomcat server
+./shutdown.sh          #to stop the tomcat server                   #./shutdown.sh
+startTomcat            #to start the tomcat server 
+
+then u can go and refresh the page http://98.89.35.238:1994/
+
+cd ../webapps/
+pwd
+ls
+
+#using Maven server here becouse we have to deploy the application go to maven server should be run 
+how we can download server to laptop or laptop to server by using FTP tool
+
+first we have to connect the using FTP tool #Maven server connect to Linux
+go to CMD   #maven server this is
+sudo su -
+cd projects/maven-web-application/target/
+ls
+vi /etc/ssh/ssh_config
+press i
+PasswordAuthentication yes         #suppose if showing no we can set up yes
+#HostbasedAuthentication no
+esc shift:wq
+service sshd restart
+passwd ec2-user
+asma
+asma
+open filezilla app
+Host: 34.228.165.136 Usernam: ec2-user Password: asma Port: 22     give this ip address        #maven server public ip 20:00sec
+
+deploying the applicalication like a copying war files into WebApps directory
+
+
+Apps Server                                     WebServer
+-----------                                     ---------
+Deploy the backend code webcontent             webcontent (HTML/CSS/images/xml(fixed static no change)
+ 
+
+cd ../webapps/                                        #cd /opt/apache-tomcat-9.0.112/bin/
+cd /opt/apache-tomcat-9.0.112/bin/
+98.94.6.252:80
+Apache HTTP sever
+yum install httpd -y
+apache --> system user
+httpd
+service httpd status
+service httpd start
+
+webapps
+
+Apache server
+
+/var/www/html/
+
+
+
+sudo su -
+yum install httpd -y     #after downloading start the service allow the port in security group 80
+service httpd status
+service httpd start
+#this is Default page #if u add your content
+
+cd /var/www/html/
+vi index.html                #press i   #let's come to insert mod
+
+<h1> Welcome to Mithun Technologies </h1>   #u can add only one line
+<h2> Welcome to Mithun Technologies </h2>
+<h3> Welcome to Mithun Technologies </h3>
+<h4> Welcome to Mithun Technologies </h4>
+<h5> Welcome to Mithun Technologies </h5>
+<h6> Welcome to Mithun Technologies </h6>
+
+esc shift:wq
+
+https://34.227.107.150/mitun.html
+
+take the public ip pest to browser
+#service sshd status
+
+vi abdul.html
+<h1> Welcome to New Journey Abdul </h1>
+
+
+
+
+
+
+
+
+
+
+cp mithunlogo.jpg /var/www/html/
+cd /var/www/html/
+ls
+http://54.160.134.222/mithunlogo.jpg    #if not work u can check the permistion
+
+
+
+
+
+
+ 
+                                                          MAVEN INSTALLATION  t2.micro
+----------------------------------------------------------============================
+connect to the EC2server
+ssh -i "abdul.pem.pem" ec2-user@ec2-98-93-28-128.compute-1.amazonaws.com
+sudo su -
+sudo yum install java-21-amazon-corretto-devel -y
+#sudo dnf install java-21amazon-corretto-devel -y#
+#sudo yum install java-21amazon-corretto-devel -y#
+
+
+java -version
+javac -version
+[root@ip-172-31-24-121 ~]# cd /opt/                     #rm -rf* means delete all files
+wget https://dlcdn.apache.org/maven/maven-3/3.9.12/binaries/apache-maven-3.9.12-bin.zip
+unzip apache-maven-3.9.12-bin.zip
+cd apache-maven-3.9.12/                               #/opt/apache-maven-3.9.12(maven home directory)         
+pwd
+ls
+pwd
+ls
+cd bin/                           #m2.conf  
+pwd
+ls
+cd ../boot/                  #sudo su - #cd /opt/apache-maven-3.9.12
+ls
+cd ../conf/                         #logging  settings.xml  toolchains.xml
+pwd
+ls
+cd ../lib/
+pwd
+ls
+cd ..
+pwd
+ls                               #cd /opt/                                       #i have to start here onwards
+[root@ip-172-31-70-25 apache-maven-3.9.12]#
+vi ~/.bash_profile              #type i it will come insert mode
+
+# User specific environment and startup programs
+#
+export M2_HOME=/opt/apache-maven-3.9.12              #add this line in this file 3.9.11
+export PATH=$PATH:$M2_HOME/bin                       #add this line in this file   #s
+
+:wq     #to save
+source ~/.bash_profile            #exit     19:00sec
+mvn -version
+sudo su -                    
+mkdir projects
+cd projects/
+sudo yum install git -y
+git clone https://github.com/MithunTechnologiesDevOps/maven-standalone-application.git
+ls
+cd maven-standalone-application/
+ls
+rm -f *file
+yum install tree -y                      #/root/projects/maven-standalone-application
+tree
+mvn clean package                         [root@ip-172-31-24-121 maven-standalone-application]#                                #
+ls
+mvn clean                              #to delete the target directory
+ls
+mvn clean package                      #to create the target directory
+tree
+mvn clean package -DskipTests
+tree                                      
+mvn clean package -Dmaven.test.skip=true    
+tree
+cd ~
+mkdir mavencustomlocalrepo
+cd mavencustomlocalrepo/
+pwd
+ls
+cd /opt/apache-maven-3.9.12/conf/   #check the version suppose if not working
+ls
+vi settings.xml
+
+
+  | Default: ${user.home}/.m2/repository #
+  <localRepository>/path/to/local/repo</localRepository>                                                           #
+  -->
+<localRepository>/root/mavencustomlocalrepo/</localRepository>  #Just add this line.
+  <!-- interactiveMode
+   | This will determine whether maven prompts you when it needs input. If set to false,
+
+:wq
+
+cd ~/projects/maven-standalone-application/
+ls ~/mavencustomlocalrepo/
+cd ..
+pwd
+git clone https://github.com/MithunTechnologiesDevOps/maven-web-application.git
+ls
+cd maven-web-application/
+ls
+rm -f *file
+ls
+rm -f JenkinsFile*
+ls
+rm -f MavenWebApplication.yaml
+rm -rf target/
+ls                                         #pom.xml  src  #deleted target file here
+tree
+mvn clean package
+ls                                    #pom.xml  src  target  #created target file heres
+cd ..            #[root@ip-172-31-24-121 projects]#
+git clone https://github.com/MithunTechnologiesDevOps/maven-enterprise-application.git                                     
+ls
+cd maven-enterprise-application/
+ls
+tree
+mvn clean package
+less pom.xml
+mvn clean package -pl MavenEnterpriseApp-web     #project list#it's possible to do specific module yess using pl
+----------------------------------------------------------your maven command end here
+                                  i simply write this file
+
+
+less pom.xml        #for checking the module  #build tool means create a packages
+
+mvn clean package -pl MavenEnterpriseApp-web   #maven command end here#project list     #specific module by using this pl#
+
+
+#jar
+#war
+#ear        #child and parent #it will come in the enterprise application
+
+java -jar jarfilename
+
+---------------------------------------------------------------------------------------------------
+                                            TOMCAT-1=Tomcat Server Installation
+                                            ===================================
+Linux server is requred ----------->t2.micro
+ssh -i "abdul.pem.pem" ec2-user@ec2-174-129-51-237.compute-1.amazonaws.com
+sudo su -
+cd /opt/
+sudo yum install java-21-amazon-corretto-devel -y
+java -version
+javac -version
+wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.112/bin/apache-tomcat-9.0.112.zip
+ls
+unzip apache-tomcat-9.0.112.zip         #[root@ip-172-31-16-5 opt]#
+ls
+cd apache-tomcat-9.0.112/              #tomcat home directory
+pwd
+ls
+cd bin/        #don't put two slash here
+pwd
+ls
+cd ../conf/
+pwd
+ls
+cd ../lib/
+pwd
+ls
+cd ../logs/
+pwd                      #it's empty directory
+ls 
+cd ../webapps/         #whatever we are going to deploy that files are available here
+ls
+cd ../work/
+pwd
+cd ../temp/
+ls
+ls -l
+cat safeToDelete.tmp    #it's empty file      
+cd ..                   #back to previous directory
+cd ../
+cd apache-tomcat-9.0.112/bin/
+pwd
+ls
+ls -l                   #we don't have the excute permistion
+
+chmod u+x *.sh           #give all the sh shell script have permition
+clear
+ln -s /opt/apache-tomcat-9.0.112/bin/startup.sh /usr/bin/startTomcat
+ln -s /opt/apache-tomcat-9.0.112/bin/shutdown.sh /usr/bin/stopTomcat
+cd ~
+startTomcat
+http:174.129.51.237:8080          #try to access in web #we are not able to access
+
+we have to enable all traffic    #then refresh the page     click the ec2 instance then go to security group add rules all traffic anywhere add the rules                                      
+
+once if u go to manager app in Tomcat u will get errors   #cd /opt/apache-tomcat-9.0.112/bin/
+
+cd -
+ls
+cd ../webapps/
+ls
+cd manager/META-INF/
+ls
+vi context.xml
+
+
+
+
+ls
+vi context.xml           #  u can see this file  53:00    #only u can add <!-- to --> down here #-rw-r--r--. 1 root root 1357 Nov  6 07:46 context.xml
+
+
+ <!--  <Valve className="org.apache.catalina.valves.RemoteCIDRValve"  #only commented<!-- -->
+          allow="127.0.0.0/8,::1/128" />
+  -->
+
+esc shift:wq
+
+
+u can go to tomcat manager app and refresh the page
+they are asking  usr name and password thne u can go to conf directory
+
+cd ../../../conf/
+pwd
+ls
+vi tomcat-users.xml
+press i
+
+<user username="mithuntechnologies" password="devops" roles="manager-gui,admin-gui"/>  #add this line last
+</tomcat-users>          #this is a default line above this line u can add this line
+
+esc shift :wq
+mithuntechnologies
+devops
+
+cd ../logs/
+ls
+
+go back and click server status  #tomcat homepage
+and go back and see here host manager #tomcat homepage #showing error
+
+cd ../webapps/                          #cd /opt/apache-tomcat-9.0.112/bin/
+cd host-manager/META-INF/               #cd ../webapps/  #suppose ur not able not able to go inside na so u can use this directory
+ls
+
+vi context.xml                            #cd host-manager/META-INF/  #in this path u get it file here
+
+
+ <!--  <Valve className="org.apache.catalina.valves.RemoteCIDRValve"   #u can add this yarrow mark here
+          allow="127.0.0.0/8,::1/128" />
+  -->
+
+esc shift:wq
+
+then u can go to Host manager app and click that app asking user name passwd u can add 
+mithuntechnologies
+devops
+
+refresh the page u can access
+-----------------------------------------------------------------------------------------
+
+go to manager app and u can type ctrl+shift D  if u like this delete na chashey it will ask usr name passwd 
+
+manager-gui  --> ManagerApp and Server Status
+admin-gui   --> HostManager
+------------------------------------------------------------------------------------------
+
+
+                                            TOMCAT-2
+                                            ========
+connect to ec2 server
+ssh -i "abdul.pem.pem" ec2-user@ec2-54-90-135-189.compute-1.amazonaws.com
+sudo startTomcat   #to start the Tomcat Server
+#then u take public ip http://54.90.135.189:8080/ go to browser then u access this page
+#then go to manager app mithuntechnologies devops usr name and passwd
+#it's running Default port number 8080 Tomcat/Jboss/wildfly/jenkins
+
+what are the command which port is using which service  #netstat -tunlap
+
+sudo su 
+cd /opt/apache-tomcat-9.0.112/conf/
+ls
+
+vi server.xml
+
+ 71     <Connector port="9980" protocol="HTTP/1.1" #change port number like this instead of
+ 72                connectionTimeout="20000"
+ 73                redirectPort="8443"
+ 74                maxParameterCount="1000"
+
+:se nu   #if u check line numbers  #http://54.90.135.189:9980/
+
+stopTomcat                  #stop tomcat server #/opt/apache-tomcat-9.0.112/webapps
+startTomcat                 [root@ip-172-31-16-5 conf]#  11:46sec FTP Tool
+cd ../webapps/
+ls
+--------------------------
+Maven server start here connect to maven server
+C:\Users\Dell\Downloads>ssh -i "abdul.pem.pem" ec2-user@172.31.24.121  #in CMD
+
+sudo su -
+cd projects/maven-web-application/target/
+ls
+vi /etc/ssh/sshd_config   #run in maven
+
+PasswordAuthentication yes   #u have to update here yes
+PermitEmptyPasswords no      #no need to change
+
+service sshd restart          #restart the service
+passwd ec2-user
+devops
+devops
+
+#go to FileZilla
+#Open the FileZilla  #take maven public ip  #15:10sec
+54.146.253.89         #maven public ip
+ec2-user
+devops
+22
+
+cp maven-web-application.war /tmp/      #temp directory access to any of the server
+
+/tmp       #enter in FileZilla rightside path
+
+in file zille u can drag and drop the file maven-web-application file #left side to right side drag and drop
+
+then u go to Tomcat server and click mangerapp 
+
+Select WAR file to upload choosfile	No file chosen  #click this 19:37sec
+onece if u upload that file u can see in tomcat server  #cd /opt/apache-tomcat-9.0.112/conf/
+
+maven-web-application  #finally this application deployed	
+
+sudo su -                             #tomcat server
+cd /opt/apache-tomcat-9.0.112/conf/   #tomcat server
+cd ../webapps/                        #tomcat server
+ls
+ROOT  examples      manager                maven-web-application.war 
+docs  host-manager  maven-web-application
+
+maven-web-application  #in tomcat server uploding file right click 
+
+http://54.90.135.189:9980/maven-web-application/
+
+i want to stop this application once if stop this application 
+go and refresh the page you are not able to access HTTP Status 404-Not found like this showing
+again go and start the application then u can go and refresh the page u will show the page
+
+cp maven-web-application.war /tmp/     #tomcat server
+ ls -l /tmp/                            #tomcat server  
+  
+am going to undelpoy this application on tomcat manager server
+
+go and see
+[root@ip-172-31-16-5 webapps]# ls
+file got deleted
+go to browser and try to access this application ur not able to access this application
+
+deploy another way #Deploy  (tomcat home page)
+ls /tmp/     #tomcat server check the list
+
+Context Path:	
+/mithuntechnologies           #add this line
+Version (for parallel deployment):	
+XML Configuration file path:	
+WAR or Directory path:	
+/tmp/maven-web-application.war  #add this path
+ 	
+click on deploy   
+
+then u go and serch on browser like this
+http://54.90.135.189:9980/mithuntechnologies/     #same application now this is a context path
+http://54.90.135.189:9980/maven-web-application   #ealier this context path
+
+#same application diffrent  context path it's possible to deploy *
+#same context path multipale application it's not possible 
+
+am deploying same application 
+
+Select WAR file to upload choose file	maven-web-application.war #it will take some for deploying the application
+                          deploy	
+
+http://54.90.135.189:9980/mithuntechnologies/              #both are working
+http://54.90.135.189:9980/maven-web-application/
+
+sudo su -                                 #it's all about tomcat server  
+cd /opt/apache-tomcat-9.0.112/conf/
+cd ../webapps/ 
+ls
+ROOT      host-manager           maven-web-application.war    
+docs      manager                mithuntechnologies           
+examples  maven-web-application  mithuntechnologies.war        
+
+
+deploying application nothing but copieing
+ mithuntechnologies                #am undelpoy this on tomcat server
+
+cp /tmp/maven-web-application.war .    #this is not working don't worry if u try it's work then fine
+
+finally it's working
+
+http://54.90.135.189:9980/mithuntechnologies/
+http://54.90.135.189:9980/maven-web-application/  
+#if u learn more about this concept u can go through this video
+Load balancing with Nginx- Tomcat -Mithun Technologies  #same application deployed in 3 server for high availability
+
+sudo su -
+cd /opt/apache-tomcat-9.0.112/conf             #[root@ip-172-31-16-5 webapps]#this is a TomCat server
+cd ../webapps/
+yum install httpd -y         #cd /var/www/html/
+service httpd status
+service httpd start
+service httpd status
+#service httpd restart                                   #Apache HTTP - 80
+http://54.90.135.189:80
+It works!                 #if u see this msg u have successfully install and it's working
+[root@ip-172-31-16-5 webapps]#    #u have install here
+
+cd /var/www/html/                           #sudo su - then u can this directory cd /var/www/html/ 
+pwd
+ls
+
+vi index.html
+
+<h1> Welcome to Mithun Technologies </h1>
+<h2> Welcome to Mithun Technologies </h2>
+<h3> Welcome to Mithun Technologies </h3>
+<h4> Welcome to Mithun Technologies </h4>
+<h5> Welcome to Mithun Technologies </h5>
+<h6> Welcome to Mithun Technologies </h6>
+
+go and refresh the page
+
+vi mithun.html
+<h1> Never giveup Abdul your time start now u can achieve it </h1>
+
+ls
+index.html  mithun.html
+go and refresh the page
+http://54.90.135.189/             #1st output  #TomcatIp address
+http://54.90.135.189/mithun.html  #2nd output
+http://54.90.135.189/AbdulAsmaHameed.html  #3rd Output
+-----------------------------------------------------------------------
+connect Mavenserver #this are maven commands
+
+
+/root/projects/maven-web-application/target/maven-web-application
+ls
+#META-INF  WEB-INF  images  jsps
+cd images/
+yum install httpd -y
+service httpd start
+cp mithunlogo.jpg /var/www/html/            #mithunlogo.jpg i copied this image to html
+cd /var/www/html/
+ls
+
+http://54.146.253.89/mithunlogo.jpg
+
+suppose if it's not working u can go to security group then all the traffic then deffinetly it will work other wise u can start the service
+
+chmod o-r mithunlogo.jpg
+ls -l
+
+then u can go and refresh the page u don't have access permition
+
+chmod o+r mithunlogo.jpg
+now u can access this logo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

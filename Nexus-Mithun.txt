@@ -1,0 +1,810 @@
+                                    NEXUS-1
+                                    =======Abdulhameed1994
+Artifactory Repo
+----------------
+JFrog Artifactory #company name #tool name  nexus-3.87 version
+
+Sonatype Nexus
+--------------
+Nexus is an opensource, java based artifactory repo
+
+it can be used to store the build artifact and retrive the build artifacts whenever we required
+
+build artifacts/packages {both are same}
+
+Java --> jar/war/ear
+
+.Net --> .exe
+
+Node js --> .tar
+
+Install
+--------
+java
+Hardware --> 4 GB RAM
+
+wget https://download.sonatype.com/nexus/3/nexus-3.87.1-01-linux-x86_64.tar.gz
+
+tar -zxvf nexus-3.87.1-01-linux-x86_64.tar.gz
+
+nexus-3.87.1-01   #nexus 3.87 #verion########etc contains all the configuration file
+etc
+nexus-default.properties
+bin
+
+
+sonatypes-work
+nexus3
+   logs     
+
+
+launch EC2 instance t2.medium #AWS linux
+connect ec2 server
+
+sudo su -
+cd /opt/
+wget https://download.sonatype.com/nexus/3/nexus-3.87.1-01-linux-x86_64.tar.gz
+tar -zxvf nexus-3.87.1-01-linux-x86_64.tar.gz
+ls
+mv nexus-3.87.1-01 nexus
+cd nexus/
+pwd
+ls
+cd bin/
+ls
+cd ..
+cd etc/
+ls
+cd ..
+cd ..
+cd sonatype-work/
+pwd
+ls
+cd nexus3/
+ls
+cd ../..
+ls
+useradd nexus
+ visudo
+## Allow root to run any commands anywhere
+#root    ALL=(ALL)       ALL
+nexus ALL=(ALL) NOPASSWD: ALL   #add this line only
+
+ctrl +o ctrl +x  #come outside
+ls -l
+chown -R nexus:nexus /opt/nexus
+chown -R nexus:nexus /opt/sonatype-work
+chmod -R 775 /opt/nexus
+chmod -R 775 /opt/sonatype-work
+
+ls -l
+clear
+
+ln -s /opt/nexus/bin/nexus /etc/init.d/nexus
+systemctl enable nexus
+sudo su - nexus
+sudo systemctl start nexus
+sudo systemctl status nexus
+ctrl c #come outside
+pwd
+nexus & jfrog both are run with 8081
+got to ec2-instance security group edit inbound rule add rule all tcp anywhere-ipv4 saverules
+take public ip http://13.217.225.158:8081/
+
+cat /opt/sonatype-work/nexus3/admin.password     #enter in linux server u will get it a passwd
+
+8968013b-8e11-411d-b70c-4b6ac79247e4
+admin
+asma   #passwd
+next
+agree
+Enable anonymous access
+finish                                #successfully installed
+
+http://23.22.66.37:9980/nexus --> nexus 2
+http://13.217.225.158:8081/ --> nexus 3                #http://23.22.66.37:9980/mithuntechnologies/#browse/browse
+
+# sudo su - nexus  #sometimes log out na u can use this
+
+if u want to change the port number u can follow this steps #http://3.80.73.129:9980/mithuntechnologies/#browse/browse
+ls
+cd /opt/nexus/etc/
+vi nexus-default.properties
+
+## DO NOT EDIT - CUSTOMIZATIONS BELONG IN $data-dir/etc/nexus.properties
+##
+# Jetty section
+application-port=9980   #u can change only port number 8081 to 9980
+application-host=0.0.0.0
+nexus-args=${jetty.etc}/jetty.xml,${jetty.etc}/jetty-http.xml,${jetty.etc}/jetty-requestlog.xml
+nexus-context-path=/mithuntechnologies #u can change name here any wish
+
+sudo systemctl restart nexus  #after change the port number u can restart the service
+
+sudo systemctl status nexus
+
+u can go and refresh the page that page is not working we change the port so u can
+http://3.80.73.129:9980/mithuntechnologies/
+
+
+#suppose if u log u can also still we are see this becouse we enabled ananymous access
+
+
+mvn package  #create a package
+mvn install  #if u want store package into your local repos
+mvn deploy   #if u want to upload artifactor into artifactory repo#configure in pom.xml
+
+#start maven server first let me connect maven server
+ssh -i "abdul.pem.pem" ec2-user@ec2-54-91-0-180.compute-1.amazonaws.com
+sudo su -
+cd projects/maven-web-application/     #maven server
+pwd
+ls
+#go to the nexus serever
+#setting , repositories,  #icicibane-release
+
+
+#<distributionManagement>   #don't use this
+http://13.217.225.158:9980/mithuntechnologies/repository/icicbank-release/
+http://13.217.225.158:9980/mithuntechnologies/repository/icicbank-snapshot/
+#</distributionManagement>
+
+ls
+vi pom.xml                          #/root/projects/maven-web-application
+
+
+
+     <distributionManagement>
+
+            <repository>
+              <id>nexus</id>
+              <name>ICICI Bank Releases Nexus Repository</name>   #add lines only here
+              <url>http://13.217.225.158:9980/mithuntechnologies/repository/icicbank-release/</url> #add line only here
+            </repository>
+
+            <snapshotRepository>
+              <id>nexus</id>
+              <name>ICICI Bank Snapshot Nexus Repository </name> #add lines only here
+              <url>http://13.217.225.158:9980/mithuntechnologies/repository/icicbank-snapshot/</url> #add lines only here
+            </snapshotRepository>
+
+        </distributionManagement>
+
+
+cd /opt/apache-maven-3.9.11/conf
+vi settings.xml
+
+    <server>
+      <id>nexus</id>
+      <username>admin</username>          #u can add this url instead of username and passwd
+      <password>asma</password>
+    </server>
+
+:wq
+
+sudo su -
+ls
+cd projects/maven-web-application/   #don't forget to deploy mvn clean deploy
+pwd
+#/root/projects/maven-web-application  #u stay this directory then u can update this command
+
+mvn clean deploy  
+
+
+
+
+
+                                                NEXUS-INSTALLATION
+                                                ==================
+create an ec2 server amazon-linux t2.medium connect to the server
+
+
+
+
+sudo su -
+cd /opt/
+wget https://download.sonatype.com/nexus/3/nexus-3.87.1-01-linux-x86_64.tar.gz
+tar -zxvf nexus-3.87.1-01-linux-x86_64.tar.gz
+ls
+mv nexus-3.87.1-01 nexus
+cd nexus/
+pwd
+ls
+cd bin/
+ls
+cd ..
+cd etc/
+ls
+cd ..
+cd ..
+cd sonatype-work/
+pwd
+ls
+cd nexus3/
+ls
+cd ../..
+ls
+useradd nexus
+ visudo
+## Allow root to run any commands anywhere
+#root    ALL=(ALL)       ALL
+nexus ALL=(ALL) NOPASSWD: ALL   #add this line only
+
+ctrl +o ctrl +x  #come outside
+ls -l
+chown -R nexus:nexus /opt/nexus
+chown -R nexus:nexus /opt/sonatype-work
+chmod -R 775 /opt/nexus
+chmod -R 775 /opt/sonatype-work
+
+ls -l
+clear
+
+ln -s /opt/nexus/bin/nexus /etc/init.d/nexus
+systemctl enable nexus
+sudo su - nexus
+sudo systemctl start nexus
+sudo systemctl status nexus
+ctrl c #come outside
+pwd
+nexus & jfrog both are run with 8081
+got to ec2-instance security group edit inbound rule add rule all tcp anywhere-ipv4 saverules
+take public ip http://13.217.225.158:8081/
+
+cat /opt/sonatype-work/nexus3/admin.password     #enter in linux server u will get it a passwd
+
+b54280db-93a5-46f1-9f71-c955cf986db7
+admin
+devops   #passwd
+next
+agree
+Enable anonymous access
+finish                                #successfully installed
+
+#http://23.22.66.37:9980/nexus --> nexus 2
+#http://13.217.225.158:8081/ --> nexus 3                #http://23.22.66.37:9980/mithuntechnologies/#browse/browse
+
+# sudo su - nexus  #sometimes log out na u can use this#suppose if u log in no need to use this command #nexus server
+
+if u want to change the port number u can follow this steps #http://3.80.73.129:9980/mithuntechnologies/#browse/browse     #
+ls
+sudo su -
+cd /opt/nexus/etc/
+vi nexus-default.properties
+
+## DO NOT EDIT - CUSTOMIZATIONS BELONG IN $data-dir/etc/nexus.properties
+##
+# Jetty section
+application-port=9980                          #u can change only port number 8081 to 9980 add both lines
+application-host=0.0.0.0
+nexus-args=${jetty.etc}/jetty.xml,${jetty.etc}/jetty-http.xml,${jetty.etc}/jetty-requestlog.xml
+nexus-context-path=/mithuntechnologies                       #u can change name here any wish
+
+:wq  #save and quite
+
+sudo systemctl restart nexus  #after change the port number u can restart the service
+
+sudo systemctl status nexus
+
+press q come outside
+
+u can go and refresh the page that page is not working we change the port so u can
+http://3.80.73.129:9980/mithuntechnologies/  #http://54.89.166.54:9980/mithuntechnologies/
+http://52.73.46.131:9980/mithuntechnologies/
+
+#suppose if u log u can also still we are see this becouse we enabled ananymous access
+let me log in username is admin passwd devops
+
+if u want to create the repositorys click o setting tab
+repositories create repository u have to select maven2(hosted)
+icicibank-snapshot  (name of the repo)
+snapshot  (version policy)
+remaining u can leave the default values click on create repository
+same way i am create another one repository
+click on repository select maven2(hosted)
+icicibank-release  (name of the repo)
+Release (version policy)
+remaining u can leave the default values click on create repository
+
+now am going to log out click on browse if we can log out also we can able to this becouse we enable the anonymus access
+u first login admin devops then go to the security click on security click on anonymous access disable the blue tick
+and then save the changes  suppose if i logout am not able to see
+
+if u want to see the content click on browse and click on icicibank-snapshot
+
+#mvn package  #create a package
+#mvn install  #if u want store package into your local repos
+#mvn deploy   #if u want to upload artifactor into artifactory repo#configure in pom.xml
+
+#start maven server first let me connect maven server
+
+ssh -i "abdul.pem.pem" ec2-user@ec2-54-91-0-180.compute-1.amazonaws.com
+sudo su -
+cd projects/maven-web-application/     #maven server
+pwd
+ls
+#go to the nexus serever
+#setting , repositories,  #icicibane-release
+
+vi pom.xml        #go to nexus home page take url from both repos
+u can go to the nexus repo icicibank-release click (copy then take url)
+http://52.73.46.131:9980/mithuntechnologies/repository/icicibank-release/                #
+u can go to the nexus repo icicibank-snapshot click (copy then take url)
+http://52.73.46.131:9980/mithuntechnologies/repository/icicibank-snapshot/
+
+
+#<distributionManagement>   #don't use this
+http://13.217.225.158:9980/mithuntechnologies/repository/icicbank-release/
+http://13.217.225.158:9980/mithuntechnologies/repository/icicbank-snapshot/
+#</distributionManagement>
+
+ls
+vi pom.xml                          #/root/projects/maven-web-application
+
+
+
+     <distributionManagement>
+
+            <repository>
+              <id>nexus</id>
+              <name>ICICI Bank Releases Nexus Repository</name>   #add lines only here ICICI Bank
+              <url>http://13.217.225.158:9980/mithuntechnologies/repository/icicbank-release/</url> #add line only here
+            </repository>
+
+            <snapshotRepository>
+              <id>nexus</id>
+              <name>ICICI Bank Snapshot Nexus Repository </name> #add lines only here ICICI Bank
+              <url>http://13.217.225.158:9980/mithuntechnologies/repository/icicbank-snapshot/</url> #add lines only here
+            </snapshotRepository>
+
+        </distributionManagement>
+
+esc :wq
+
+cd /opt/apache-maven-3.9.12/conf    #here u add maven-3.9.12
+vi settings.xml  #press i
+
+ <server>
+      <id>deploymentRepo</id>   #nexus
+      <username>repouser</username> #admin   
+      <password>repopwd</password> #devops
+    </server>
+
+---------------intead of this u can add bottom lines
+
+    <server>
+      <id>nexus</id>
+      <username>admin</username>          #u can add this url instead of username and passwd
+      <password>devops</password>
+    </server>
+
+:wq
+
+                               #suppose u log out u can use this command
+                                sudo su -
+cd -                              ls           cd projects/maven-web-application/   #don't forget to deploy mvn clean deploy
+                              #/root/projects/maven-web-application  #u stay this directory then u can update this command
+
+exit       #suppose if u in /conf u can exit
+sudo su -           #/root/projects/maven-web-application
+
+mvn clean deploy                  #0.0.1-SNAPSHOT
+
+
+
+
+http://54.89.166.54:9980/
+
+
+
+
+http://52.73.46.131:9980/mithuntechnologies/repository/icicibank-release/
+
+
+   <server>
+      <id>nexus</id>
+      <username>admin</username>
+      <password>devops</password>
+    </server>
+
+
+
+chat gpt lines
+-------------
+
+<servers>
+    <server>
+        <id>nexus-releases</id>
+        <username>admin</username>
+        <password>devops</password>
+    </server>
+
+    <server>
+        <id>nexus-snapshots</id>
+        <username>admin</username>
+        <password>devops</password>
+    </server>
+</servers>
+
+
+<distributionManagement>
+    <repository>
+        <id>nexus-releases</id>
+        <url>http://18.207.113.254:9980/mithuntechnologies/repository/icicibank-Releases/</url>
+    </repository>
+</distributionManagement>
+
+
+
+
+                                   Nexus=2
+                                   =======
+Turn on the Nexus and Maven Server
+
+let me access to Nexus http://3.87.173.23:9980/mithuntechnologies
+give the usr name and passwd admin devops
+
+am going to connect the linux server using Maven server
+connect linux server ssh -i "abdul.pem.pem" ec2-user@ec2-3-88-228-129.compute-1.amazonaws.com
+sudo su -
+cd projects/maven-web-application/
+vi pom.xml
+
+                                   #/root/projects/maven-web-application
+ <modelVersion>4.0.0</modelVersion>                #assume if u delete this server u can change this version until no need to change this version
+
+        <groupId>com.mt</groupId>
+        <artifactId>maven-web-application</artifactId>
+        <packaging>war</packaging>
+        <version>1.0.0</version>                 #just remove the SNAPSHOT leave it as it is
+
+
+
+esc :wq
+
+---------------------------------------------------#don't add below this line pom.xml becouse i made a change that's pested here for remember purpose
+ <properties>
+                <jdk.version>1.8</jdk.version>
+                <spring.version>5.1.2.RELEASE</spring.version>
+                <junit.version>4.11</junit.version>
+                <log4j.version>1.2.17</log4j.version>
+                <sonar.host.url>http://18.207.113.254:9000/</sonar.host.url>        #leave it as it is
+                <sonar.login>b54280db-93a5-46f1-9f71-c955cf986db7</sonar.login>
+--------------------------------------------------------------------------------
+
+#before deploy the goal 
+validate
+compile
+test                    #this are command just for remember purpose
+package
+install
+deploy
+-------this are the goals it's going to excute#
+
+mvn clean deploy         #start command here
+
+EIP --> elastic IP like a public ip suppose if u restart the server public ip not going to change
+
+
+Maven Local Repo
+
+Maven Central Repo
+
+Remote Repo
+
+mithuntechnologies-remoterepo
+maven2 version policy
+Mixed
+
+upload the files 
+click choose file javax.mail-1.6.2.jar
+Extension  jar
+
+Group ID
+com.mt
+Artifact ID
+mail
+Version
+1.0.0
+
+
+<dependency>
+  <groupId>com.mt</groupId>
+  <artifactId>mail</artifactId>  #34.04
+  <version>1.0.0</version>
+</dependency>
+
+ 
+<repositories>
+ <repository>
+  <id>nexus<id>
+  <url>http://3.87.173.23:9980/mithuntechnologies/repository/mithuntechnologies-remoterepo/</url>
+ </repository>
+</repositories>
+
+
+ <mirror>
+      <id>nexus</id>
+      <mirrorOf>external:http:*</mirrorOf>
+      <url>http://3.87.173.23:9980/mithuntechnologies/repository/mithuntechnologies-remoterepo/</url>
+      <blocked>false</blocked>
+    </mirror>
+  </mirrors>
+
+
+
+                        Nexus=3
+                        =======
+create a repository
+
+select maven2 proxy
+mithuntechnologies-proxy  (repo name)
+https://repo1.maven.org/maven2/
+
+all default click on create repository
+
+ vi pom.xml
+http://3.87.173.23:9980/mithuntechnologies/repository/mithuntechnologies-proxy/
+
+cd ~/mavencustomlocalrepo/
+rm -rf commons*
+ls
+rm -rf junit/
+rm -rf log4j/
+cd -
+[root@ip-172-31-20-87 maven-web-application]#
+
+
+http://3.87.173.23:9980/mithuntechnologies/repository/mithuntechnologies-grouprepo/
+
+hosted (means upload)
+
+users
+active
+nx-enonymus
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

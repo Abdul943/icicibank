@@ -1,0 +1,562 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springappdeployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springapp
+  template: # Pod template
+    metadata:
+      name: springapppod
+      labels:
+        app: springapp
+    spec:
+      containers:
+      - name: springappcont
+        image: dockerhandson/spring-boot-mongo:1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGO_DB_HOSTNAME
+          value: mongosvc
+        - name: MONGO_DB_USERNAME
+          value: devdb
+        - name: MONGO_DB_PASSWORD
+          value: devdb@123
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 200m
+            memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springappsvc
+spec:
+  type: NodePort
+  selector:
+    app: springapp
+  ports:
+  - port: 80
+    targetPort: 8080
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: mongodbrs
+spec:
+  replicas: 1 # Added replicas for a single replica (change as needed)
+  selector:
+    matchLabels:
+      app: mongo
+  template: # Pod template
+    metadata:
+      name: mongopod
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongocontainer
+        image: mongo
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: devdb
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: devdb@123
+        volumeMounts: # Fixed indentation
+        - name: mongodbvol
+          mountPath: /data/db
+      volumes:
+      - name: mongodbvol
+        hostPath:
+          path: /tmp/mongodata
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongosvc
+spec:
+  type: ClusterIP
+  selector:
+    app: mongo
+  ports:
+  - port: 27017
+    targetPort: 27017
+kubectl get pod
+kubectl  logs springappdeployment-zkrj7
+kubectl exec mongodbrs-85whb ls (check 1 pod)
+kubectl describe pod mongodbrs-85whb
+kubectl exec mongodbrs-85whb -c containername ls (check multiple container)
+kubectl describe pod mongodbrs-85whb
+kubectl logs mongodbrs-85whb -c mongocontainer (check multiple logs)
+kubectl exec mongodbrs-85whb ls /data/db (check data)
+       (NFS share volume)
+create a nfs volume
+sudo apt update  (nfs)
+sudo apt install nfs-kernel-server -y  (nfs)
+sudo mkdir -p /mnt/nfs_share   (nfs)
+ls
+  (instead of use these sudo chown -R nobody:nogroup -R /mnt/nfs_share) (nfs)
+sudo vi /etc/exports  (go to inside the nfs)
+/mnt/nfs_share 10.0.0.0/24(rw,sync,no_subtree_check,no_root_squash)  take vpc id  (nfs)
+ sudo exportfs -a     
+sudo systemctl restart nfs-kernel-server  (nfs)
+sudo apt install nfs-common -y (install these software in w1,w2 master machine)
+cp springapp.yml 
+  (master node)
+vi springapp_nfs.yml (remove the host path in these file)
+delete & recreate all the services 
+ls /mnt/nfs_share  (nfs)  (check the data in nfs volume)
+kubectl get all
+kubectl get pod -o wide
+kubectl delete pod podname (pod will be shifted to other node our data will be there becouse our data store in nfs) 
+
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: springappdeployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springapp
+  template: # Pod template
+    metadata:
+      name: springapppod
+      labels:
+        app: springapp
+    spec:
+      containers:
+      - name: springappcont
+        image: dockerhandson/spring-boot-mongo:1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGO_DB_HOSTNAME
+          value: mongo
+        - name: MONGO_DB_USERNAME
+          value: abdul
+        - name: MONGO_DB_PASSWORD
+          value: abdul@123
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 200m
+            memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springappsvc
+spec:
+  type: NodePort
+  selector:
+    app: springapp
+  ports:
+  - port: 80
+    targetPort: 8080
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: mongodbrs
+spec:
+  replicas: 1 # Added replicas for a single replica (change as needed)
+  selector:
+    matchLabels:
+      app: mongo
+  template: # Pod template
+    metadata:
+      name: mongopod
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongocontainer
+        image: mongo
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: abdul
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: abdul@123
+        volumeMounts: # Fixed indentation
+        - name: mongodbvol
+          mountPath: /data/db            
+      volumes:
+      - name: mongodbvol
+        nfs:                                                                   # (remove only host path)
+         server: 10.0.0.108                      # (private ip of the nfs server) 
+         path: /mnt/nfs_share  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongosvc
+spec:
+  type: ClusterIP
+  selector:
+    app: mongo
+  ports:
+  - port: 27017
+    targetPort: 27017
+
+(gourave)  empty-dir                                  (if you delete the container data will be not deleted becouse data is stored in the pod)
+vi emptydir.yml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-vol
+spec:
+  containers:
+  - name: test-container
+    image: coolgourav147/nginx-custom
+    volumeMounts:
+      - mountPath: /data
+        name: first-volume
+  volumes:
+  - name: first-volume
+    emptyDir: {}
+
+kubectl get all
+kubectl apply -f firstvolume.yml
+kubectl get all
+kubectl exec -it  test-vol /bin/bash
+
+cd /data/
+
+for((i=0;i<50;i++))
+> do
+> touch $i
+> done
+root@test-vol:/data# ls
+0  10  12  14  16  18  2   21  23  25  27  29  30  32  34  36  38  4   41  43  45  47  49  6  8  all-my-x  rukhi
+1  11  13  15  17  19  20  22  24  26  28  3   31  33  35  37  39  40  42  44  46  48  5   7  9  mub       sumi
+
+cd /tmp/
+root@test-vol:/tmp# ls
+root@test-vol:/tmp# cd 
+root@test-vol:~# ls
+root@test-vol:~# pwd
+/root
+root@test-vol:~# touch r s m a h 
+root@test-vol:~# ls
+a  h  m  r  s
+root@test-vol:~# service nginx stop  (stop the nginx service and delete the container inside the pod)
+kubectl get pod
+kubectl exec -it test-vol /bin/bash
+cd data/
+ls
+
+     (host path volume)
+delete old pod &create new pod
+kubectl delete pod test-vol                    
+vi hostpath.yml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-vol
+spec:
+  containers:
+  - name: test-container
+    image: coolgourav147/nginx-custom
+    volumeMounts:
+      - mountPath: /data
+        name: first-volume
+  volumes:
+  - name: first-volume
+    hostPath:
+      path: /tmp/data
+
+connect one master machine                 (if you delete the pod data is not deleted becouse data is stored in the node)
+kubectl apply -f hostpath.yml 
+kubectl get all
+kubectl exec -it test-vol /bin/bash
+ls
+cd /data/
+(go to inside the pod) 
+firstvolume.yml  hostpath.yml
+kubectl apply -f hostpath.yml
+ touch 1 2 3 4 5 6 7 8 9
+exit
+kubectl delete pod test-vol
+delete the pod and recreate the pod
+kubectl apply -f hostpath.yml 
+kubectl exec -it test-vol /bin/bash
+ls
+ cd data/
+ls
+
+delete the pod
+kubectl delete all --all
+
+kubectl cluster-info (Information of the cluster)
+kubectl get node
+create an ebs volume on aws/ take 2gb data on this volume                        wsl --install (search in linux)
+create an ebsvolume.yml (file)
+vi ebsvolume.yml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-vol
+spec:
+  containers:
+  - name: test-container
+    image: coolgourav147/nginx-custom
+    volumeMounts:
+      - mountPath: /data
+        name: first-volume
+  volumes:
+  - name: first-volume
+    awsElasticBlockStore:
+      volumeID: "vol-0826024a53e806464"            #insert EBS volume ID here 
+      fsType: ext4
+
+kubectl apply -f ebsvolume.yml
+kubectl describe pod test-vol
+
+                           (config map & secrets)
+kubectl get configmap
+ kubectl get secret
+kubectl describe cm kube-root-ca.crt (config is a human readable format)
+kubectl describe secret default-token-n8wmw (encripted format)
+cp springapp_nfs.yml springapp_pvc_configmapsecrets.yml
+kubectl apply -f springapp_pvc_configmapsecrets.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springappdeployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springapp
+  template: # Pod template
+    metadata:
+      name: springapppod
+      labels:
+        app: springapp
+    spec:
+      containers:
+      - name: springappcont
+        image: dockerhandson/spring-boot-mongo:1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGO_DB_HOSTNAME
+          value: mongosvc
+        - name: MONGO_DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: springappconfig    #
+              key: mongodbusername
+        - name: MONGO_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: springappsecret
+              key: mongodbpassword
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 200m
+            memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springappsvc
+spec:
+  type: NodePort
+  selector:
+    app: springapp
+  ports:
+  - port: 80
+    targetPort: 8080
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: mongodbrs
+spec:
+  replicas: 1 # Added replicas for a single replica (change as needed)
+  selector:
+    matchLabels:
+      app: mongo
+  template: # Pod template
+    metadata:
+      name: mongopod
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongocontainer
+        image: mongo
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: springappconfig
+              key: mongodbusername
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: springappsecret
+              key: mongodbpassword
+        volumeMounts: # Fixed indentation
+        - name: mongodbvol
+          mountPath: /data/db            
+      volumes:
+      - name: mongodbvol
+        nfs:                                                                   # (remove only host path)
+         server: 10.0.0.42                      # (private ip of the nfs server) 
+         path: /mnt/nfs_share  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongosvc
+spec:
+  type: ClusterIP
+  selector:
+    app: mongo
+  ports:
+  - port: 27017
+    targetPort: 27017
+
+kubectl get all (pods are not creating becouse we are not creating configmap &secrets)
+kubectl describe pod mongodbrs-6zbbc
+vi springappconfig.yml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: springappconfig
+data:
+  mongodbusername: devdb
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: springappsecret
+type: Opaque
+stringData:
+  mongodbpassword: devdb@123
+
+kubectl apply -f springappconfig.yml
+kubectl get cm
+kubectl get secret
+kubectl describe configmap springappconfig 
+
+kubectl get pod 
+kubectl get node
+kubectl get ns
+kubectl api-resource | grep configmaps
+kubectl get cm
+kubectl create cm cm1 --from-literal=database_ip="192.168.0.4"
+kubectl describe cm cm1
+(down of the data is a key,down of the key it's value)
+kubectl create cm cm2 --from-literal=database_ip="192.168.0.4" --from-literal=database_username="root" --from-literal=database_password="mysupersecretpassword"
+kubectl describe cm cm2
+mkdir configmap
+cd configmap/
+vi application.properties
+kubectl get cm
+kubectl create cm cm3 --from-file=application.properties
+kubectl get cm
+cp application.properties superadmin.properties 
+ kubectl describe cm cm3
+vi application.properties 
+
+database_ip="192.168.0.4"
+database_password="hameed123"
+database_username="abdul"
+
+vi superadmin.properties
+
+database_ip="192.168.0.4"
+database_password="hameed123"
+database_username="abdul"
+
+kubectl create cm cm4 --from-file=application.properties --from-file=superadmin.properties
+kubectl get cm
+kubectl get nodes
+kubectl get all
+cd configmap/
+ls
+application.properties superadmin.properties 
+echo "this is test1 file" > test1.properties
+echo "this is test2 file" > test2.properties
+ls
+cd ..
+kubectl create cm filecm --from-file=configmap
+kubectl get cm
+kubectl describe cm filecm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
