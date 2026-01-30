@@ -1,0 +1,1600 @@
+sudo su - (root user) ########scp -i abdul.pem mavenwebimage.tar ubuntu@34.228.9.103:/home/ubuntu/mavenwebimage.tar#########one server to another server copy
+apt update -y  (update all)
+apt install docker.io -y (docker installion)
+sudo usermod -aG docker ubuntu    #-a stand for add #g stand for group #suppose u can add group log in and logout then u don't add sudo without sudo permition all commands are work
+which docker (check docker instalsuserlation)
+docker -v  (check docker version)
+service docker status (check docker status)
+service docker start  (docker start the status)
+docker info (informatin of the docker)
+ps -ef | grep "docker"      #dockerd docker d stand for daemon
+docker images (check images)
+docker ps (check proccess status,running container)
+docker ps -a (check runnig and stop status,all container)
+docker run -it ubuntu /bin/bash (create a new container,go to inside the container and run the container)(interactive mode terminal)
+ls (list)
+cat /etc/os-release  (check the running container version,oprating system )
+exit  (if use this exit command come to outside of the container, stopped,once if you run -it ubuntu /bin/bash create new container)
+docker run -it ubuntu /bin/bash (again create new container)
+docker run -it centos /bin/bash
+exit
+docker images 
+docker ps -a
+docker pull jenkins (automatically pull in docker hub)
+docker images 
+docker pull chef/chefdk (automatically pull in docker hub)
+docker run -it chef/chefdk /bin/bash (downloads within seconds)
+
+docker build -t abdultomcat:1 .
+docker commit abdultomcat abdul1992/abdultomcat                   #take container id here
+docker push abdul1992/abdultomcat
+
+docker run -d --name asmamycaty -p 8080:8080 abdul1992/abdultomcat
+
+docker run -d --name abdulspringboot -p 9090:8080 dockerhandson/spring-boot-mongo
+docker commit 7b88e3133fb2 abdul1992/spring-boot-mongo
+docker images
+docker push abdul1992/spring-boot-mongo
+
+
+which chef 
+chef -v
+exit
+docker search ubuntu (check all ubuntu files)
+docker search jenkins (check all ubuntu files)
+docker run -it --name abdul ubuntu /bin/bash (create name of the container)
+exit (stop all the container & come to outside the container)
+docker ps -a (check container name)
+docker start abdul (start the container)
+docker ps (check container runnig status)
+docker start vishnu (start the container)
+docker attach abdul (go to inside the container)
+exit (come outside the container)
+docker start abdul (start the container)
+docker stop abdul (stop the container)
+docker ps -a (check container name)
+docker rm abdul (delete the container)(if you delete the container first stop the container then you can delete)
+docker rm rukhi (delete the container)
+docker ps -a (check container name)
+docker ps -a (check container name)
+exit
+docker ps -a (check container name)
+
+Client
+------
+creating an image
+downloading (pull) image from registry
+uploading (push) image to registry
+creating a container from image
+or deleting a container
+
+Docker Hub--> it's public registry maaintaned by docker where we cabn find lot of softwrare as a image we can these images as base image to create our own image.
+(docker hub is play store for a docker images) 
+
+
+docker images (check images)
+docker ps (check proccess status,running container)
+
+
+
+
+                                                              DOCKER-3
+                                                              ========
+
+Working Dir: /var/lib/docker
+---------------------------
+
+docker info      ---> docker information
+docker version  ----> complete details
+docker --version   --> it will give only one line
+
+using docker file we can create a docker image
+
+what is docker registry?
+Registry is a central place where we can create repositories to store or docker images.
+
+"Registry is a collection of one or more repositories"
+
+what is repositories?
+
+in repositories we can maintain docker image of same type(application)
+with diffrent tags(versions)
+
+ImageName: <registryName>/<repoName>:<tag>
+
+#docker run --name <conatinerName> <iamgename>
+
+#docker run --name centosconatainer centos:latest  
+
+docker images
+
+#it will pull (Download) the image from the registry
+docker pull <iamgeName>
+
+docker run --name centoscotainer centos:7
+
+docker ps              #it will list running container
+docker container ls
+
+docker ps -a
+docker container ls -a   #it will show running or stopped container#-a all#exit means stopped
+
+what is a image?
+image is a package which is required to create a container.
+
+what is a container?
+container is a run time instance of your image.
+
+
+git clone https://github.com/MithunTechnologiesDevOps/maven-web-application.git
+
+ls
+cd maven-web-application/
+
+rm -f Dockerfile
+Default name of docker file
+
+Dockerfile                 --> make sure D is capital
+
+
+Java+Tomcat+Container Liberares + ApplicationCode #suppose if u create Docker file we need al those things
+Docker Domain Specric instructions(Keyword/directives)
+
+FROM
+COPY
+ADD
+RUN
+CMD
+ENTRYPOINT
+WORKDIR
+
+i have deleted this Dockerfile in maven-web-application
+
+vi Dockerfile
+FROM tomcat:9.0-jdk11
+COPY target/maven-web-application.war /usr/local/tomcat/webapps/maven-web-application.war
+---------------------------
+
+#/usr/local/tomcat  this dfault tomcat home directory or catalina home directory
+
+vi Dockerfile
+
+FROM tomcat:8-jdk8-temurin
+Copy target/maven-web-application*.war /usr/local/tomcat/webapps/maven-web-application.war
+
+:wq
+
+cat Dockerfile
+
+docker build -t <imageName> <buildContext>
+
+docker build -t <imageName> .       # . dot represent current directory
+
+docker build -t abdul1992/maven-web-application:1 . 
+  
+#abdul1992 docker hub registries  #maven-web-application this is repository # 1 is a tag # . represent current directory
+
+
+rm -rf target/
+
+mvn clean package
+
+sudo apt install maven -y
+
+java -version
+
+mvn --version
+
+mvn clean package
+
+ls target/
+
+docker build -t abdul1992/maven-web-application:1 .    #-t stand for tag
+
+docker images
+
+docker push abdul1992/maven-web-application:1
+
+docker login -u abdul1992 -p hameed@1992                        #-u means username
+
+docker push abdul1992/maven-web-application:1        #i have push an image to my docker hub
+
+
+name Dev_Docker_server  select ubuntu    creating a new ec2 server t2.micro
+let me connect this server and installed docker
+
+sudo apt update -y
+
+sudo apt install docker.io -y
+
+sudo usermod -aG docker ubuntu
+
+log out and then login
+
+docker images
+
+docker run -p 8080:8080 --name mavenwebapp abdul1992/maven-web-application:1
+
+go to the setting allow the port 8080
+
+http://52.206.6.187:8080/maven-web-application/     #Queite good working
+
+
+docker run -p 8080:8080 --name mavenwebapp1 abdul1992/maven-web-application:1
+
+#docker run -d --name mavenwebapp1 -p 8080:8080 abdul1992/maven-web-application:1
+
+
+                                                      DOCKER-4
+                                                      ========
+lets start the Docker server in EC2(Docker_Buil_Server)
+cd maven-web-application/
+cat Dockerfile
+
+FROM tomcat:9.0-jdk11
+COPY target/maven-web-application.war /usr/local/tomcat/webapps/maven-web-application.war
+
+mvn clean package
+
+docker images
+ls -lar
+
+
+#docker build -t abdul1992/maven-web-application:1 .    #-t stand for tag       
+
+
+sudo ls /var/lib/docker      #7minutes  start from here tommarow onwards   
+sudo ls /var/lib/docker/overlay2
+
+connect to Dev_Docker_Server ssh -i "abdul.pem.pem" ubuntu@ec2-52-91-130-195.compute-1.amazonaws.com #this is my Deployment server where i can deploy the server
+
+#JUST TURN ON THE SERVER AM NOT USING NOW
+
+
+Stands for “detached” mode.    -d #stand for
+
+When you use -d, Docker runs the container in the background, and your terminal prompt returns immediately instead of attaching to the container’s output.
+
+ 
+Stands for “publish” (a short form of --publish). -p #stand for
+
+It maps a port on your host machine to a port inside the container, so services inside the container (like a web server) can be accessed externally.
+
+docker info
+docker version
+docker --version
+
+
+
+Image Commands
+==============
+docker images or docker image ls           #check images #-t means tag your taging that name
+
+docker build -t <ImageName> <buildContext> #build image #using Dockerfile we create an image
+
+docker build -t <ImageName> .
+
+Imagename --> <registryName>/<repoName>:<tag>
+
+In case of docker hub docker hub usernem(registryname)
+
+docker build -t abdul1992/maven-web-application:1 .
+
+In case of Private Registries
+
+docker build -t 172.89.82.43:8083/maven-web-app:1 .
+
+docker build -t nexus.tcs.com/maven-web-app:1 .
+
+docker build -t nexus.tcs.com/maven-web-app:1 .
+
+ECR --> Elastic Container Registry it's managed container
+registry where we can maintainer docker images. #AWS
+
+
+ACR --> Azure Container Registry
+
+GCR --> Google Container Registry
+
+                                    ECR--AWS#25minutes
+cd maven-web-application
+
+docker build -t 496395773172.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1 .
+
+docker push 496395773172.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1 .
+
+docker images  #468ce97da620 This is image am going to taging 
+
+docker tag imageId awsECR details
+
+docker tag 468ce97da620 496395773172.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1 .
+                         or
+docker build -t 496395773172.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1 .
+
+docker images
+
+docker push 496395773172.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1
+
+ECR to Authenticate
+
+docker login -u <Username> -p <password> <RegistryURL/Name> #this is dockerhub login
+
+docker login -u <username> -p <password> 496395773172.dkr.ecr.us-east-1.amazonaws.com        #ECR rigestry  #38minutes
+
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 496395773172.dkr.ecr.us-east-1.amazonaws.com
+
+aws ecr get-login-password --region us-east-1  #am trying to get password
+
+cd ~
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+sudo apt install unzip -y                #THIS IS AWS CONCEPT
+
+unzip awscliv2.zip
+
+sudo ./aws/install
+
+aws --version
+
+AM CREATING A ROLE IN IAM
+
+i will go to the roles am creating a roles
+
+select ec2 AmazonEC2ContainerRegistryReadOnly click on next Role name ECR_Access click on create role
+am attaching this role select that server
+select Docker_Build_Server(Docker server this is a) click on action select security click on modify role ECR_Access click on Update IAM Role
+
+aws ecr get-login-password --region us-east-1
+
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 496395773172.dkr.ecr.us-east-1.amazonaws.com
+
+docker push 496395773172.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1
+
+WE DON'T HAVE  ACCESS BECOUSE WE ATTACH ONLY READ ONLY ACCESS
+
+again go to IAM click on ECR_Access click on add permition click on attach polices search AmazonEC2ContainerRegistryFullAccess tick it click on add permistion
+am removing  AmazonEC2ContainerRegistryReadOnly #removed
+
+then go and run this command
+
+docker push 496395773172.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1
+
+#passwrd valide for 12hours only
+
+
+#Jenkins Docker Integration - Mithun Technologies - +91-9980923226 #refer this videos#IT'S VERY VERY IMPORTANT BECOUSE THIS REAL TIME SCENARIO
+
+now u can go and see the image in ECR
+
+connect Dev_Docker_Server 
+
+ssh -i "abdul.pem.pem" ubuntu@ec2-100-31-116-56.compute-1.amazonaws.com #this Dev_Docker_Server
+
+docker rm -f $(docker ps -q)  #may be this two commands are not working
+
+docker rm -f $(docker ps -aq)  #may be this two commands are not working  #this service not authenticate to ECR
+
+docker run -d --name mavenwebapp -p 8080:8080 496395773172.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+sudo apt install unzip
+
+unzip awscliv2.zip
+
+then go to IAM create a Role
+
+Create a role select AWS service select Ec2 click on next select AmazonEC2ContainerRegistryReadOnly click on next Role name Dev click on create role
+then go to EC2 i will attach to that server click on Dev_Docker_Service click on action security modify role select Dev Update Iam role
+
+
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 496395773172.dkr.ecr.us-east-1.amazonaws.com
+
+docker pull <IamgeName>
+
+docker run it will do three things first it will check image or not
+it will pull the image
+then it will create a container
+then it will start the container
+
+docker run -d --name mavenwebapp -p 8080:8080 496395773172.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1
+
+docker ps
+------------------that is ECR Concept
+
+
+
+docker build
+docker push
+docker pull
+docker login
+docker images
+
+docker deamon assining the ID's
+
+
+docker rmi <ImageName/ImageId>    #rmoving single image#for removing ID's or repository Details
+ 
+docker rmi <ImageName/ImageId> <ImageName/ImageId>   #removing multiple images
+
+docker rmi  73d58abf502c 468ce97da620
+
+docker rmi abdul1992/maven-web-application:1 496395773172.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1
+  
+docker images -q    #only images id's
+
+docker rmi $(docker images -q)    #delete multiple images#remove images rmi
+
+can we remove image if there is running container for that images?
+no
+
+docker rmi 496395773172.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1
+not deleted becouse it's running container
+
+docker rmi -f 496395773172.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1
+if u use like this -f showing untag
+just removed the tag #image is still exsting
+
+docker images-->
+
+what is dangling images in docker?                  #VVVIMP
+An image without any registry refrence. or an image without any tag.
+
+docker rmi -f  73d58abf502c   #while running the container we can't delete the image
+
+docker rmi  468ce97da620          #now am deleting this image becouse of there is no container is runnig
+
+docker images -q
+
+docker images --filter dangling=true      #if u want to see dangling images
+
+docker images
+
+docker tag 73d58abf502c 496395773172.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1
+am tagging this image with the repository
+docker tag imageid ECRid     #now this is not a dangling image
+
+
+
+
+                                                      DOCKER-5
+                                                      ========
+let me connect to server
+
+docker inspect <imageName/Id> or docker image inspect <imageName/Id>  #more details
+
+docker images
+
+docker inspect abdul1992/maven-web-application:1
+
+imgage is nothing but a multiple layer
+
+without registry how we can we create an image
+
+docker save -o <FileName>.tar <Imageid/Name>  #without registry one server to another server we can move the image #docker save load we can do that
+
+docker load -i <fileName>.tar               #it will load the image of tar file create an image
+
+docker save abdul1992/maven-web-application:1 -o mavenwebimage.tar      #image name or ID also
+
+
+ls
+
+
+vi abdul.pem   #am copieng my pem file
+chmod 400 abdul.pem
+
+scp -i abdul.pem mavenwebimage.tar ubuntu@34.228.9.103:/home/ubuntu/mavenwebimage.tar      #AM copeing one server to another server#-i identity                     ####SCP
+
+am connecting Dev-Docker-server #this is a Dev server
+
+docker images
+
+docker load -i mavenwebimage.tar
+
+docker images
+
+#docker save abdul1992/maven-web-application:1 -o mavenwebimage.tar     #-o output
+#docker load -i mavenwebimage.tar
+
+docker search nginx     #searching the images
+
+docker search tomcat
+
+#403 permistion denaide
+
+docker system prune         #it will remove all the stopped container,that is not used by atleast one container
+#clean up the system
+
+docker image prune          #- all dangling images
+
+docker container prune      #- all stopped containers
+
+docker network prune        #- all networks not used by at least one container
+
+docker volume prune
+-------------------------------
+
+
+Container Commands #nothing but a process
+==================
+
+docker create --name <conatinerName> -p <hostPort>:<containerPort> <ImageName>
+docker run --name <conatinerName> -p <hostPort>:<containerPort> <ImageName>
+
+
+docker run -d --name <conatinerName> -p <hostPort>:<containerPort> <ImageName>    #-d detached background mode
+
+#-m 256Mi --cpus
+
+what is diffrence between docker create & docker run
+
+docker create --> it will just create cotainer it will not start the container
+
+docker run --> it will create container and it will start the container
+
+what should be unique for the containers?
+Container Name & Host Port should be unique.
+we can't have two containers with same name & same host port.
+
+docker start <containerId/Name>
+docker stop <containerId/Name>
+docker restart <containerId/Name>
+docker kill <containerId/Name>  #forceFully stop the container
+
+suppose image is not there it will be pull the image in docker registry
+each container will have some ip address
+
+connect to docker_build_server(Docker-server)
+
+docker create abdul1992/maven-web-application:1    #it's not running
+
+
+#Only Running Containers
+docker ps or docker container ls
+
+#All(Running + Stopped) Containers
+docker ps -a or docker container ls -a
+
+docker ps -a
+
+docker rename jovial_elgamal mavenwebapp   #rename the container(Id/old name)
+
+docker ps -a
+
+docker start mavenwebapp
+
+docker ps
+
+docker inspect mavenwebapp    #more information (Container id or conatiner Name)
+
+curl -v 172.17.0.2:8080/maven-web-application     #container ip or container port #only access inside the container
+
+wget -qO- 172.17.0.2:8080/maven-web-application   #container ip or container port
+
+-p  --> Port Publish/Port Mapping
+
+-p <hostPort>:<containerPort>
+      9090         8080
+hostip -->serverip
+
+ps -ef | grep "tomcat"
+
+sudo apt install net-tools -y     #netstat
+
+netstat -tulnp           #listen the port
+
+netstat                  #to check the port which is used
+
+docker rm mavenwebapp      #remove the container
+
+docker rm -f mavenwebapp   #forcefully removed the container
+
+docker run -d --name mavenwebapp -p 8080:8080 abdul1992/maven-web-application:1
+
+HostPort 8080->8080 ContainerPort
+
+sudo netstat -tunlap
+
+ADD 8080 IN SECURITY GROUP
+
+http://13.222.190.27:8080/maven-web-application/
+
+docker ps
+
+#dockerhandson/java-web-app
+
+docker run -d --name javawebapp -p 9090:8080 dockerhandson/java-web-app
+
+docker ps
+
+go to security group allow the port number 9090
+
+http://13.222.190.27:9090/java-web-app/
+
+docker top mavenwebapp     #what process running
+
+docker stop mavenwebapp    #container is not accessing
+
+docker ps
+
+docker ps -a     
+
+what is diffrenss between docker stop and docker kill
+
+docker stop <containerId/Name>  #stop the process or stop the container safe
+
+docker kill <containerId/Name>  #forceFully stop the container #kill is forcefully #terminational signal
+
+docker restart <containerId/Name>
+
+docker restart mavenwebapp
+
+
+
+   
+
+                                          DOCKER-6
+                                          ========                                      
+
+docker create -p <hostPort:containerPort> --name <containerName> <image>
+docker run -d -p <hostPort:containerPort> --name <containerName> <image>
+docker ps or docker container ls
+docker ps -a or docker container ls -a
+
+docker start <containerId/Name>
+docker stop <containerId/Name>
+docker kill <containerId/Name>
+docker restart <containerId/Name>
+
+docker inspect <containerId/Name>
+docker container inspect <containerId/Name>
+
+docker rm <containerId/Name>
+
+docker rm -f <containerId/Name>
+
+#Remove all containers
+docker rm -f $(docker ps -aq)       
+
+#Remove Only Stopped(Exited) Containers
+docker container prune
+                or
+docker rm $(docker ps -aq --filter "status=exited")
+
+let me connect my docker machine
+
+
+docker ps       #only running containers
+
+docker ps -a     #all containers
+
+docker ps -aq     #only ids
+
+docker ps -aq --filter status=exited   
+
+docker ps -a --filter status=exited
+
+#docker rm $(docker ps -aq --filter status=exited)
+
+docker create --name mavenwebapp -p 9090:8080 abdul1992/maven-web-application:1
+
+docker inspect mavenwebapp
+
+docker start mavenwebapp
+
+
+docker pause <containerId/Name>
+
+docker unpause <containerId/Name>
+
+docker pause mavenwebapp       #sleeping mode
+
+http://34.207.245.136:9090/maven-web-application/
+docker unpause mavenwebapp
+
+http://34.207.245.136:9090/maven-web-application/
+
+How to trouble shoot the application which is running as a container?
+
+1) Make sure the container is up and running.
+
+  docker ps or docker container ls
+
+2) Check the logs of the container.
+
+  docker logs <containerId/Name>
+
+docker logs mavenwebapp
+
+docker logs --tail 10 <containerId/Name>  #it will display last 10 lines
+
+docker logs -f mavenwebapp    #it's printing logs #ctrl c come outside #for truble shooting
+
+3) docker exec <containerId/Name> ls <dir>       #going to inside the container excute the commands
+
+  docker exec <containerId/Name> cat <fileNameWithpath>    #using this u can run Linux cmd
+
+docker exec mavenwebapp pwd
+
+docker exec mavenwebapp ls             #list of container files
+
+ls
+
+docker exec mavenwebapp ls webapps
+
+docker exec mavenwebapp ps
+
+docker exec mavenwebapp ps -ef      #whatever process running inside the container
+
+docker top mavenwebapp
+
+
+docker run -d --name javawebapp -p 8080:8080 dockerhandson/java-web-app    #to check in server
+
+
+docker exec javawebapp ps -ef 
+
+
+is it recomanded to run more then one process to the inside the container?
+it is possible, but it not recomanded.
+whole container proccess are isolation.
+
+docker exec javawebapp ps -ef
+
+docker start javawebapp  mavenwebapp
+
+
+docker exec -it javawebapp bin/bash    #-it interactive terminal go to inside the container
+       or
+docker exec -it javawebapp bash        #-it interactive terminal
+       or
+docker exec -it javawebapp sh          #-it interactive terminal
+
+root@df0f87495ead:/usr/local/tomcat#      #current working directory of the container 
+type exit       #come outside the container
+
+
+root@df0f87495ead:/usr/local/tomcat#
+ps
+ps -ef
+ls
+env
+exit
+
+docker stats javawebapp        #ctrl c
+
+docker exec -it javawebapp bash
+
+apt install vim -y
+
+exit
+
+docker ps
+
+docker commit javawebapp dockerhandson/java-web-app:fromcontainer   #using container we create an image
+
+docker commit <containerId/Name> <Imagetag>      
+
+what is docker commit?
+we can create(commit) image from container
+
+docker ps
+
+docker images
+
+How can we copy files from container to the docker host/system & docker host/system to container?
+
+docker cp <SourcePath> <destinationPath>   #container to the system
+
+docker cp <filePathOfTheSystem> <containerId/Name:/PathOftheContainer>  #system to the container
+
+docker cp  <containerId/Name:/PathOftheContainer> <filePathOfTheSystem>  #container to the system
+
+what is diffrence b/w cp & COPY in docker?
+COPY system to the image 
+cp   system to the container or container to the system
+
+
+docker exec javawebapp ls logs
+
+docker exec javawebapp pwd
+
+docker exec javawebapp ls /usr/local/tomcat/logs
+
+docker cp javawebapp:/usr/local/tomcat/logs/catalina.2026-01-27.log catalina.2026-01-27.log
+
+ls
+
+can we copy files from one container to another container directly
+no possible
+
+
+Registry
+Docker Client
+Docker Daemon/Server/Host
+
+docker container --help
+docker ps --help
+docker commit --help
+
+
+
+
+
+                                                 DOCKER-7
+                                                 ========
+Dockerfile -->
+----------
+It's file using which we can create a docker image. in docker file we are going to write
+instruction to create an image quikly
+
+In docker file we are going to use Docker DSL (Domain Specfic Language)
+Keyword/Directives.
+
+FROM
+MAINTAINER
+COPY
+ADD
+RUN
+CMD
+ENTRYPOINT
+LABEL
+ARG
+ENV
+WORKDIR
+USER
+EXPOSE
+USER
+VOLUME                             
+
+Docker Image --> It's an excutable package which contains everything 
+(App Code And It's dependenceis(Software,Configuration,Environment vars ..etc)which is requred to run piece of software
+
+
+Sample
+
+FROM    #we are creating our image#FROM indicate base image
+
+FROM --> It's used to set(define) base image for our own dockerimage.
+         All the subsequent instruction will executed on top of this image
+
+FROM tomcat:8.0.20-jre8
+
+FROM openjdk:8-jdk-oraclelinux8
+
+FROM python:3.10.0cr2-bullseye
+
+FROM node:16-alpine3.11
+
+MAINTAINER  --> We can set maintainer(Owner) who is owning that iamg.
+
+MAINTAINER MithunTech<devopstrainingblr@gmail.com>
+
+COPY --> Using COPY we can copy files/folders
+(From the system where we are building the image)while creating an image
+
+COPY <Source> <Destination>
+
+docker build -t <ImageTag> <buildContext>
+
+docker build -t <ImageTag> .     #. reprsent current directory
+
+EX:
+COPY target/maven-web-application.war /usr/local/tomcat/webapps/maven-web-application.war
+
+COPY only copieng local files
+
+COPY . .      #first . dot represent current directory #whatevre copy in your buildContext that copy to current directory of your image
+
+ADD --> ADD also can copy files to the image.ADD can copy local files and also files from remote http(s)locations.
+         If we are adding (copying) tar files using ADD.It will add the tar file to the image and also it will extract the tar file in the image.
+
+ADD <SorcePath> <Destination>
+
+ADD <SorceURL> <Destination>
+
+ADD https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.115/bin/apache-tomcat-9.0.115.tar.gz /opt/tomcat.tar.gz
+
+What is diffrence b/w COPY and ADD
+copy and add both are use to copy to the image but copy can copy only local files when 
+it comes to add local file as well as remote file and if your adding tar file it will be extract the tar file
+
+#only tar file extract
+
+FROM tomcat:9.0-jdk11
+COPY target/maven-web-application.war /usr/local/tomcat/webapps/maven-web-application.war
+
+RUN --> using RUN we can run any command on top of the previous layer(Image)(we can exucute the command)
+this RUN commands exucted while creating an image.
+For an example we can install required package while creating an image
+
+we can have n number of instruction.Docker will process all the instruction from top to bottom
+
+
+CMD  --> using CMD also we can run commands. CMD instruction or command will be excuted while starting the container
+         this is used to run a service.this is used to run a application(process)
+
+
+let me connect to docker server ssh -i "abdul.pem.pem" root@ec2-98-81-129-131.compute-1.amazonaws.com
+
+What is diffrence b/w RUN & CMD?
+use case of CMD to start the application to start the process #CMD start the process 
+RUN instruction while creating an image while building the image
+
+we can have more than one CMD instruction.but docker will use (excute) only one CMD(RecentOne/last CMD in the order)
+
+FROM tomcat:9.0-jdk11
+COPY target/maven-web-application.war /usr/local/tomcat/webapps/maven-web-application.war
+
+docker run --name centoscontainer centos:7
+
+#docker run -it centos:7 bash#
+
+
+
+ENTRYPOINT --> we can set ENTRYPOINT for the container.we can run commands
+using ENTRYPOINT.ENTRYPOINT Instruction will be exucted while starting the container.
+
+What is Diffrence b/w CMD & ENTRYPOINT
+CMD commands/instuction can be overriden at run time (While creating a container)
+
+ENTRYOINT["catalina.sh","run"]
+CMD["catalina.sh","run"]
+
+#docker run --name <containerName> -d <ImageName> ls   #if we have CMD #overrite the CMD ls will be run if u pass like this
+
+mkdir dockerfile_lab
+
+cd dockerfile_lab/
+ls
+                     docker image is layerd architachure
+
+
+FROM   #base image
+COPY  #copy your code
+ADD   #copy your code
+RUN   #excute or install software
+CMD         #to start your application
+ENTRYPOINT  #to start your application
+
+
+
+
+vi Dockerfile
+
+FROM nginx
+
+RUN apt-get update
+RUN apt-get install -y git
+RUN echo "RunOne"
+RUN mkdir -p /opt/app
+RUN echo "RunTwo"
+
+docker build -t imageone .
+
+docker build -t imageone .    #practing purpose
+
+What is build cache?
+while creating an image what ever instruction have in Dockerfile if the instruction is already process if there is no changes it's not going to recreate that layer
+it's going to use from the cache
+if u have cahe it will not take to more time to build within seconds it will be create
+
+docker images
+
+how to see the layers of the image
+
+docker inspect <containerId/Name>
+
+docker history imageone:latest
+
+docker build --no-cache -t imageone .    #no cache 
+
+vi Dockerfile
+
+FROM nginx
+RUN apt-get update
+RUN apt-get install -y git
+RUN echo "RunOne"
+RUN mkdir -p /opt/app
+RUN echo "RunTwo"
+CMD ["date"]
+
+docker history imageone
+
+docker run imageone
+
+docker run imageone ls    #this way CMD can be overinde, ENTRYPOINT can't be override
+
+
+
+
+
+
+                                                     DOCKER-8
+                                                     ========
+CMD can be overriden
+if i use ENTRYPOINT we can't override
+
+cp Dockerfile Dockerfile_ENTRYPOINT
+vi Dockerfile_ENTRYPOINT
+
+FROM nginx
+RUN apt-get update
+RUN apt-get install -y git
+RUN echo "RunOne"
+RUN mkdir -p /opt/app
+RUN echo "RunTwo"
+ENTRYPOINT ["date"]         #instead of CMD we have ENTRYPOINT
+
+docker build -f Dockerfile_ENTRYPOINT -t imagetwo .        #-f means file this is not a Dockerfile this is a normal file
+
+docker run imagetwo
+
+docker run imagetwo ls     #is it going to not overide
+
+docker run imagetwo
+
+FROM nginx
+RUN apt-get update
+RUN apt-get install -y git
+RUN echo "RunOne"
+RUN mkdir -p /opt/app
+RUN echo "RunTwo"
+#ENTRYPOINT ["date"]
+ENTRYPOINT ["echo","Asma"]         #this one take as argument
+
+docker run imagetwo
+Asma                     #this is 
+docker run imagetwo ls
+Asma ls
+docker run imagetwo date 
+
+
+ cp Dockerfile_ENTRYPOINT DockerfileD
+mv DockerfileD Dockerfile_ENTCMD
+ vi Dockerfile_ENTCMD
+
+FROM nginx
+RUN apt-get update
+RUN apt-get install -y git
+RUN echo "RunOne"
+RUN mkdir -p /opt/app
+RUN echo "RunTwo"
+CMD ["date"]
+ENTRYPOINT ["ls","/"]
+
+docker build -t imagethree -f Dockerfile_ENTCMD .
+
+docker run imagethree
+#ls: cannot access 'date': No such file or directory
+
+docker run imagethree pwd
+#cannot access 'pwd': No such file or directory
+
+Always i want to excute same command but i should be able to pass diffrent args to that command
+while starting the container.
+
+CMD ["start"]
+
+ENTRYPOINT ["sh","catalina.sh"]
+
+docker run imagefour
+
+sh catalina.sh start
+
+docker run imagefour run
+sh catalina.sh run
+
+
+Shell Form & Excutable Form
+============================
+RUN CMD, ENTRYPOINT's can be defined in shell form or executable form
+
+Shell Form
+---------
+RUN excutabel arg1 arg2
+Internally the commands is executed as bash/sh
+
+/bin/<shell> -c executable arg1 arg2
+
+RUN mkdir -p /opt/test
+
+/bin/bash -c mkdir -p /opt/test
+
+RUN yum install git -y
+
+/bin/bash -c yum install git -y   
+
+CMD echo welcome
+/bin/bash -c echo welcome
+CMD java -jar app.jar             #bash is a main process
+/bin/bash -c java -jar app.jar    #child process#java is a child
+
+
+ENTRYPOINT echo welcome
+/bin/bash -c java -jar app.jar
+ENTRYPOINT java -jar app.jar
+/bin/bash -c java -jar app.jar  
+
+Executable Form
+
+
+Syntax
+======
+RUN ["executable","arg1","arg2"]
+
+Internally it will be excuted as
+/bin/excutable arg1 arg2
+
+RUN ["mkdir", "-p", "/opt/test"]
+/bin/mkdir -p /opt/test
+RUN ["yum", "install", "git", "-y"]
+/bin/yum install git -y
+
+CMD ["echo", "welcome"]
+/bin/echo welcome
+CMD ["java", "-jar", "app.jar"]
+/bin/java -jar app.jar
+
+ENTRYPOINT ["echo", "welcome"]
+/bin/echo welcome
+ENTRYPOINT ["java", "-jar", "app.jar"]                  
+/bin/java -jar app.jar   #main process#java is a main process
+
+shell form to excutable form issue got resoled
+
+Specially for prefered CMD & ENTRYPOINT excutable form   # ["echo", "welcome"] CMD ENTRYPOINT Always   excutebale form     
+RUN is shell form  /bin/bash
+
+
+
+FROM   #base image
+COPY  #copy your code
+ADD   #copy your code
+RUN   #excute or install software
+CMD         #to start your application
+ENTRYPOINT  #to start your application
+
+label  --> Labels key value pairs
+
+LABEL  --> we can add() a labels to the image
+
+ENV   ---> it's key value pair.we can set environment variable image/container
+
+ENV JAVA_HOME /usr/bin/java
+ENV TOMCAT_HOME /usr/local/tomcat
+
+
+ARG   --> Argument we can pass arguments to the docker build.
+we can define ARG in docker file this args can be reffered in docker file.
+
+WORKDIR -->working directory
+
+EXPOSE
+
+USER
+
+VOLUME
+
+
+
+node{
+
+def branchname =
+
+def buildNumber =BUILD_NUMBER
+
+stage("docker build"){
+
+ sh "
+
+
+
+
+
+cd dockerfile_lab/
+
+vi Dockerfile
+
+FROM tomcat:9.0-jdk11
+#COPY target/maven-web-application.war /usr/local/tomcat/webapps/maven-web-application.war
+
+
+vi Dockerfile     #am adding label here
+FROM tomcat:8-jdk-temurin
+LABEL branchName develop
+#COPY target/maven-web-application*.war /usr/local/tomcat/webapps/maven-web-application.war
+
+
+docker build -t dockerhandson/maven-web-application:1 .
+
+docker inspect 7383b0bb0ec6
+
+
+FROM tomcat:9.0-jdk11
+ARG branchName=develop
+LABEL branchName ${branchName}
+
+docker build -t dockerhandson/maven-web-application:1 .
+
+docker inspect 993bd65143b5
+
+docker build --build-arg branchName=master -t dockerhandson/maven-web-application:1 .
+
+docker inspect  72940bbdc759  
+
+
+FROM tomcat:9.0-jdk11
+ARG branchName=develop
+LABEL branchName ${branchName}
+ENV TEST envtest
+
+docker build -t dockerhandson/maven-web-application:1 .
+
+docker run -d --name mavencontainer dockerhandson/maven-web-application:1
+
+docker inspect mavencontainer
+
+docker exec -it mavencontainer bash
+
+env
+
+echo $TEST
+echo $TOMCAT_VERSION
+
+exit
+
+
+WORKDIR -->using workdir we can set workingdirctory of our image or directory 
+
+EXPOSE
+
+USER
+
+VOLUME
+
+docker ps
+
+docker exec  mavencontainer pwd    #how it will come workingdirectory we are not set in the base image it will come 
+/usr/local/tomcat
+
+WORKDIR -->  suppose this folder is not exist it will be that has a created as a workingdirectory
+
+vi Dockerfile
+
+FROM nginx
+RUN apt-get update
+RUN apt-get install -y git
+WORKDIR /opt/test
+RUN echo "RunOne"
+RUN mkdir -
+WORKDIR /opt/test
+RUN echo "RunTwo"
+CMD ["pwd"]
+
+docker build -t imageone .
+
+docker run imageone
+
+
+                                        
+
+
+
+
+                                           DOCKER-9
+                                           ========
+
+
+EXPOSE  --> we can define on which port container (proccess) will listen.
+EXPOSE 8080
+
+USER  --> we can set user for an image/container.so the container process will be running as that
+user instead of root user #by default it's rootuser
+
+RUN useradd
+USER jenkins
+CMD ["java","-jar","jenkins.war"]
+
+
+VOLUME  --> volume mount container dir with host machine filesystem.
+
+VOLUME /data/db
+
+Container file system exists as long as the container exists.
+
+
+FROM nginx
+RUN apt-get update
+RUN apt-get install -y git
+WORKDIR /opt/test
+RUN echo "RunOne"
+RUN mkdir -
+WORKDIR /opt/test
+RUN echo "RunTwo"
+CMD ["pwd"]
+
+Spring Boot --> it's java based frame work. it will eliminate boilerplate code(easy)
+using this frame work developer build projects very quickly.
+
+Using Spring Boot we can run/run web applications also as a standalone application(jar)
+
+ubuntu@ip-172-31-19-60:~/dockerfile_lab$ cd ..
+git clone https://github.com/MithunTechnologiesDevOps/Springboot-Mongo-Application.git
+
+cd Springboot-Mongo-Application/
+cat pom.xml
+
+mvn clean package     #let me first build the project
+
+
+
+
+
+FROM eclipse-temurin:11-jdk-alpine
+
+RUN apk update && apk add /bin/sh
+
+RUN mkdir -p /opt/app
+ENV PROJECT_HOME /opt/app
+
+COPY target/spring-boot-mongo-1.0.jar $PROJECT_HOME/spring-boot-mongo.jar
+
+WORKDIR $PROJECT_HOME
+EXPOSE 8080
+CMD ["java" ,"-jar","./spring-boot-mongo.jar"]
+
+docker build -t dockerhandson/spring-boot-mongo:1 .
+
+cd ..
+
+let clone this node js application
+
+git clone https://github.com/MithunTechnologiesDevOps/nodejs-app-mss.git
+
+cd nodejs-app-mss/
+
+FROM node
+WORKDIR /app
+COPY package.json package.json
+RUN npm install
+COPY . .
+EXPOSE 9981
+CMD ["node","app.js"]
+
+docker build -t dockerhandson/nodejs-app-mss:1 .    
+
+
+#docker system prune -a --volumes                                  #deleting all the container and images which is not using
+
+
+docker tag dockerhandson/nodejs-app-mss:1 abdul1992/nodejs-app-mss:1          #WE CAN CHANGE THE DOCKER IMAGE NAME
+
+docker push abdul1992/nodejs-app-mss:1
+
+
+i am pulling this image abdul1992/nodejs-app-mss:1 in Another one Server let's connect to other server
+
+am connecting in git bash
+
+docker images    #don't forget to give the tag
+
+docker pull abdul1992/nodejs-app-mss:1
+
+docker run -d --name nodeapp -p 8080:9981 abdul1992/maven-web-application:1
+
+                             HOST-PORT8080:CONTAINER-PORT9981
+#DON'T CHANGE CONTAINER PORT SUPPOSE IF YOUR ACCESSING CHANG ONLY HOST PORT
+
+docker ps
+
+let me exess     http://100.31.108.83:8080/mithuntechnologies
+
+RUN pip install     #pip (is a python package manager) maven installation
+
+#https://hub.docker.com/r/dockerhandson/python-app:1
+
+
+docker pull dockerhandson/python-app:1
+
+docker run -d --name pythonapp -p 5000:5000 dockerhandson/python-app:1
+
+understanding purpose
+FROM centos
+COPY test.sh /opt/test.sh
+CMD ["sh","test.sh"]
+
+
+docker commit b6232ede2436 abdul1992/python-app:1
+
+
+Alpine is a light weight linux flavour
+
+
+-----------------------------------
+Examples:
+
+Nginx → nginx -g "daemon off;"
+
+Tomcat → catalina.sh run
+
+Node → node server.js
+
+Python → python app.py
+
+COPY . .  -->copying all the files of your application  whcih is in the docker build context. whcih is copied in the current directory like if u have folder like this /test/app
+. dot represent whatever files have in current directory those all the files copy in the image if u don't want all the files u can use .dockerignore there u can add files there
+COPY . . = “Is folder ka sab kuch container ke andar copy kar do”
+Pehla . → host
+Doosra . → container
+
+if u don't want some file u can add that files in .dockerignore 
+
+.dockerignore
+----------------
+
+Best Practice to follow While Creating Image
+
+1)Alpine is a light weight linux flavour
+2)Don't copy or install unnecassary packages(softwares)
+3)use only official images
+4)try to reduce the number of layers as much as possible
+
+
+
+
+#just understanding purpose
+
+FROM node:22-alpine
+WORKDIR /app
+COPY . .
+RUN yarn install --production
+CMD ["node", "./src/index.js"]
+
+
+
+FROM python:3.13
+WORKDIR /usr/local/app
+
+# Install the application dependencies
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy in the source code
+COPY src ./src
+EXPOSE 8080
+
+# Setup an app user so the container doesn't run as the root user
+RUN useradd app
+USER app
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+
+
+
+
+
+
+                                                      DOCKERFILE-10
+                                                      =============
+
+Multi Stage Dockerfile
+----------------------
+With Multi Stage builds you can
+use multiple FROM statements in a
+socker file.Each From can use a diffrent bas image,
+each of them begins stage of the build,
+you can selectively copy artifacts(files/folder) from one stage to another stage
+leaving everything you don't in the final image.
+
+
+Using Dokcerfile
+1)Clone the project
+2)Build application package using maven
+3)Create an image which has only tomcat and application code.
+
+FROM centos
+RUN yum install git
+RUN git clone https://github.com/MithunTechnologiesDevOps/maven-web-application.git
+RUN curl
+RUN tar -xvzf tomcat.tar
+WORKDIR maven-web-application
+RUN mvn clean package
+RUN cp target/maven-web-application.war usr/local/tomcat/webapps/maven-web-application.war
+CMD ["sh","catalina.sh"]
+
+FROM alpine/git AS repo
+WORKDIR /repo
+RUN git clone https://github.com/MithunTechnologiesDevOps/maven-web-application.git
+
+FROM maven:3-openjdk-11 AS build
+WORKDIR /app
+COPY --from=repo /repo/maven-web-application .     #--from #copy previous directory
+RUN mvn clean package
+
+FROMtomcat:9.0-jdk8-temurin
+COPY --from=build /app/target/maven-web-application.war /usr/local/tomcat/webapps/maven-web-application.war
+---------------------
+
+
+
+vi Dockerfile    #not working don't use this code
+
+# Stage 1: Build the application
+FROM node:lts AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Stage 2: Create the final production image
+FROM nginx:alpine
+# Copy the built artifacts from the 'builder' stage to the Nginx web directory
+COPY --from=builder /app/build /usr/share/nginx/html
+# Copy a custom Nginx config if needed (optional)
+# COPY nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+
+
+docker image prune
+------------------------
+
+Application Archetecture
+------------------------
+Application can be developed in Monolithic or Microservices.
+
+Monolithic --> In Monolithic Architecture the whole application will be built
+and deployed as a single entity(package)
+
+Flipkart     -->Code Base (git Repo) --> Flipkart.war --> Tomcat    #in real time this package (Flipkart.war)will be deployed in multiple server 
+becouse for high availability loadbalance
+-------
+
+Flipkart
+Login
+Reistration
+CheckoutProducts
+AddtoCart
+Payments
+Order
+Profile                         1Hour completed#start from here
+
+
+
+MicroServices
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
