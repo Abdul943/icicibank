@@ -1,0 +1,1334 @@
+                                  SECTION-1(LINUX)
+                                  ================
+SSH---secure shell (22 Port)
+
+Linux---Directory (means folder)
+
+FTP----tools (21 for data transfer 20)
+----------
+file transfer protocal
+
+multiuser (we can create n number of user)
+
+C Laungauge (collection of C program)
+
+OpenSource
+
+Casesensitive (Lower case) Linux is like a flovers (Redhat,CentOS,Ubuntu)
+
+/ -----Root Dir  (sub directory means directory inside the directory)
+
+home  ------(all the user information collected)
+----
+mithun  (we have 10 directory we can create 10 user)
+manan
+bhaskar
+pavan
+
+bin -----binary files (access by any user including root user also) 
+---
+ls
+mkdir
+
+sbin ----system binary files (root user only access)
+----
+shutdown
+useradd
+
+Types of Users
+--------------
+a) root user /super user /admin user
+root (default)
+
+b) normal users (create by the root user)
+mithun
+/home/mithun
+devops.txt
+manan
+/home/manan
+devops.txt
+bhaskar
+pavan
+
+c) system users ---(software installition)
+Jenkins-- CI tools --Jenkins
+
+Apache HTTP (80) Server --apache
+       HTTPS (443)
+
+etc      ------all the configurations file(as a normal user can't access this directory)
+----
+
+passwd
+shadow
+group
+sudoers
+motd
+
+opt  ---(3rd party software it's empty direcory)
+---
+
+proc ---(process id )
+----
+
+cpuinfo ---(cpu information)
+-------
+
+lib  ----(all liberary)
+---
+
+dev ----(all external devices)
+----
+
+tmp  ----(anyone can access)
+---
+
+var ----(logs files are stored in this directory, variable)
+---
+
+
+                                                               SECTION-2
+                                                               =========
+
+Navigation and Directory Control Commands 
+-----------------------------------------
+
+uname ----- check connect or not
+
+mkdir ---- create folder 
+mkdir Test 
+mkdir DevOps
+mkdir Python
+
+mkkdir -v Python (v verbose is option showing the creating directory)
+mkdir: created directory 'abdul' #like this showing if u specify -v
+
+rm -rf *         #if u delete all those files in presnt u can use this cmd 
+
+ls -- list
+
+sudo find / -name sumi
+
+DevOps
+Linux
+ShellScript
+Git
+Maven
+Tomcat
+SonarQube
+Nexus
+Jenkins
+
+rm -r    #remove the directory  it will be delete all empty directories like sub directory
+
+mkdir -p DevOps/Liux/ShellScript/Git/Maven/Tomcat/SonarQube/Nexus/Jenkins 
+
+create multiple directory inside the directory u can use -p (parent)(means sub directory)
+
+mkdir  DevOps/LiuxShellScript/Git/Maven/Tomcat/SonarQube/Nexus/Jenkins/Ansible/aws
+
+clear ---clear the screen or ctrl+l
+ls ---- check the list
+
+tree (u can install tree command see hirerical format)
+
+yum install tree     #suppose if u not login as root user then u can specify sudo yum install tree like this
+
+tree
+
+yum update tree
+yum remove tree
+
+ec2-user --- normal user
+root -- admin user/super user
+
+
+ec2-user ---- root ---sudo su -
+
+
+yum install tree -y
+
+exit --- log out for the root user connect to ec2-user
+
+ls 
+tree
+
+mkdir -vp (-v showing how to create directory  -p create inside directory like sub directory)
+mkdir: created directory 'DevOps'
+mkdir: created directory 'DevOps/Liux'
+mkdir: created directory 'DevOps/Liux/ShellScript'
+mkdir: created directory 'DevOps/Liux/ShellScript/Git'
+mkdir: created directory 'DevOps/Liux/ShellScript/Git/Maven'
+mkdir: created directory 'DevOps/Liux/ShellScript/Git/Maven/Tomcat'
+mkdir: created directory 'DevOps/Liux/ShellScript/Git/Maven/Tomcat/SonarQube'
+mkdir: created directory 'DevOps/Liux/ShellScript/Git/Maven/Tomcat/SonarQube/Nexus'
+mkdir: created directory 'DevOps/Liux/ShellScript/Git/Maven/Tomcat/SonarQube/Nexus/Jenkins'
+
+touch ---- create empty files
+
+touch devops.txt
+
+ls -l (long listing give the all information)
+
+d----directory
+- ---file
+
+cd /            switch to root user
+cd ..           one step backword
+pwd              parent working directory
+cd -             go to the previous directory           mv abdul /home/ec2-user      #suppose if u want to move abdul to home directory u can
+cd ~             go to the home directory               mv abdul Abdul/asma/hameed/banu/sheikh/    #u can move the file multiple directory also
+
+sudo find / -name abdul                               #if u want to find and kind of the file or directory u can specify this command
+
+echo "I love u baby Aashu" >>/home/ec2-user/hameed/abdul/asma
+
+cat /home/ec2-user/hameed/abdul/asma
+
+ls -l devops.txt
+
+cd Devops       (going inside the directory)
+
+cd /etc/          (going inside the ect directory)
+ls
+
+ls -lh      (long listing `human` redaable formate)
+clear
+
+cd ~  or cd  (go to home directory)
+pwd
+tree
+cd DevOps/LiuxShellScript/Git/Maven/Tomcat/SonarQube/Nexus/Jenkins/Ansible/aws
+cd .. (one step back)
+cd ../../ (two step back)
+cd ../../../ (three step back)
+cd ~   (back to home directory)
+pwd
+cd -   (back to previous directory)
+cd    (user home directory)
+ls -l (long listing)
+ls -la (it's showing all the hiden directorys or files)
+
+mkdir -m 700 (mode default permistion now custom permistion)
+
+Inode: inode is a data structure, it can be used to store the file or dir information. 
+
+ls -li    (i means inode 8536899)
+
+ls -i  (check inode information)
+
+ls -lt  (access time first create directoy or file it's display in the last recently create it will show first one)
+
+ls -ltr  (reverce order)
+
+ls -la     (hidden files or directory)
+
+hidde file or directory start with .   (dot)
+
+mkdir .Ansible  (creating hidden directory touch .Jenkins)
+
+ls -la
+
+rmdir Test/
+rmdir Python/        (using rmdir command we can delete empty directory)
+rmdir Jenkins/
+
+rm -rf DevOps     (u can use this command and delete empty or full directory)
+
+rm -f devops.txt    (delete file take this command -f file)
+
+touch devops.txt     (create empty file)
+ls
+
+Editors
+-------
+
+vi abdul           ---->press i then it will come insert mode then u can add some data esc shift :wq save and quite
+
+cat abdul    ---> to chek the data
+
+vim hameed    --->press i it will come insert mode add some data here and esc shift :wq save and quite vi&vim both are similiar
+
+echo "i love myself" >>abdul
+
+cat >>abdul
+i love my family
+
+cat hameed
+
+nano  sheikh   ---> add some data here ctrl o plus ctrl x save and quite
+
+cat sheikh
+
+vi devops.txt   (type i come into insert mode then press esc and shift : colon wq to save the file)w=save and q=quite
+Hello Guys
+this file is created by using vi editors
+
+cat > abdul.txt  (u can create file like this)#if u want to create a file u can use this cmd
+hi asma i love u baby
+ctrl + c   #come outside
+cat asma
+
+cat >>abdul.txt (u can add this content)#suppose if u add some data in existing file u can use this#u can create file also
+cat devops.txt   (if u want to see the content)
+cat >>sumi
+hi sumi my love forever
+cat sumi
+
+echo "i love my self" > abdulhameed
+cat abdulhameed
+
+echo "" >abdulhameed    #if u want to delete a data inside the file u can use this
+cat abdulhameed
+
+
+
+ls -l DevOPs/   (to check Devops 
+
+mkdir -vp DevOPs/Linux/ShellScript   (showing directory creating and inside the directory -v verbors p parent)
+
+touch Py/test.txt  (inside the directory create a file)
+
+
+find . -type f -empty            (. current directory all the files in current directory)         # means root user $means normal user
+find . -type d -empty            (finding empty directory)
+find . -type f                 #all the files details  #u can try it without .
+find . -type d                 #all the directory details
+find / -name abdul
+
+sudo mv Abdul/ abdul.txt mubeen sumi /root               #suppose if u want to move all the files to root u can use
+cat >>Abdul/asma/banu/hameed/rukhi
+hi sumi ur mine
+
+cat Abdul/asma/banu/hameed/rukhi
+
+
+                                             SECTION:3             
+                                             =========
+
+uname (to chek server)
+
+touch --- create empty file (file already existeted it will not created it will change the name)
+
+umask --- (default permistion going to set) umask 222 (change u mask permition)   #Directory 777  #File 666   #file don't have permistion to execute
+
+         umask     d file per    d dir file
+root      0022         622        755
+
+nuser     0022         622        755
+
+
+Base permission for file is : 0666                                 umask means always MINUS the Value#while creating the file's or directories
+                         (-)  0022
+                             ------
+                               644
+
+Base Permistion for dir is : 0777
+                         (-) 0022
+                             ----
+                             0755     
+
+User          Other                                    
+rwx    r-x    r-x ---->  Devops                          User Group Other  
+       Group
+
+r --> read     -->4
+w --> write    -->2
+x --> execute  -->1
+
+7 5 5
+
+rw- r-- r--
+6   4   4
+
+(if u change umask value it will update now creating file not exsting file ok)
+
+
+~/.bash_profile   (always fix value in umask)
+
+ls -l
+
+chmod   (u can give the permistion change modification)
+chmod 000 remove all the permistion         #if u give permistion like this u can also acces during as root user, suppose if your ec2 user u can't see the containt
+ 
+chmod 000 devops.txt     #esc shift:q!  without saving the file
+ls -l    #listing
+ls -la   #long listing
+
+----------. 1 ec2-user ec2-user 52 Nov 23 06:43 devops.txt
+
+if u don't have permistion u can't open the file #if your using normal user u can't access the file content
+chmod 400 devops.txt  (user have read access group & others don't have permistion)
+chmod 444 devops.txt
+cat devops.txt  (now we give the permition)
+chmod 777 devops.txt   (full permistion)
+
+chmod 777 DevOps   (no subdirectory not get this permistion)
+
+chmod -R 777 DevOPs/          (if u give permition to subdirectory(means inside the directory) u can use this command)capitol # -R recursive  #optional         
+
+
+_wx _wx _wx      (without read permistion how can u change it)333
+user group others
+
+Hello  ----(can i change it Hi no)
+
+Hello 
+
+chmod 333 devops.txt
+ cat devops.txt
+
+chmod 777 devops.txt
+cat devops.txt
+
+chown   (change the ownership)
+
+chown bhaskar devops.txt   (bhaskar user is invalid)  #useradd abdul  #groupadd  #for delete the user userdel    #for delete the group groupdel             
+cat /etc/passwd   ----> check the users
+cat /etc/group    ----> check the groups
+chgrp sumi devops.txt
+
+chown asma:abdul devops.txt
+
+sudo su -  (it will be switch to the root user it will point to root user home directory and it will load the root cofiguration file)
+
+sudo su    ()
+
+what is the root user home directory? / root directory,/home/root users home directory ,/root root user home directory)
+ans) /root
+
+sudo su -         # means root user  $ normal user
+
+exit
+sudo su
+pwd
+
+chown root devops.txt      #to change the ownership
+chown root DevOps
+
+-     -wx  -wx   -wx.    1       hameed hameed  11   Apr  5 13:27 devops.txt
+file user  group othres  number  owner  group 
+
+d          -wx  -wx   -wx.    1       hameed hameed  11   Apr  5 13:27 
+directory user  group othres  number  owner  group 
+
+ls -l DevOPs/
+
+chgrp -R root DevOPs/          #change the permistion to all subdirectory also changed # -R recursive  #optional means extra
+chgrp -R sumi DevOps/
+chown -R abdul DevOps/
+cat /etc/group        #to check the group
+
+chown -R asma:hameed DevOps/                #ONE MORE IMPORTANT UPDATE OWNER & GROUP BOTH ARE SAME LIKE #suppose if u create user(adduser abdul)as well as u can add group also
+
+chgrp wheel devops.txt
+
+chown ec2-user:ec2-user devops.txt   (change the group name and owner name it's possible to change at a time)
+      owner:group
+chown abdul:sumi abdul.txt          -  rwx   r-x  r-x.    1     1001   1001 0 Jan 18 13:27 abdul
+                                   file-user-group-other number owner group  month date time
+sudo mv DevOps/ devops.txt /root     #move the file or directory normal user to root user
+mv     command we are using move the file like file to directory as well as mv means change the name as well as
+
+                                                          SECTION=4
+                                                          =========     
+uname
+cp -----  copy the file
+
+cp filename destinationdir
+
+cp -r dirname destinationdir    (-r recursively one Directory to another Directory)
+ls 
+ls -l
+
+mv abdul /root
+
+cp test.java DevOps/   (files copy to DevOps Directory)
+
+ls -l DevOPs/    (to check the list)
+
+cp *.txt DevOps    all the test file copy * means all .txt extentstion files                    
+
+rm -f *.txt         #suppose if want to delete just .txt files u can 
+
+rm -rf *      delete all the files at a time
+
+cp -r Py/ DevOPs/    (dir to dir)
+
+sudo su                #as a normal user we are not able to access /etc/
+cd /etc/
+pwd
+ls
+cp sudoers /home/ec2-user/         #sudoers file to home/ec2-user/
+cd /home/ec2-user/
+
+chown ec2-user:ec2-user sudoers          #change the owner ship
+
+exit
+
+cd /   ----- / root 
+cd ~    ----- home/ec2-user
+cd -    ----- previous directory
+
+ls -l
+
+mv Py/ Python          #for renaming
+
+mv test.java DevOPs/    #for renaming and moving purpose 
+
+
+file sudoers    #which file is this
+ 
+file DevOPs     #DevOPs/: directory
+
+rmdir *.sumi    remove all sumi related files
+
+wc sudoers     #120  620 4375 sudoers
+wc -l sudoers  #only lines -l   #wc“word count.”
+wc -w sudoers
+wc -c sudoers
+wc -w *.txt     #how many words are there in each file
+
+ln   of  linkfile
+
+ln -s of linkfile
+
+Hardlink                          Softlink              
+---------                         ---------
+1)we can create files only        we can create files and directory
+                       
+2)original file and               original file and link file having diffrent 
+linkfile have same                properties  
+properties
+
+3)inode number is same            inode number is diffrent
+link file and original            link file and original file
+file                                 
+
+4)once u delete the original file     if u delete the original file not able to
+still we can able to access       access the link file contents
+the link file
+
+            
+          create hardlink
+
+ls -l
+ln devops.txt lntest.txt
+ls -l
+cat devops.txt
+vi devops.txt    #add some contents and check to both files
+ls -l
+cat lntest.txt
+ls -li
+rm -f devops.txt
+
+              create softlink
+
+ln -s devops.txt lnsoft.txt     #-s soft link
+cat lnsoft.txt
+cat >>devops.txt   #u can add like this
+ rm -f devops.txt  #remove the file
+cat lnsoft.txt     #u will not get the data
+ln DevOPs/ LinkDevOps  #will not create the directory
+ln -s DevOPs/ LinkDevOps #directory will be created
+rm -f lnsoft.txt       #removing
+[root@ip-172-31-66-47 ~]# cd AbdulAsma/
+[root@ip-172-31-66-47 AbdulAsma]# ls
+[root@ip-172-31-66-47 AbdulAsma]# touch file1 file2 file3
+[root@ip-172-31-66-47 AbdulAsma]# ls
+file1  file2  file3
+[root@ip-172-31-66-47 AbdulAsma]# cd ..
+[root@ip-172-31-66-47 ~]# ls
+AbdulAsma  AsmaBanuSheikh
+[root@ip-172-31-66-47 ~]# cd AsmaBanuSheikh/
+[root@ip-172-31-66-47 AsmaBanuSheikh]# ls
+file1  file2  file3
+[root@ip-172-31-66-47 AsmaBanuSheikh]#
+
+Editors
+-------
+
+vi
+vim
+nano
+
+a) vi devops.txt
+type i --> INSERTMODE
+.......
+......
+....
+press the esc
+:wq
+
+b) vi devops.txt
+
+type i --> INSERTMODE
+
+Hello
+Hello --> Hi
+
+press the esc
+:q!                            #close the file without saving #suppose if u not saving the file na u can't see the content which u wrote
+                               #if u not save the file na content also not showing
+c) vi devops.txt
+:q
+
+vi devops.txt
+i--insert mode esc shift: wq
+
+ls
+cat devops.txt
+vi
+:q
+
+vim    #advance editor 
+
+vim vimtest.txt esc :wq
+
+vim sudoers   ----press i 
+
+:se nu        ----set numbers
+:se nonu      ----no number
+:69           -----go 69 number
+:7,12d        -----it means 7 to 12d lines can be deleted
+
+/root
+/user
+
+:q       ---come to outside
+
+nano nanotest.txt
+
+ctrl + o enter ---save
+ctrl + x  ---exit
+
+clear
+
+echo Hello Guys
+echo Hello       Guys
+echo 'Hello       Guys'  #u can use this dingle code or double code will display the space
+"Hello       Guys"
+
+ctlr c    terminate the process
+
+cat devops.txt        # display all the content
+cat -n devops.txt     #line numbers also display
+
+head filename    #first 10 lines
+
+
+head sudoers         #first 10 lines
+
+head -12 sudoers     #first 12 lines
+head -20 sudoers     #first 20 lines display or head -n 20 sudoers                       
+tail sudoers         #last 10 lines display
+
+tail -n 15 sudoers   #last 15 lines display  #tail -15 sudoers   u can try this command also
+
+tail -f sudoers  #continuos updating that file display suppose if any changes in file displaying
+
+ctrl c   #come outside
+
+
+                                                               SECTION-5                             
+                                                               =========
+uname
+more sudoers   #ctrl f===forward ctrl b==backword    more & less page by page checking
+ctrl f    # u have to see next page  end of the page it will go the forward direction
+hit by hit one enter one line like this is displaying
+less              #page by page  
+if u come out side of the file u can press q
+
+     using sort command
+vi friend.txt
+bhaskar
+mithun
+pavan
+manan
+suresh
+satya
+prakash
+
+esc shift:wq
+
+sort friend.txt  #it will be set up serial wise
+sort -r friend.txt    #if u display reverce oredr u can use -r
+clear
+cat friend.txt | sort    #using pipe symbol | one command output it's going to give the other command output #sorts
+cat friend.txt | sort -r           #if u using cat command then output will sort command using pipe symbol -r reverce
+cat friend.txt | sort | tr [a-z] [A-Z]  #tr means translate lower case to upper case
+
+without using pipe line symbol | we can't run multiple command
+clear
+
+vi sample.txt
+red red red
+red red red
+red
+red red
+red red
+
+red ---> blue    where erver red is there i want to change in blue
+
+sed "s/red/blue/" sample.txt           #s stand for stream  #sed means “stream editor” #s means stream ed means editor
+blue red red
+blue red red
+blue
+blue red
+blue red        #only first line change
+
+sed "s/red/blue/g" sample.txt      #i want to change all so that time we can use g is a stand for globally
+blue blue blue
+blue blue blue
+blue
+blue blue
+blue blue
+
+sed "s/red/blue/2" sample.txt    #u have to change only second line u can use 2
+cat sample.txt  #it's not replace actual content
+sed -i "s/red/blue/g" sample.txt  #it's replaced and saved -i ignore in sample.txt
+cat sample.txt
+blue blue blue
+blue blue blue
+blue
+blue blue
+blue blue
+
+head sudoers  #first 10 lines
+cat -n sudoers
+
+sed -n "107p" sudoers     #if u display 107 contand only display u can use this command
+                          #-n numbers p print
+
+sed -n "107,110p" sudoers  #107 to 110 display
+
+grep "global regular expertion print"
+
+grep bhaskar friend.txt   #if it's available it will show
+bhaskar
+grep devops.txt friend.txt    # bhaskar name is not in the file that's why not showing
+
+grep -i Bhaskar friend.txt    # -i means ignore suppose then show the Bhaskar name#A (capital/uppercase) and a (small/lowercase)
+
+clear
+
+who   #how many users are log in
+who -H   #headder
+w        #showing cpu
+uptime #  server timing cpu utilition
+
+sudo yum install stress -y  
+
+exit  #log out
+
+stress -c 8 --timeout 10    #increase the utilition
+uptime
+w
+
+1st    5th    15th   cpu utilition
+2.00s  0.02s  0.00s 
+
+users
+ec2-user
+
+whoami   #currently which user we are using
+
+whereis java   #to check the file
+
+date
+
+timedatectl list-timezones   #to check all the list #ctrl c come outside #press q come outside
+
+df  #diskfree
+df -h  #human readable format
+
+ls
+du -h DevOPs/    #human readable
+du -sh DevOPs/   #summary
+hostname          #each server having a hostname
+ip-172-31-31-246.ec2.internal
+
+hostname -i     #displaying the ip address
+172.31.31.246
+
+ifconfig         #to check ip address
+
+sudo su -        #swith to the root user
+hostname AbdulAsmaHameed
+hostname
+exit
+man mkdir
+man ls
+info mkdir
+whatis ls
+whatis mkdir                                                         #whatis mkdir #whatis ls #whatis touch
+
+systemctl list-unit-files               #press q come outside
+
+service options (status|stop|start|restart)
+
+service sshd status     #systemctl status sshd
+
+
+sudo su -
+stop sshd.service              #service sshd stop #service sshd restart
+service sshd status
+sudo service sshd status
+
+last   #complete details here
+
+
+ps       #process id 
+
+ps -ef   #process id ps=process,ef all formated
+
+ps -ef | grep jenkins
+
+kill -l          #u will get all all the list here
+ps               #u can use ps means process id 
+kill -9 2244         #signalkill lost ur ec2-user signal SIGKILL #9) SIGKILL
+
+ 2244 pts/0    00:00:00 bash        #u have to enter this number
+   4668 pts/0    00:00:00 ps
+
+top #all resource information  #5111 pts/0    00:00:00 bash is current shell iam going to kill
+
+press q #quite
+
+kill -9 4818
+
+sar
+
+
+                                                   SECTION-6
+                                                   =========
+zip -r devops.zip DevOPs/                                  #zip -r devops.zip Devops/ #“recursive”
+unzip devops.zip                                           #rm -rf Devops/
+unzip devops.zip -d /tmp/            #specify the path     #unzip devops.zip
+rm -rf DevOPs/                                             #tar -cvf devops.tar Devops/  #create verose file         
+unzip devops.zip                                           #rm -rf Devops/
+tar -cvf devops.txt DevOPs/   #create verbose file system  #tar -xvf devops.tar
+ rm -rf DevOPs/  
+tar -xvf devops.tar                #extract verbose file
+
+USER AND GROUP ADDMISTRAION COMMAND
+-----------------------------------
+
+useradd bhaskar                 #              
+#groupadd manan
+
+cat /etc/passwd    #to check list of user  #as a normal user can't create user we need to switch to the root user
+cat /etc/group     #suppose if u delete a userdel  #suppose if u delete group groupdel
+/home/
+
+bhaskar
+
+/etc/
+
+passwd
+shadow
+group
+
+sudo su -
+ls /home/     
+
+useradd bhaskar
+ls /home/       #to check home directory bhaskar user also there
+cat /etc/shadow
+cat /etc/passwd
+
+passwd bhaskar                           #to store the passwd in shadowd
+devops
+
+cat /etc/shadow
+
+passwd ec2-user
+devops             #password
+passwd root
+devops
+                                #rootuser $normaluser
+
+cat /etc/passwd
+cat /etc/shadow
+
+chage bhaskar
+
+ Minimum Password Age [0]: 90
+        Maximum Password Age [99999]: 90
+        Last Password Change (YYYY-MM-DD) [2025-11-25]:
+        Password Expiration Warning [7]: 14
+        Password Inactive [-1]:
+        Account Expiration Date (YYYY-MM-DD) [-1]:
+
+
+chage bhaskar
+
+cat /etc/group
+
+groupadd devops
+
+cat /etc/groupuser
+
+
+lid -g devops                   #to check user in group #lid means linux cmd
+
+id bhaskar 
+
+groups bhaskar            #bhaskar user belong to bhaskar group only
+
+usermod -g devops bhaskar              #add bhaskar into the group
+lid -g devops
+id bhaskar
+
+usermod -L bhaskar    #uppercase -L     #lock the user    once it's lock bhaskar user got !
+usermod -U bhaskar    #uppercase -U    #unlock the user  once it's unlock ! exlamtri mark automatically gone
+
+cat /etc/shadow         #it will display whether lock or unlock #lock means ! #unlock means no exlametri      
+
+groups ec2-user       #ec2-user belong to how many groups
+
+su  - bhaskar    #if u want to switch one user to another user u can use this command
+
+normal user to normal user ----user password is required
+normal user to root user   ----password is required
+root user to normal user    ---password is not required
+
+su - bhaskar          #switch to bhaskar user
+
+su - ec2-user
+devops
+su - root
+devops
+
+visudo            #it's correct practice
+vi /etc/sudoers     #if u give the full permistion then u can use this command           #
+
+## Allow root to run any commands anywhere
+root    ALL=(ALL)       ALL
+bhaskar ALL=(ALL)       ALL                   #give permistion to bhaskar user
+
+ctrl o ctrl x
+
+su - bhaskar  
+
+sudo useradd mithun
+devops
+ls -l /home/
+sudo passwd mithun                     #once if u switch to normal u can use sudo previlages
+devops
+devops
+
+sudo groupadd dba
+cat /etc/group
+
+sudo userdel -r mithun         #delete user                                                          #sudo userdel -r mithun         #delete user
+
+sudo groupdel dba                #delete group                                            #groupdel dba                #delete group
+
+ls -l /home/
+
+sudo groupdel dba
+
+ps                          #process id
+ps -u bhaskar               #-u means option or user # 6797 pts/1    00:00:00 bash
+pkill -u bhaskar
+kill -9 7755                 #-9 means SIGKILL  #take bash number
+userdel bhaskar
+userdel -r bhaskar      #suppose if u facing delete na u can use sudo
+userdel -f bhaskar
+
+
+
+                                                               SECTION-7
+                                                               =========
+ssh -i "abdul.pem.pem" ec2-user@ec2-98-91-211-20.compute-1.amazonaws.com
+
+sudo su -
+
+      #after using this command   yes  service sshd restart                            
+
+sudo vi /etc/ssh/sshd_config
+PasswordAuthentication yes
+HostbasedAuthentication no                     #30:00   sudo vi /etc/ssh/sshd_config
+
+:wq
+
+server-1           create an ec2 server take t2.nano connect to the ec2-server
+--------
+sudo vi /etc/ssh/sshd_config   #sudo su -  #passwd ec2-user afterthat u can take this public ip server1 and then u can go the linux server where devops.zip files are there u can scp devops.zip ec2-user@3.90.214.20:/tmp/ this is a public ip for server1
+PasswordAutentication yes                  #then u can go to the server1 u can type cd /tmp/  suppose if find this find zip file u successfully copied done
+
+#passwd devops
+
+scp devops.zip ec2-user@3.90.214.20:/tmp/  server1
+sudo service sshd restart
+who -H
+cd /tmp/
+ls
+
+scp   #secure copy  one server to another server copy the file we are using this command
+
+create one more EC2-server connect that server
+
+server-2
+--------  
+sudo vi /etc/ssh/sshd_config  #sudo su -  #passwd ec2-user #passwd ec2-user afterthat u can take this server2 public ip and then u can go the linux server where devops.zip files are there u can scp devops.zip ec2-user@18.215.172.195:/tmp/ this is a public ip for server2
+service sshd status                       #then u can go to the server2 u can type cd /tmp/  suppose if find this find zip file u successfully copied done
+
+
+vi AbdulHameedKey.pem       #u can peste key here
+
+chmod 400 AbdulHameedKey.pem
+
+scp -i AbdulHameedKey.pem devops.zip ec2-user@3.80.3.28:/tmp/      #this all command run to linux normal server
+
+
+scp devops.zip ec2-user@18.215.172.195:/tmp/        #server2 public ip   #u can run this command in normal linux server
+password
+devops                                          #always check service running or not
+sudo service sshd restart  #both server turn on this service
+
+press q come out
+
+cd /tmp/            #u have to check in server2
+ls
+
+free          #total ram 
+free -h
+free -m
+free -g
+
+sudo yum install dmidecode -y        
+sudo dmidecode
+
+on premise servers?
+the server physically existed in your company
+
+
+                              CRONTAB:47:00
+                              =======
+
+cron is daemon that executes scheduled commands 
+every one min cronjob will trigger
+
+if u want to shedule the job so and so u can use cron tab
+
+sudo yum install cronie -y  
+
+
+sudo service crond.service status
+sudo service crond.service start
+sudo service crond.service stop
+
+                              
+crontab -l  #how many jobs are available #-l list
+
+crontab -e   #edit
+
+crontab -r  #remove
+
+
+crontab -l   #-l list
+
+press q
+
+crontab -l   #-l list
+
+sudo vi /etc/cron.allow         #create the file remove all user permition #ok, cron.allow is a file #allowing the permistion
+ec2-user                        #give only permition to ec2-user
+
+crontab -l
+
+vi hello.sh
+
+echo "Hello Guys"
+echo "GM/GA/GE"                                #always remeber as normal user u can run the crontab #root user not possible to run
+echo "Welcome to Crontab"
+echo "Today date is: "
+date
+
+:wq
+
+ls -l
+ls -l hello.sh
+
+./hello.sh                              #there is no excute permition that's why showing error#if u use#bash hello.sh, sh hello.sh
+
+chmod u+x hello.sh 
+
+./hello.sh              #run script
+
+
+>  --> redirect standard output       #whatever data u write that data could be redirect #puarana data chale javega naya data aajeyega
+>> --> append the standard output     #it means all data available here   #nothing data will be delete here #append means judana
+
+file descriptors
+---------------
+0------> standard input
+1------> standard output
+2------> standard error
+
+sudo crontab -e
+*/1 * * * * /home/ec2-user/hello.sh > /home/ec2-user/hello.log 2>&1              #redirect here #पुनः प्रेषित करना
+crontab -l
+ls
+cat hello.log         #to check the file
+cat hello.log         #every one minute running
+*/1 * * * * /home/ec2-user/hello.sh >> /home/ec2-user/hello.log 2>&1   #here added >> for append #जोड़ना
+cat hello.log       #after one minute will come output
+
+Position	Meaning
+1st	Minute (0–59)
+2nd	Hour (0–23)
+3rd	Day of month (1–31)
+4th	Month (1–12)
+5th	Day of week (0–6, Sunday=0)
+Last	The command to run
+
+
+                                                   SECTION:8   i will start here tomorrow onwards here #i will try crontab tommarow also
+                                                   =========
+crontab -ir    #n means not delete #y means deleted
+crontab -r      #deleted
+
+SMTP             #simple mail transfer protocal
+
+log in bash in bhaskar user and one Linux server same server don't create new server
+
+wall "Hello Everyone, restarting the Linux Server in 10 mins, please plan your work"
+
+you have to login in root user then u can apply this command
+
+
+
+
+vi jenkisdetials.txt
+
+JENKINS_USER=mithuntechnologies
+JENKINS_TOKEN=14254dne4545454545454
+JENKINS_URL=http://98-93-238-55:8080/
+
+
+cat jenkisdetials.txt
+
+grep JENKINS_USER jenkisdetials.txt
+
+grep JENKINS_USER jenkisdetials.txt | cut -d "=" -f2
+
+
+-d         #delingvitor
+
+clear  #clear the screen
+cal  #display the calender
+cal 2025 #entire calender
+cal 3  2020  #march 2023 calender dispay
+cal -3   #previous 3month
+cal -1    #previous a month 
+cal 7 1992
+wget https://dlcdn.apache.org/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.zip                #it's not working
+ls
+curl -o maven.zip https://dlcdn.apache.org/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.zip
+
+        #specify the file name maven.zip
+
+wget ---supporting very less protocals
+curl ----supporting very less protocals useful for calling the Api's  #application programming interface
+
+ls > lsopt.txt   #redirect in the file
+
+ls | tee teeopt.txt
+
+tee  #display in the consol 
+
+ script
+
+date
+hostname
+
+script bhaskar.txt    
+ls
+cal
+exit
+
+script -a bhaskar.txt
+hostname
+date
+exit
+
+ping google.com
+ctlr c
+
+ping -c  5  google.com        #  -c  ccount
+
+sudo yum install telnet -y
+telnet google.com 80
+
+ctrl c
+
+ping command is check the conectivity
+telnet command is check along with the conectivity port is open or not
+
+history           #to check all the command
+history -c     #clear the history
+history > history.txt
+
+uname
+uname -a
+
+os-release
+redhat-release
+
+cat /etc/*release    
+
+clear
+
+netstat -tunlap  #tcp protocal udp protocal n number l listining a all p program name
+
+sudo netstat -tunlap
+
+date    #i want to update date command every 5 seconds
+
+watch  date     #every 2 seconds output will be change
+
+watch -n 5 date
+
+exit
+sudo shutdown
+sudo shutdown -c
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
