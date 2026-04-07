@@ -1,0 +1,1631 @@
+Migrate EC2 server from one region to another region using AMI - Amazon Machine Image
+=====================================================================================
+First create one EC2 machine in N.Virginia region location
+
+ssh -i "AbdulHameedKey.pem" ec2-user@ec2-3-236-173-31.compute-1.amazonaws.com
+
+to connect server 
+
+touch Dockerfile
+mkdir Kubernates
+echo "Welcome to new journey Abdul" >abdul.txt
+ls
+
+First stop the ec2 server
+
+then u can select this server go to the actions select image and templates & click on create image
+Image name Abdul-image click on create image to check on AMIs(in Images section once it's ready u can create ec2 in Mumbai region)
+
+After image is available select that image click on actions click on copy AMI u can select the region here mumbai region here click on copyAMI
+u can delete N.vriginia region ami then u can go to mumbai region once it's ready u can select that AMI click on Launch instance from ami
+Name MumbaiAMI click on Launch instance now u can connect ssh -i "abdulMumbaiKey.pem" root@ec2-13-201-1-152.ap-south-1.compute.amazonaws.com
+
+ssh -i "abdulMumbaiKey (1).pem" ec2-user@13.201.1.152
+ls 
+Dockerfile  Kubernates  abdul.txt 
+
+u can delete all AMI and EC2 machines
+ 
+EFS - Elastic File System
+=========================
+It is a elastic scalable file storage.
+AWS will manage file system for ec2.
+We can mount file system with multiple servers and it can by used simultaneosly.
+
+We can use EFS, wheh we want to share static files with multiple servers.
+
+sudo yum install nfs-utils -y 
+
+
+seaerch EFS click on crearte file system
+Name Shared_Elastic_File_Syatem  am selecting here default sg-031ab1448201f2100 click on create file system 
+select abdulEFS click on View details
+
+open one more page go to the ec2 go to the security group sg-031ab1448201f2100  in this security group we need to open 2049 port number
+click on sg-031ab1448201f2100 this security group here u open efs port number 2049
+
+create 2 instance choose RedHat
+Name RedHat select redhat Number of instances 2 launch instance
+
+connect both redhat machine
+
+ssh -i "AbdulHameedKey.pem" ec2-user@ec2-98-92-33-182.compute-1.amazonaws.com
+sudo yum install nfs-utils -y 
+sudo mkdir elastic_file_system
+ls
+sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-0bc5d95258415dc06.efs.us-east-1.amazonaws.com:/ elastic_file_system
+df -kh
+cd elastic_file_system/
+sudo touch Dokcerfile
+ls
+ls
+
+
+
+ssh -i "AbdulHameedKey.pem" ec2-user@ec2-44-211-83-51.compute-1.amazonaws.com
+sudo yum install nfs-utils -y
+sudo mkdir elastic_file_system 
+ls
+sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-0bc5d95258415dc06.efs.us-east-1.amazonaws.com:/ elastic_file_system
+df -kh
+cd elastic_file_system/
+ls
+sudo touch jenkinsfile
+
+
+
+then go to the efs click on attch (in view details right side)
+#sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-0bc5d95258415dc06.efs.us-east-1.amazonaws.com:/ efs elastic_file_system
+#iam mounting to efs to ec2      
+------------------------------------class-5
+                                    =======
+
+create an EC2 server name Jenkins_server select RedHat connect ec2 instance
+
+sudo yum update
+
+sudo yum install wget -y
+
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/rpm-stable/jenkins.repo
+
+sudo yum upgrade
+# Add required dependencies for the jenkins package
+sudo yum install fontconfig java-21-openjdk
+sudo yum install jenkins
+sudo systemctl daemon-reload
+
+sudo systemctl enable jenkins
+
+free -h
+
+df -kh
+
+lsblk
+
+create EBS volume go to volume size 25gb select correct region where is your ec2 is running Availability Zone (us-east-1f) click on create volume name Jenkins_addistional_volume
+volume state is showing available if u attach this then it will be showing in-use capacity(1gb to 16000gb)
+select EC2 instance then go to the actions click on storage then click o attcah volume select voume here 
+Device name /dev/sdf click on attach volume now state of the volume is in-use
+
+lsblk
+
+sudo mkfs.ext4 /dev/nvme1n1           #this name u will get it after create volume nvme1n1  
+
+sudo mount /dev/nvme1n1 /var/lib/jenkins
+
+lsblk
+
+df -kh
+
+ls /etc/
+
+cat /etc/fstab
+
+sudo systemctl start jenkins
+
+sudo systemctl enable jenkins
+sudo systemctl status jenkins   
+
+ls /var/lib/jenkins/
+
+sudo reboot              #if u restart the jenkins mount point will be gone again we have to connect again and again
+
+sudo systemctl start jenkins
+
+lsblk
+
+sudo systemctl status jenkins
+
+sudo mount /dev/nvme1n1 /var/lib/jenkins
+
+lsblk
+
+df -kh
+
+sudo chown jenkins:jenkins -R /var/lib/jenkins/
+
+ls /var/lib/jenkins/
+
+sudo systemctl restart jenkins
+
+sudo systemctl status jenkins
+
+http://3.235.66.161:8080/
+
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+bfe865131fa64c20b077dd1af48a3d28
+
+install sugest plugin
+
+ls /var/lib/jenkins/
+
+abdul
+hameed
+hameed
+abdulhameed
+hameedshaik5593@gamil.com
+save&continue
+
+go to the tools and Git installations (remove only git)select jgit  
+
+create pipeline name abdulPipeline slect pipeline click on ok
+select Pipeline script from SCM 
+https://github.com/Abdul943/maven-web-application.git
+save it  click on build now pipe line got failed
+
+go to the tools
+maven3.8.2
+3.8.2
+save
+click on build now agian failed
+
+sudo cp /etc/fstab /etc/fstab.orig
+
+sudo blkid    #copy uuid
+
+sudo vi /etc/fstab
+
+#UUID="f4de5768-fbab-45cb-b55e-d9053b2745e5" BLOCK_SIZE="4096" TYPE="ext4"  #this is a id like this
+
+
+UUID=5a97cc7b-538e-4a0f-8afc-48da2388aeaa       /       xfs     defaults        0       0
+UUID=663D-A7B7  /boot/efi       vfat    defaults,uid=0,gid=0,umask=077,shortname=winnt  0       2
+UUID=f4de5768-fbab-45cb-b55e-d9053b2745e5  /var/lib/jenkins ext4 defaults,nofail 0  2           #u just add this line 
+
+
+:wq
+
+sudo umount /var/lib/jenkins
+
+sudo mount -a                  #suppose if u not give any output that means submitted permently
+suppose if u incraese the volume go to the volume select the volume select actions select modify the volume  25 to 30 click on modify
+
+df -kh
+
+sudo resize2fs /dev/nvme1n1
+
+df -kh
+
+EBS Snapshots   #only volume can be mounted to the directories not snapshot
+=============
+It can be used to take backup of EBS Volumes Storages.
+It is always recommended to take back up of EBS Volumes as it can be used to restore data in case of volume failures.
+
+Using EBS Snapshots
+data can be migrate from one region to another region
+from one AZ to another AZ.
+
+select the volume what we are created go to the actions select create snapshot click on create snapshot
+i can go the snapshot section once it's ready select the snapshot select actions select copy snapshot am selecting ap-southeast-1(singapore-region)
+click on copy snapshot now i will swith to singapore-region name jenkins_voulme_snapshot 
+click on volume slect create volume snapshot click create volume
+then go to the volume name adistion_jenkins_volumes
+
+i will crate an instance in singapore region  (open port 8080)
+ssh -i "AbdulSingaporeKey.pem" ec2-user@ec2-54-169-247-78.ap-southeast-1.compute.amazonaws.com
+
+#install jenkins here also
+
+sudo yum update
+
+sudo yum install wget -y
+
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/rpm-stable/jenkins.repo
+
+sudo yum upgrade
+# Add required dependencies for the jenkins package
+sudo yum install fontconfig java-21-openjdk
+sudo yum install jenkins
+sudo systemctl daemon-reload
+
+sudo systemctl enable jenkins
+
+select the volumes click on actions select attach volume select jenkins instance select any deice name select attach volume
+
+lsblk 
+
+sudo file -s /dev/nvme1n1
+
+sudo mount /dev/nvme1n1 /var/lib/jenkins
+
+lsblk
+
+sudo cp /etc/fstab /etc/fstab.orig
+
+sudo blkid
+
+#/dev/nvme0n1p3: LABEL="root" UUID="5a97cc7b-538e-4a0f-8afc-48da2388aeaa" BLOCK_SIZE="512" TYPE="xfs" PARTUUID="e91ed8c2-e65d-4119-aeb9-fe274510eda3"
+#/dev/nvme0n1p2: SEC_TYPE="msdos" LABEL_FATBOOT="ESP" LABEL="ESP" UUID="663D-A7B7" BLOCK_SIZE="512" TYPE="vfat" PARTUUID="6567df77-0c9e-42d8-8249-1dafd7217789"
+#/dev/nvme1n1: UUID="f4de5768-fbab-45cb-b55e-d9053b2745e5" BLOCK_SIZE="4096" TYPE="ext4"   #u can add this id
+#/dev/nvme0n1p1: PARTUUID="2ec0020b-5ab4-43ef-ad42-c07524d36dc2"
+
+
+sudo vi /etc/fstab
+
+#UUID=5a97cc7b-538e-4a0f-8afc-48da2388aeaa       /       xfs     defaults        0       0
+#UUID=663D-A7B7  /boot/efi       vfat    defaults,uid=0,gid=0,umask=077,shortname=winnt  0       2
+UUID=f4de5768-fbab-45cb-b55e-d9053b2745e5 /var/lib/jenkins   ext4  defaults,nofail, 0  2  #u can add this line only
+
+sudo umount /var/lib/jenkins/
+
+sudo mount -a
+
+sudo systemctl daemon-reload
+
+sudo umount /var/lib/jenkins/
+
+sudo mount -a
+
+ls /var/lib/jenkins/
+
+sudo systemctl start jenkins
+
+sudo systemctl start jenkins
+
+http://54.169.247.78:8080/login
+abdul
+hameed
+--------------------------------------Class-6
+                                      =======
+
+
+Connect to EC2 server whne PEM file is lost or deleted
+======================================================
+
+now iam creating an EC2 instance name Jenkins_Server take os RedHat Launch ec2 insatnce
+ssh -i tempKey.pem ec2-user@32.194.159.4    #craete new pem file here
+
+cat .ssh/authorized_keys      #to check the key
+
+touch Dockerfile Jenkinsfile
+mkdir -v Kubernates Pipeline
+ls
+
+exit
+
+tempKey.pem    am deleting this pem file manually
+
+am creating one more tempervery server same region where your previous machine is running
+Name Tempervary_server select REdHat create new pem file name Amazonpem select availabality zone us-east-1f(in this region previous server is running that's why take same region)
+
+i will connect this instance
+ssh -i Amazonpem.pem ec2-user@44.222.178.96
+
+cat .ssh/authorized_keys
+
+am stopping the Jenkins_server machine (Stopped) am going to detach this volume go to vol-05571c063cb13813a am detaching this volume
+then go to the volume vol-05571c063cb13813a clik on action and detach this volume(without root volume we cannot access lauch the ec2 instance)
+
+go to the volume section select this volume vol-05571c063cb13813a click on action attach volume select the running instance select device name any click on attach volume
+then u can go to ec2 instance select instance check the attach volume go to storage 
+
+lsblk
+
+mkdir Recovery_Key
+
+sudo mount -o nouuid /dev/nvme1n1p3 Recovery_Key/
+
+df -kh
+
+ls 
+
+cd Recovery_Key/             #everything part of old machine key
+
+ls
+cd ..
+
+cat .ssh/authorized_keys >> Recovery_Key/home/ec2-user/.ssh/authorized_keys
+
+cat Recovery_Key/home/ec2-user/.ssh/authorized_keys
+
+sudo umount /dev/nvme1n1p3
+
+df -kh
+
+lsblk
+
+i have to stope this machine ec2 Amazonpem i stopped this machine
+go the volume section vol-05571c063cb13813a detach this volume click on action chose detach volume
+again select this volume vol-05571c063cb13813a click on action click attch volume here select jenkins_server then /dev/sda1 click on attach volume
+am goin to ec2 sever to start Jenkins_server 
+
+ssh -i Amazonpem.pem ec2-user@3.237.17.70         #using Amazonpem.pem we are connecting successfully
+ls
+
+exit
+
+
+one more trick recover the key
+select Jenkins_server ec2 click on action click on select image and template click on create image
+Image name Jenkins_server_recovery click on create image (wait for available mode)
+once it's available select that machine click an instance 
+Name Docker_recovery_server i will create new pem file name Jenkins_recovery_pem click launc instance am deleting Jenkin_server
+
+ssh -i Jenkins_recovery_pem.pem ec2-user@44.192.14.152
+ls
+
+
+S3 - Simple Storage Service
+===========================
+We can access data [read and write] from s3 buckets without mounting to servers.
+It is highly available and scalable storage service in AWS.
+We can read and write data stored in S3 bucket from anywhere - Internet as well.
+S3 bucket data can be access globally.
+We can select in which region s3 bucket should be created..
+We don't need to mount s3 objects as they can be accessed from anywhere.
+
+AWS Management console.
+AWS CLI.
+
+S3 is a perfect place to store images, audios, videos and documents and application logs files etc.
+
+We can create maximum 100 s3 buckets in aws account by default.
+
+Amazon s3 is chargeable.
+-----------------------------------------Class-7
+                                         =======
+let's create a s3 bucket name abdulhameed-bucket(name is unique)
+go to inside the bucket upload the object click on upload click on addfile select jpg image click on upload 
+click on image and check url https://abdulhameed-bucket.s3.us-east-1.amazonaws.com/IMG_1778.jpg #am not accessing this image on browser
+click on bucket name then click on permistion Block public access (bucket settings) click on edit untick it Block all public access
+save the changes confirm click on Object Ownership edit select ACLs enabled tick it I acknowledge that ACLs will be restored click on savechanges
+again select the image click on action click on makepublic using ACL click on make public
+
+i will upload same object jenkins image  click on that image take url https://abdulhameed-bucket.s3.us-east-1.amazonaws.com/Jenkins.jpg not accessing
+click on make public access #EVERY OBJECT U HAVE TO SELECT MAKE PUBLIC ACCESS
+
+i will desible the permistion bucket object both uploaded the object click on Access control list (ACL) remove the tick Everyone (public access) click on save changes
+click on image select permistion go to Access control list (ACL) edit save changes
+#u can delete old objects and upload new objects this object is not accessible
+
+suppose if u access all object u can use bucket policy
+
+S3 Concepts
+===========
+Access Control List.
+Bucket policy
+versioning.
+storage classes.
+Object life cycle.
+Replcication.
+
+ACL - Access Control List,
+ACL can be used to grant permissions to another aws accounts.
+
+Bucket Policy,
+Bucket policy can be used to manage permissions for objects in s3 bucket.
+Bucket policies can be written in the form of JSON format.
+We can secure s3 bucket objects using s3 bucket polices.
+
+select the bucket abdulhameed-bucket select the permistion in Bucket policy click on edit pest this json code
+
+{
+    "Version":"2012-10-17",		 	 	 
+    "Id": "ExamplePolicy01",
+    "Statement": [
+        {
+            "Sid": "PublicRead",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:GetObjectVersion"
+            ],
+            "Resource": [
+                "arn:aws:s3:::abdulhameed-bucket/*"
+            ]
+        }
+    ]
+}
+
+
+click save chages it's good accessible all  
+
+
+Versioning,
+Versioning will be disabled by default on s3 bucket.
+When we try to upload same object to s3 bucket then it'll overdide,
+we can enable versioning to maintain multiple versions of same object.
+
+u can click bucket abdulhameed-bucket click on properties in Bucket Versioning click on edit click on Enable select save changes 
+
+
+Storage Classes
+===============
+Standard.
+Infrequent.
+Reduced Redundancy storage.
+Glacier.
+
+Standard,
+we can maintain object which are going to be accessed frequently [high availablity and better performance].
+standard is the default storage class for the objects that we upload into S3 bucket.
+
+Infrequent access,
+It is designed for data that is access less frequently but still needs to be retrievable quickly when needed.
+
+Reduced redundancy storage,
+We can maintain non critical and reproducable data.
+
+Glacier,
+We can maintain archival data - data which we don't use often like application log files.
+
+Object Life Cycle
+=================
+we can define object life cycle so that AWS will take care of transferring objects from one storage class to another storage class.
+
+Replication Rules
+=================
+We can replicate s3 objects [copy, duplicate and backup], whatever source objects that we upload into s3 bucket.
+
+Versioning must be enabled.
+Replication bucket must be created.
+
+now go the management click on Replication rules click on Create replication rule  
+Replication rule name Bucket_Object_Replicatione Status Enabled Choose a rule scope  Apply to all objects in the bucket Choose a bucket in this account 
+
+am creating a new S3 bucket  name aswin-bucket81025  u can select this bucket here  click on Create new role click on save changes Yes, replicate existing objects. click on submit
+select s3://aswin-bucket81025 click on save changes  #u can select image and go to actions select make public access
+
+if u all object can be access u can apply this policy u can add the bucket name here
+
+{
+    "Version":"2012-10-17",		 	 	 
+    "Id": "ExamplePolicy01",
+    "Statement": [
+        {
+            "Sid": "PublicRead",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": [
+                "s3:GetObject",
+                "s3:GetObjectVersion"
+            ],
+            "Resource": [
+                "arn:aws:s3:::aswin-bucket81025/*"
+            ]
+        }
+    ]
+}
+
+
+
+Snowball,
+Snowball is a device to transfer huge amount of data from onpremise data centers to cloud.
+Snowball device will be given by AWS team.
+We can copy data from onpremise data center to snowball device can be physically moved from one location to another location.
+
+Host static website on AWS S3 bucket
+====================================
+Amazon s3 is cloud object storage service by AWS.
+Amazons3 allows users to store and ogranize data in the cloud.
+
+static websites.,
+Simple websites doesn't have a backend connection to a database.
+We can host simple website in aws s3 bucket.
+
+
+create a new bucket
+Bucket name host-tatic-website-login15424686415  select ACLs enabled disable Block all public access Bucket Versioning Enable click on 
+
+u can go to file manager u can create a file here vi index.html write data here I Love My Family i will upload this file in S3 bucket host-tatic-website-login15424686415
+suppose if u want to access this file https://host-tatic-website-login15424686415.s3.us-east-1.amazonaws.com/vi+index.html.txt #access deneide if u make it public u can able to access
+(how to make it public go to object actions click on make public using ACL)
+
+(same way i will remove this permistion) select the permissions click on edit remove Everyone (public access) save changes
+
+click on this bucket host-tatic-website-login15424686415 click on properties click on Static website hosting edit click on Enable select Host a static website Index document index.html click on save changes
+
+delete all the bucket
+
+https://awspolicygen.s3.amazonaws.com/policygen.html  if u generate the policy u can use this link
+---------------------------------------
+Type of Policy
+S3 Bucket Policy
+Effect Allow
+Principal *  (it means all)
+actions GetObjectVersion,GetObject
+All Resources ("*")  *    mithuntechnologies-1651451/*   u have to add bucket name here (other wise u can add * here)
+
+let me crate S3 bucket mithuntechnologies-1651451 click on create 
+
+click on generate policy
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Statement1",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": [
+        "s3:GetObjectVersion",
+        "s3:GetObject"
+      ],
+      "Resource": "arn:aws:s3:::mithuntechnologies-1651451/*"
+    }
+  ]
+}
+------------------------------------Class-8  VPC
+                                    =======
+
+
+VPC - Virtual Private Cloud
+===========================
+Application ==>> .war
+
+Servers, Storages and Load Balancers Etc ==>> Created within a VPC [Network].
+
+Virtual Private Cloud is a private network in AWS in which we can create aws resources like EC2, EBS and ELB Etc.
+
+AWS is a public cloud and anyone can use AWS to create infrastructure.
+
+We shouldn't create infrastructure in Default,
+We will not have control over Default VPC as it will be created and managed by Cloud Provider.
+
+VPC is all about Network,
+We can use VPC to isolate resources in one network from other network.
+We can have full control on VPC like IP addresses, Its routing, security groups and subnets.
+
+AWS will not charge for VPCs.
+It will charge for resources created in a VPC.
+
+VPC Components,
+CIDR - classless inter domain routing.
+subnet mask.
+subnets.
+route tables.
+IGW - Internet Gateway.
+NAT Gateway.
+Secruity Groups.
+NACLs - Network access  control lists.
+
+Mumbai
+ap-south-1a
+ap-south-1b
+ap-south-1c
+
+CIDR - Classless Internet Domain Network
+========================================
+We need to define network [IP range] while creating VPC.
+
+We need to define network range in the form of CIDR.
+CIDR is a method for allocating IP addresses and its routing to Private Networks.
+
+CIDR Block must be a valid IPv4 CIDR.
+
+Public IPs  will be given/assigned to resources by ISPs - Internet Service Providers.
+
+Subnet mask
+===========
+We can calculate how many IPs will be available for Private Network based on subnet mask.
+
+192.168.0.0/20
+
+/16
+/17 is a subnet mask.
+Subnet mask range must be between 16 to 28
+
+192.168.0.0/26
+
+ 32-n	32-26	8 
+2		2		2 = 2*8=256
+
+192.168.0.0/16
+
+ 32-n	32-15	16 
+2		2		2 = 2*16=65536
+
+We get 65535 Private IPs using subnet mask.
+
+192.168.0.0
+192.168.0.1
+192.168.0.2 - 192.168.255.255
+
+VPC CIDR ranger 192.168.0.0/16
+
+Subnet - Sub Network.
+=====================
+We divide VPC [network] into multiple sub networks.
+
+We can create 'N' number of subnets.
+We can create resources like ec2 servers and load balancers etc within subnets.
+
+Types of Subnets
+Public subnet.
+Private Subnet.
+
+Public subnet.
+Subnet which will have an access to internet called as Public subnet.
+Servers in public subnet can access interne and we can reach servers also from internet.
+
+Private
+subnet which will not have an access to internet called as private subnet.
+Servers in private subnet cannot access intnernet and we cannot reach servers also from internet.
+
+Load Balancer servers can be created in public subnets.
+Application servers and database servers can be created in private subnets to secure applications.
+
+Internet Gateway
+================
+Internet Gateway can be associated with VPC.
+IGW is a Virtual router in AWS which will enable Internet connectivty to VPC.
+IGW will be attached to Subnet in Route table. 1:05:31minutes
+
+1 IGW can be attached to only 1 VPC.
+
+Route Tables
+============
+Route tables routes network traffic to resources in a VPC.
+
+Subnets which are associated with internet gateway in a route table called as public subnets.
+Subnets which are not associated with internet gateway in route table called as private subnets.
+
+NAT Gateway
+===========
+We create NAT Gateway,
+when private servers created in private subnets needs access to internet to download software packages.
+
+NAT Gateway is managed by AWS.
+
+Security Groups
+===============
+Security Group is a firewal at server/instance level.
+We need to allow whatever Ports whatevers sources we need, by default is Deny.
+Security Group is stateful.
+which means whatever port we're allowed in Inbound Automatically will be allowed [opened] in outbound.
+
+NACL - Network access control list
+==================================
+It is firewall at subnet level.
+NACL will be created automatically whens subnets are created.
+NACL supports allow rules and deny rules.
+NACL is stateless,
+Which means whatever port we're are allowed in inbound are not automatically will be allowed [opened] in outboud.
+
+----------------------------------------Class-9
+                                        =======
+https://www.davidc.net/sites/default/subnets/subnets.html    go to this link u can dived the subnet
+
+
+HOW TO CREATE A VPC
+===================
+
+go to the VPC click on create vpc name AWS_Production_VPC  cidr 192.168.0.0/18 click on createVPC
+#192.168.0.0  / 18
+
+#192.168.0.0/20	192.168.0.0 - 192.168.15.255	192.168.0.1 - 192.168.15.254	4094	Divide			
+#192.168.16.0/20	192.168.16.0 - 192.168.31.255	192.168.16.1 - 192.168.31.254	4094	Divide	
+#192.168.32.0/20	192.168.32.0 - 192.168.47.255	192.168.32.1 - 192.168.47.254	4094	Divide		
+#192.168.48.0/20	192.168.48.0 - 192.168.63.255	192.168.48.1 - 192.168.63.254	4094	Divide	
+
+select vpc click on actions select edit vpc setting Enable DNS hostnames(enable it suppose if u get dns name u can enable it)click on save changes
+
+(create Subnets)
+public_subnet1 go to subnet click on create subnet select vpc(which we created)Subnet name AWS_Production_Public_Subnet_1 Availability Zone (us-east-1a) IPv4 subnet CIDR block  192.168.0.0/20 (u can add 16,32,48 here )click on create subnet
+public_subnet2 go to subnet click on create subnet select vpc(which we created)Subnet name AWS_Production_Public_Subnet_2 Availability Zone (us-east-1b) IPv4 subnet CIDR block  192.168.16.0/20 (u can add 16,32,48 here )click on create subnet
+private_subnet1 go to subnet click on create subnet select vpc(which we created)Subnet name AWS_Production_Private_Subnet_1 Availability Zone (us-east-1a) IPv4 subnet CIDR block  192.168.32.0/20 (u can add 16,32,48 here )click on create subnet
+private_subnet2 go to subnet click on create subnet select vpc(which we created)Subnet name AWS_Production_Private_Subnet_2 Availability Zone (us-east-1b) IPv4 subnet CIDR block  192.168.48.0/20 (u can add 16,32,48 here )click on create subnet
+
+(Enable IP address)
+choose this subnets AWS_Production_Public_Subnet_1 click on actions select edit subnet settings click on Enable auto-assign public IPv4 address(it means enable public ip automatically)click on save
+choose this subnets AWS_Production_Public_Subnet_2 click on actions select edit subnet settings click on Enable auto-assign public IPv4 address(it means enable public ip automatically)click on save
+
+(create IGW)
+click on internet gateway click on create internet gateway Name tag AWS_Production_IGW click on create internet gateway click (attach to vpc)select AWS_Production_IGW select actions click on attach to VPC select vpc here attach internet gateway
+
+(create RouteTable)
+click on Route tables click on create route table Name AWS_Production_Public_RT select VPC AWS_Production_VPC click on create route table 
+select AWS_Production_Public_RT click on Routes click on edit click on Add route 0.0.0.0/0 select internet Gateway here click on save changes
+select Subnet associations click on edit subnet association select Two Public_subnet1 &  Public_subnet2 click on save changes
+
+am creating an EC2 Instance name Production_Server RedHat select Production_VPC select subnet production_public_subnet_1 click on launch instance
+ssh -i AbdulHameedKey.pem ec2-user@54.146.115.231
+
+ping www.google.com   #it's working
+
+sudo yum install git -y
+
+am creating an EC2 instance name Private_Subnet_Server RedHat select Production_VPC select subnet production_private_subnet_1 click on launch intance(there is no public ip here)
+
+curl -v telnet://192.168.36.47:22         #this is a private ip of this server Private_Subnet_Server
+
+vi AbdulHameedKey.pem
+
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEA1T2+9iqSbt1M4LFYNWqvPjENzfAEL1LF0kaCCdOxdbGfNTsb
+Y+7lH0fsLWwux4AxLu4JKJs6YGWODcfKmrTqOm8kfDy8DHUr66a//LgaHuEdHEsm
+PHZLhZzLC7RJICEsEyCFeUmDLz4l/Jb/vlzDods0TSOIPo+6CKsCet+Lt0c8cdLL
+x4Hb79HLs5BoJRw8I5YMmkuvSAwk0kx7aS5KMmP0WnUJnDi4rOEh7jNHxOAkbXrT
+qnnq27OcSLrkCWq+jiwSXwHzUKL0J5FfrdtCt+ECsDMJ91npoZJz19Qfv0BlaUsQ
+7eIZ4432C67ofccpI2Zqqzi1qZGy2othVNF3CwIDAQABAoIBAQCiJ24La5wmygon
+4zQcip/wPwUsURQdmGft2sgQCPatdQCITgYqHAQHoX2rnNSFyKmd8kzsn/3oR9Ga
+EQ+0TVbAULwB7X1iS8e2Tvs3hhf222Bzn4HYAGy1keGlaNcio5cMhHJ7JLepOS1R
+wtF/RLNPZY2ECz0Ttd/Vr5UXMt7f4txk74qBsYYeRczJiTBX/vh39MQFFNYbnDiZ
+p/gMhQVVZefKeYhMEMPfnNNjhvK/Ms1VKyJzUbLt0tf3YDsJdTQCC12LVLxhMmjo
+wZjmnvCh3FJk2Jh8yJikjSlUPrZXCox839TDBm/TUa/Nf2aP15FWaiF/hhsc9Zy2
+FNK9A2KhAoGBAO1Qm0ZQie7VMq6wcBQlcnrDd0Z8GTBNBw8VNZ5xqVunih+FrcoN
+yJ8wUoEHehtJbwQGqSgpl3wjp3kBB9iIPxrmrjVPAIUCgeYWxwkFbPRqobNcKcFD
+WKkM9XPdFBkUhZi+YuKtz5BN+qQi0Hkd5Ju1XdtdA3GyoP+XaT+zLwWvAoGBAOYH
+5x9L9m1cpAdrmYHK8Se6QVr0LGXJglx+hQJMifTWh+cdzAWFuGf5xPYBuyz8H03a
+Rb5/R/IUtQH2GswBI27u+rDpsYtJoq16AC9Juo+jaw3RMhWS+ssF4b3pkoASjRV9
+k+hK0qQU1pi9nub22zYC0eI0q3DIhRsB8viMNpdlAoGAH1nwyX9GWakMwwtII0E3
+OISuMz+dzEXA0vtIVCBL8XHWy4dLiE/92xn1LFqihQxUgEGpA0dLXfkP3OqH8NE/
+FPy4sw420VudcZo8vTJcTIXxytI4KfINunedzaq9RvrxE1bDlZLEwxmqLRj0Vavf
+UbrKJXrKQ7EHl/yWyPWRFr0CgYAbZgmTYrrhX81xzNEl8oQy1S5/pOG85fmPBsrU
+8UTlUsAxOQ1aAwlp6QgavS4MN6OK5Fq2S/bH0MuWhje+4MvVpMVbWRp6mrSzsPpg
+p4l/Hlnb9XTfuPgCQpsWwcFfW9ZOHv0FCBR60riUzNEmdXS6xC83oEpjTp78Dolg
+LWM7OQKBgQCpuLyN40sj/9GoJCSq6U5WnEj55ebExoM4DrWMhecmO+cXh2fh8dm6
+iFd/omTtASFVmdV5sEzADHyYSI0D8W/Ur3d31ERzJZQvFXwpst1p/WqPMBARHrIa
+JGRmxKs7wG0EuO9V6qA/dZpkVLswIvE3DavAOo0VWeuSa8njnRiRtg==
+-----END RSA PRIVATE KEY-----
+
+
+chmod 400 AbdulHameedKey.pem
+
+ssh -i AbdulHameedKey.pem ec2-user@192.168.36.47         #private server ip
+
+ping www.google.com             #it will be not talk to the internet
+
+sudo yum install git -y        #not working
+
+let me create RouteTable click on create route table name AWS_Production_Private_RT select production_VPC click create route table
+
+let me create NAT gateways click on create NAT gateway Name AWS_Production_NGW choose vpc production_VPC click on create Nat gateway 
+
+let me go to Route tables click on AWS_Production_Private_RT click on Routes click on edit routes 0.0.0.0/0 select nat gateway here click on save changes
+click on Subnet associations click on edit subnet association select here Private_subnet1 & Private_subnet2 click on save assocations
+
+exit 
+
+ssh -i AbdulHameedKey.pem ec2-user@54.146.115.231
+
+ssh -i AbdulHameedKey.pem ec2-user@192.168.36.47     #this is private of private server
+#it's working
+
+sudo yum install git -y
+
+
+VPC Peering
+===========
+We can use VPC peering when servers in one VPC wants to talk to servers in another vpc over a private network without internet.
+
+We can create VPC Peering,
+When VPCs are creating in 2 different regions or in 2 different accounts.
+
+VPC Peering possible combinations
+Same Account - Same Region.
+Same Account - Different Regions.
+Different Account - Same Region.
+Differerent Account - Different Regions.
+
+When VPC CIDRs are overlapping then it is not possible to create VPC peering.
+
+Default VPC CIDR 172.31.0.0/16
+
+Custom VPC CIDR 192.168.0.0/16
+
+AWS and Azure services comparision
+==================================
+EC2 Elastic Compute Cloud => Virtual Machine.
+Amazon Machine Image ==>> Virtual Machine Image.
+Instance Type ==>> Virtual Machine Series.
+User data ==>> Custom Data
+Elastic IP ==>> Static IP.
+
+Network Load Balancer ==>> Azure Load Balancer.
+Application Load Balancer ==>> Azure Application Gateway.
+
+Autoscaling Groups ==>> Virutal machine scale.
+
+EBS ==>> Azure Disk.
+EFS ==>> Azure File.
+S3 ==>> Azure Blob.
+
+VPC ==>> Virtual Network
+
+Security group ==>> Application security Group.
+NACL => Network security group.
+
+EKS Elastic K8s Service ==>> Azure Kubernetes Service.
+
+Elastic COntainer REgistry ==>> Azure Container Registry.
+
+Elastic contaier service = Azure Cotainer instances.
+
+Route53 ==>> Azure DNS.
+
+AWS Secrets Manager ==>> Azure Key Vault.
+
+IAM Identity and Access Management ==>> Azure Active Directory.
+
+-------------------------------------------Class-10
+                                           ========
+
+VPC Peering
+===========
+
+click on Peering connections Name DefaultVPC_Amazon_VPC_peering VPC ID (Requester) select DefaultVPC VPC ID (Accepter) Production_VPC click on create peering connections
+#showing pending acceptence
+
+select DefaultVPC_Amazon_VPC_peering select action click on accept request
+
+Default vpc CIDR  172.31.0.0/16       #it will get in vpc
+
+Custom vpc CIDR   192.168.0.0/18      #it will get in vpc
+
+go to Route tables select Deafult route table then select Routes(down) click on edit routes click on Add route 
+192.168.0.0/18(take customCIDR) select peering connection&id click on save changes click on save chnages
+
+click on PrivateRouteTable click on Routes click on edit route click on Add route 172.31.0.0/16(Default CIDR)select peering connection&ID click on save changes
+
+lets create an EC2 serever name AWS_Production_Public_Server select RedHat select ProductionVPC(customVPC) select publicsubnet1 click launch instance
+
+
+lets create one more server name AWS_Production_private_server select RedHat select ProductionVPC(customVPC) select privatesubnet1 click on launch instance
+
+
+let create one more instance name Default_VPC_server select REdHat this is a Default vpc click on launch instance 
+
+now Iam connecting to AWS_Production_Public_Server ssh -i "AbdulHameedKey.pem" ec2-user@18.206.153.186
+
+vi AbdulHameedKey.pem
+
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEA1T2+9iqSbt1M4LFYNWqvPjENzfAEL1LF0kaCCdOxdbGfNTsb
+Y+7lH0fsLWwux4AxLu4JKJs6YGWODcfKmrTqOm8kfDy8DHUr66a//LgaHuEdHEsm
+PHZLhZzLC7RJICEsEyCFeUmDLz4l/Jb/vlzDods0TSOIPo+6CKsCet+Lt0c8cdLL
+x4Hb79HLs5BoJRw8I5YMmkuvSAwk0kx7aS5KMmP0WnUJnDi4rOEh7jNHxOAkbXrT
+qnnq27OcSLrkCWq+jiwSXwHzUKL0J5FfrdtCt+ECsDMJ91npoZJz19Qfv0BlaUsQ
+7eIZ4432C67ofccpI2Zqqzi1qZGy2othVNF3CwIDAQABAoIBAQCiJ24La5wmygon
+4zQcip/wPwUsURQdmGft2sgQCPatdQCITgYqHAQHoX2rnNSFyKmd8kzsn/3oR9Ga
+EQ+0TVbAULwB7X1iS8e2Tvs3hhf222Bzn4HYAGy1keGlaNcio5cMhHJ7JLepOS1R
+wtF/RLNPZY2ECz0Ttd/Vr5UXMt7f4txk74qBsYYeRczJiTBX/vh39MQFFNYbnDiZ
+p/gMhQVVZefKeYhMEMPfnNNjhvK/Ms1VKyJzUbLt0tf3YDsJdTQCC12LVLxhMmjo
+wZjmnvCh3FJk2Jh8yJikjSlUPrZXCox839TDBm/TUa/Nf2aP15FWaiF/hhsc9Zy2
+FNK9A2KhAoGBAO1Qm0ZQie7VMq6wcBQlcnrDd0Z8GTBNBw8VNZ5xqVunih+FrcoN
+yJ8wUoEHehtJbwQGqSgpl3wjp3kBB9iIPxrmrjVPAIUCgeYWxwkFbPRqobNcKcFD
+WKkM9XPdFBkUhZi+YuKtz5BN+qQi0Hkd5Ju1XdtdA3GyoP+XaT+zLwWvAoGBAOYH
+5x9L9m1cpAdrmYHK8Se6QVr0LGXJglx+hQJMifTWh+cdzAWFuGf5xPYBuyz8H03a
+Rb5/R/IUtQH2GswBI27u+rDpsYtJoq16AC9Juo+jaw3RMhWS+ssF4b3pkoASjRV9
+k+hK0qQU1pi9nub22zYC0eI0q3DIhRsB8viMNpdlAoGAH1nwyX9GWakMwwtII0E3
+OISuMz+dzEXA0vtIVCBL8XHWy4dLiE/92xn1LFqihQxUgEGpA0dLXfkP3OqH8NE/
+FPy4sw420VudcZo8vTJcTIXxytI4KfINunedzaq9RvrxE1bDlZLEwxmqLRj0Vavf
+UbrKJXrKQ7EHl/yWyPWRFr0CgYAbZgmTYrrhX81xzNEl8oQy1S5/pOG85fmPBsrU
+8UTlUsAxOQ1aAwlp6QgavS4MN6OK5Fq2S/bH0MuWhje+4MvVpMVbWRp6mrSzsPpg
+p4l/Hlnb9XTfuPgCQpsWwcFfW9ZOHv0FCBR60riUzNEmdXS6xC83oEpjTp78Dolg
+LWM7OQKBgQCpuLyN40sj/9GoJCSq6U5WnEj55ebExoM4DrWMhecmO+cXh2fh8dm6
+iFd/omTtASFVmdV5sEzADHyYSI0D8W/Ur3d31ERzJZQvFXwpst1p/WqPMBARHrIa
+JGRmxKs7wG0EuO9V6qA/dZpkVLswIvE3DavAOo0VWeuSa8njnRiRtg==
+-----END RSA PRIVATE KEY-----
+
+chmod 400 AbdulHameedKey.pem
+
+ssh -i AbdulHameedKey.pem ec2-user@192.168.19.187      #this AWS_server_production_server ip private ip 
+
+ping www.google.com          #here NAT gate way is enable that's why we can able talk to the internet
+
+IAM CONNECTING PRIVATE SERVER TO DEAFULT SERVER
+
+vi AbdulHameedKey.pem
+
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEA1T2+9iqSbt1M4LFYNWqvPjENzfAEL1LF0kaCCdOxdbGfNTsb
+Y+7lH0fsLWwux4AxLu4JKJs6YGWODcfKmrTqOm8kfDy8DHUr66a//LgaHuEdHEsm
+PHZLhZzLC7RJICEsEyCFeUmDLz4l/Jb/vlzDods0TSOIPo+6CKsCet+Lt0c8cdLL
+x4Hb79HLs5BoJRw8I5YMmkuvSAwk0kx7aS5KMmP0WnUJnDi4rOEh7jNHxOAkbXrT
+qnnq27OcSLrkCWq+jiwSXwHzUKL0J5FfrdtCt+ECsDMJ91npoZJz19Qfv0BlaUsQ
+7eIZ4432C67ofccpI2Zqqzi1qZGy2othVNF3CwIDAQABAoIBAQCiJ24La5wmygon
+4zQcip/wPwUsURQdmGft2sgQCPatdQCITgYqHAQHoX2rnNSFyKmd8kzsn/3oR9Ga
+EQ+0TVbAULwB7X1iS8e2Tvs3hhf222Bzn4HYAGy1keGlaNcio5cMhHJ7JLepOS1R
+wtF/RLNPZY2ECz0Ttd/Vr5UXMt7f4txk74qBsYYeRczJiTBX/vh39MQFFNYbnDiZ
+p/gMhQVVZefKeYhMEMPfnNNjhvK/Ms1VKyJzUbLt0tf3YDsJdTQCC12LVLxhMmjo
+wZjmnvCh3FJk2Jh8yJikjSlUPrZXCox839TDBm/TUa/Nf2aP15FWaiF/hhsc9Zy2
+FNK9A2KhAoGBAO1Qm0ZQie7VMq6wcBQlcnrDd0Z8GTBNBw8VNZ5xqVunih+FrcoN
+yJ8wUoEHehtJbwQGqSgpl3wjp3kBB9iIPxrmrjVPAIUCgeYWxwkFbPRqobNcKcFD
+WKkM9XPdFBkUhZi+YuKtz5BN+qQi0Hkd5Ju1XdtdA3GyoP+XaT+zLwWvAoGBAOYH
+5x9L9m1cpAdrmYHK8Se6QVr0LGXJglx+hQJMifTWh+cdzAWFuGf5xPYBuyz8H03a
+Rb5/R/IUtQH2GswBI27u+rDpsYtJoq16AC9Juo+jaw3RMhWS+ssF4b3pkoASjRV9
+k+hK0qQU1pi9nub22zYC0eI0q3DIhRsB8viMNpdlAoGAH1nwyX9GWakMwwtII0E3
+OISuMz+dzEXA0vtIVCBL8XHWy4dLiE/92xn1LFqihQxUgEGpA0dLXfkP3OqH8NE/
+FPy4sw420VudcZo8vTJcTIXxytI4KfINunedzaq9RvrxE1bDlZLEwxmqLRj0Vavf
+UbrKJXrKQ7EHl/yWyPWRFr0CgYAbZgmTYrrhX81xzNEl8oQy1S5/pOG85fmPBsrU
+8UTlUsAxOQ1aAwlp6QgavS4MN6OK5Fq2S/bH0MuWhje+4MvVpMVbWRp6mrSzsPpg
+p4l/Hlnb9XTfuPgCQpsWwcFfW9ZOHv0FCBR60riUzNEmdXS6xC83oEpjTp78Dolg
+LWM7OQKBgQCpuLyN40sj/9GoJCSq6U5WnEj55ebExoM4DrWMhecmO+cXh2fh8dm6
+iFd/omTtASFVmdV5sEzADHyYSI0D8W/Ur3d31ERzJZQvFXwpst1p/WqPMBARHrIa
+JGRmxKs7wG0EuO9V6qA/dZpkVLswIvE3DavAOo0VWeuSa8njnRiRtg==
+-----END RSA PRIVATE KEY-----
+
+chmod 400 AbdulHameedKey.pem
+
+ssh -i AbdulHameedKey.pem ec2-user@3.238.130.116      #this is a default server
+
+exit
+exit
+exit
+
+now iam connecting to Default machine ssh -i AbdulHameedKey.pem ec2-user@3.238.130.116
+
+
+vi AbdulHameedKey.pem
+
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEA1T2+9iqSbt1M4LFYNWqvPjENzfAEL1LF0kaCCdOxdbGfNTsb
+Y+7lH0fsLWwux4AxLu4JKJs6YGWODcfKmrTqOm8kfDy8DHUr66a//LgaHuEdHEsm
+PHZLhZzLC7RJICEsEyCFeUmDLz4l/Jb/vlzDods0TSOIPo+6CKsCet+Lt0c8cdLL
+x4Hb79HLs5BoJRw8I5YMmkuvSAwk0kx7aS5KMmP0WnUJnDi4rOEh7jNHxOAkbXrT
+qnnq27OcSLrkCWq+jiwSXwHzUKL0J5FfrdtCt+ECsDMJ91npoZJz19Qfv0BlaUsQ
+7eIZ4432C67ofccpI2Zqqzi1qZGy2othVNF3CwIDAQABAoIBAQCiJ24La5wmygon
+4zQcip/wPwUsURQdmGft2sgQCPatdQCITgYqHAQHoX2rnNSFyKmd8kzsn/3oR9Ga
+EQ+0TVbAULwB7X1iS8e2Tvs3hhf222Bzn4HYAGy1keGlaNcio5cMhHJ7JLepOS1R
+wtF/RLNPZY2ECz0Ttd/Vr5UXMt7f4txk74qBsYYeRczJiTBX/vh39MQFFNYbnDiZ
+p/gMhQVVZefKeYhMEMPfnNNjhvK/Ms1VKyJzUbLt0tf3YDsJdTQCC12LVLxhMmjo
+wZjmnvCh3FJk2Jh8yJikjSlUPrZXCox839TDBm/TUa/Nf2aP15FWaiF/hhsc9Zy2
+FNK9A2KhAoGBAO1Qm0ZQie7VMq6wcBQlcnrDd0Z8GTBNBw8VNZ5xqVunih+FrcoN
+yJ8wUoEHehtJbwQGqSgpl3wjp3kBB9iIPxrmrjVPAIUCgeYWxwkFbPRqobNcKcFD
+WKkM9XPdFBkUhZi+YuKtz5BN+qQi0Hkd5Ju1XdtdA3GyoP+XaT+zLwWvAoGBAOYH
+5x9L9m1cpAdrmYHK8Se6QVr0LGXJglx+hQJMifTWh+cdzAWFuGf5xPYBuyz8H03a
+Rb5/R/IUtQH2GswBI27u+rDpsYtJoq16AC9Juo+jaw3RMhWS+ssF4b3pkoASjRV9
+k+hK0qQU1pi9nub22zYC0eI0q3DIhRsB8viMNpdlAoGAH1nwyX9GWakMwwtII0E3
+OISuMz+dzEXA0vtIVCBL8XHWy4dLiE/92xn1LFqihQxUgEGpA0dLXfkP3OqH8NE/
+FPy4sw420VudcZo8vTJcTIXxytI4KfINunedzaq9RvrxE1bDlZLEwxmqLRj0Vavf
+UbrKJXrKQ7EHl/yWyPWRFr0CgYAbZgmTYrrhX81xzNEl8oQy1S5/pOG85fmPBsrU
+8UTlUsAxOQ1aAwlp6QgavS4MN6OK5Fq2S/bH0MuWhje+4MvVpMVbWRp6mrSzsPpg
+p4l/Hlnb9XTfuPgCQpsWwcFfW9ZOHv0FCBR60riUzNEmdXS6xC83oEpjTp78Dolg
+LWM7OQKBgQCpuLyN40sj/9GoJCSq6U5WnEj55ebExoM4DrWMhecmO+cXh2fh8dm6
+iFd/omTtASFVmdV5sEzADHyYSI0D8W/Ur3d31ERzJZQvFXwpst1p/WqPMBARHrIa
+JGRmxKs7wG0EuO9V6qA/dZpkVLswIvE3DavAOo0VWeuSa8njnRiRtg==
+-----END RSA PRIVATE KEY-----
+
+chmod 400 AbdulHameedKey.pem
+
+ssh -i AbdulHameedKey.pem ec2-user@192.168.19.187     #this is a production server private ip 
+
+it's working i will Terminat all those machine
+---------------------------
+
+
+Load Balancer 22:51sec
+=============
+Popular Web Servers come load balancers,
+Nginx,
+Apache Httpd Etc [Software Load Balancers]
+
+Hardware Load Balancer
+F5
+
+ELB - Elastic Load Balancing,
+ELB will be created and managed by AWS Cloud provider.
+
+Types of Load Balancers,
+Network Load Balancer [Layer 4 TCP Protocol]
+Application Load Balancer [Layer 7 - Http and Https Protocol].
+
+OSI Model [Open System Interconnection]
+
+Application Layer.
+Presentation Layer.
+Session Layer.
+Transport Layer.
+Network layer.
+Datalink layer.
+Physical.
+
+
+NLB and ALB ELBS
+===========
+
+NLB - Layer 4
+It will just receive traffic and it will send traffic to some IPs on some port.
+
+ALB - Layer 7
+It is capable of routing traffic based on host of the applicaiton or based on path of the applicaiton
+https://www.google.com/
+https://www.google.com/search
+We can route traffic to multiple target groups/servers with single load balancer.
+We can achieve advanced routing techniques like if host is google.com then route traffic to so and so target group.
+
+Load Balancer will accept/receive traffic on port 80 [http] and 443 [Https].
+
+Elastic Load Balancer Concepts
+==============================
+Listener.
+Target.
+TargetGroups.
+
+Listener,
+Each load balancer should have atleast one listener to accept the traffic.
+Routing rules are defined on listeners.
+
+Target,
+Target is where request should reach.
+Target is nothing but a server where our application is running.
+
+We cannot use target in load balncer directly.
+
+Target Groups
+Grouping of application servers into a Target Group
+Target group will be used in load balancers.
+Logical grouping of targers behind the load balancer.
+
+Health Checks,
+Load Balancer will perform health checks on targets to identify targets are healthy or not.
+When load balancer finds any application server is not healthy then load balancer will stop routing traffic to unhealthy server.
+Health checks ensures user traffic is shifted away from failed instances.
+
+Types of Load Balancers,
+Internal Load Balancer
+Internet Facing Load Balancer
+
+Internal Load Balancer,
+ILB cannot be access from internet.
+
+Internet Facing Load Balancer,
+Internet Facing Load Balancer can be access from internet.
+To creat Internet Facing Load Balancer,
+we need minimum 2 pubilc subnets available in a VPC in wihc we create load balancer.
+Because 2 load balancer instances will be created by AWS in background for load balacner.
+
+am Creating an EC2 instance Jumpbox_Server RedHat customVPC(Production Publicsubnet1) laucnch instance
+
+am Creating an EC2 instance Application_Server1 RedHat t3.small customVPC(Production Privatesubnet1) 8080 anywhere should allow here(Tomcat) laucnch instance
+
+am Creating an EC2 instance Application_Server2 RedHat t3.small customVPC(Production Privatesubnet2) 8080 anywhere should allow here(Tomcat) laucnch instance
+
+now i will connect to the jumpbox_Server machine ssh -i "AbdulHameedKey.pem" ec2-user@34.205.2.211
+
+vi AbdulHameedKey.pem
+
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEA1T2+9iqSbt1M4LFYNWqvPjENzfAEL1LF0kaCCdOxdbGfNTsb
+Y+7lH0fsLWwux4AxLu4JKJs6YGWODcfKmrTqOm8kfDy8DHUr66a//LgaHuEdHEsm
+PHZLhZzLC7RJICEsEyCFeUmDLz4l/Jb/vlzDods0TSOIPo+6CKsCet+Lt0c8cdLL
+x4Hb79HLs5BoJRw8I5YMmkuvSAwk0kx7aS5KMmP0WnUJnDi4rOEh7jNHxOAkbXrT
+qnnq27OcSLrkCWq+jiwSXwHzUKL0J5FfrdtCt+ECsDMJ91npoZJz19Qfv0BlaUsQ
+7eIZ4432C67ofccpI2Zqqzi1qZGy2othVNF3CwIDAQABAoIBAQCiJ24La5wmygon
+4zQcip/wPwUsURQdmGft2sgQCPatdQCITgYqHAQHoX2rnNSFyKmd8kzsn/3oR9Ga
+EQ+0TVbAULwB7X1iS8e2Tvs3hhf222Bzn4HYAGy1keGlaNcio5cMhHJ7JLepOS1R
+wtF/RLNPZY2ECz0Ttd/Vr5UXMt7f4txk74qBsYYeRczJiTBX/vh39MQFFNYbnDiZ
+p/gMhQVVZefKeYhMEMPfnNNjhvK/Ms1VKyJzUbLt0tf3YDsJdTQCC12LVLxhMmjo
+wZjmnvCh3FJk2Jh8yJikjSlUPrZXCox839TDBm/TUa/Nf2aP15FWaiF/hhsc9Zy2
+FNK9A2KhAoGBAO1Qm0ZQie7VMq6wcBQlcnrDd0Z8GTBNBw8VNZ5xqVunih+FrcoN
+yJ8wUoEHehtJbwQGqSgpl3wjp3kBB9iIPxrmrjVPAIUCgeYWxwkFbPRqobNcKcFD
+WKkM9XPdFBkUhZi+YuKtz5BN+qQi0Hkd5Ju1XdtdA3GyoP+XaT+zLwWvAoGBAOYH
+5x9L9m1cpAdrmYHK8Se6QVr0LGXJglx+hQJMifTWh+cdzAWFuGf5xPYBuyz8H03a
+Rb5/R/IUtQH2GswBI27u+rDpsYtJoq16AC9Juo+jaw3RMhWS+ssF4b3pkoASjRV9
+k+hK0qQU1pi9nub22zYC0eI0q3DIhRsB8viMNpdlAoGAH1nwyX9GWakMwwtII0E3
+OISuMz+dzEXA0vtIVCBL8XHWy4dLiE/92xn1LFqihQxUgEGpA0dLXfkP3OqH8NE/
+FPy4sw420VudcZo8vTJcTIXxytI4KfINunedzaq9RvrxE1bDlZLEwxmqLRj0Vavf
+UbrKJXrKQ7EHl/yWyPWRFr0CgYAbZgmTYrrhX81xzNEl8oQy1S5/pOG85fmPBsrU
+8UTlUsAxOQ1aAwlp6QgavS4MN6OK5Fq2S/bH0MuWhje+4MvVpMVbWRp6mrSzsPpg
+p4l/Hlnb9XTfuPgCQpsWwcFfW9ZOHv0FCBR60riUzNEmdXS6xC83oEpjTp78Dolg
+LWM7OQKBgQCpuLyN40sj/9GoJCSq6U5WnEj55ebExoM4DrWMhecmO+cXh2fh8dm6
+iFd/omTtASFVmdV5sEzADHyYSI0D8W/Ur3d31ERzJZQvFXwpst1p/WqPMBARHrIa
+JGRmxKs7wG0EuO9V6qA/dZpkVLswIvE3DavAOo0VWeuSa8njnRiRtg==
+-----END RSA PRIVATE KEY-----
+
+chmod 400 AbdulHameedKey.pem
+
+now am connecting to the Application_Server1 using Jumpbox_server
+ssh -i AbdulHameedKey.pem ec2-user@192.168.17.152  #Application_Server1    #suppose if u connect private srver u can must and should attach NAT gateway here
+
+vi installTomcat.sh
+
+#!/bin/bash
+curl -LO https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.rpm
+sudo yum localinstall amazon-corretto-11-x64-linux-jdk.rpm -y
+cd /opt
+sudo yum install wget -y
+sudo wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.115/bin/apache-tomcat-9.0.115.tar.gz
+sudo tar -xvf apache-tomcat-9.0.115.tar.gz
+sudo rm apache-tomcat-9.0.115.tar.gz
+sudo mv apache-tomcat-9.0.115 tomcat9
+sudo chmod 777 -R tomcat9
+cd /opt/tomcat9
+./bin/startup.sh
+
+chmod +x installTomcat.sh
+
+./installTomcat.sh
+
+ps -ef | grep tomcat
+
+curl http://localhost:8080
+
+exit
+curl -v http://192.168.17.152:8080
+
+exit
+curl -v http://192.168.50.218:8080   #u can try only in jumpbox_server(u can exit private server here u can try in jumpbox_server)
+
+am connecting one more terminal using jumpbox_server ssh -i AbdulHameedKey.pem ec2-user@192.168.50.218 this application2
+
+vi installTomcat.sh
+
+#!/bin/bash
+curl -LO https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.rpm
+sudo yum localinstall amazon-corretto-11-x64-linux-jdk.rpm -y
+cd /opt
+sudo yum install wget -y
+sudo wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.115/bin/apache-tomcat-9.0.115.tar.gz
+sudo tar -xvf apache-tomcat-9.0.115.tar.gz
+sudo rm apache-tomcat-9.0.115.tar.gz
+sudo mv apache-tomcat-9.0.115 tomcat9
+sudo chmod 777 -R tomcat9
+cd /opt/tomcat9
+./bin/startup.sh
+
+chmod +x installTomcat.sh
+
+./installTomcat.sh
+
+ps -ef | grep tomcat
+
+curl http://localhost:8080
+
+u can delete NAT-gateway
+
+#https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.115/bin/apache-tomcat-9.0.115.tar.gz
+
+#scp -i ~/PavanReddy.pem target/maven-web-application.war ec2-user@192.168.190.143:/opt/tomcat9/webapps/maven-web-application.war
+
+#maven-loadbalancer-ad62841d11375389.elb.ap-south-1.amazonaws.com/maven-web-application
+
+#http://maven-loadbalancer-ad62841d11375389.elb.ap-south-1.amazonaws.com/maven-web-application/
+
+----------------------------------Class-11
+                                  ========  #application server not working
+Let's turn on all the server
+
+am connecting to jumpbox_server ssh -i AbdulHameedKey.pem ec2-user@3.235.106.231
+
+sudo yum install git -y
+
+git clone https://github.com/MithunTechnologiesDevOps/maven-web-application.git
+
+sudo yum install maven -y
+
+cd maven-web-application/
+
+ls
+
+ls target/
+
+mvn clean package
+
+ls target/
+
+cd ~
+
+ls maven-web-application/target/
+
+ls
+
+cd maven-web-application/
+
+scp -i ~/AbdulHameedKey.pem target/maven-web-application.war ec2-user@192.168.17.152:/opt/tomcat9/webapps/maven-web-application.war      #this is a private ip of Application1 server
+
+scp -i ~/AbdulHameedKey.pem target/maven-web-application.war ec2-user@192.168.50.218:/opt/tomcat9/webapps/maven-web-application.war      #this is a private ip of Application2 server
+
+cd ~
+
+using jumpbox_server am connecting both server application1 & application2
+
+ssh -i AbdulHameedKey.pem ec2-user@192.168.17.152    #privateip of application1
+ls /opt/tomcat9/webapps/
+exit
+curl -v 192.168.50.218:/maven-web-application/        
+ssh -i AbdulHameedKey.pem ec2-user@192.168.50.218   #privateip of application2
+ls /opt/tomcat9/webapps/
+exit
+curl -v 192.168.17.152:/maven-web-application/
+
+
+let me create a target group click on target group in ec2(down in load balancing)
+click on target group Target type select on intances Target group name maven-targetgroup Protocol TCP Port 80 IP address type IPv4 VPC select customVPC
+Health checks HTTP Health check path /maven-web-application/ click on next click on select application1&application2 include as pending below 
+click on next click on create target group
+
+we have to create a load balancer click on create Load Balancers 
+Network Load Balancer click on create Load balancer name maven-loadbalancer Scheme Internet-facing ipv4 VPC choose customVPC click on both subnets in Subnet make sure u can select public_subnet1 & public_subnet2
+Security groups  make sure remove the default-securityGroup in Security groups(section)
+click on create a new security group.
+Security group name
+maven-lb-sg
+Description
+Allow Port 80
+VPC
+choose customVPC
+
+Inbound rules 
+click on Add rule type CustomTCP Port range 8080 Source AnywhereIPV4  click on create security group
+
+then go to the security group section refresh and choose maven-lb-sg Target group select maven-targetgroup click on create load balancer  #THIS ACCOUNT IS NOT SUPPORTING APPLICATION LOAD BALANCER
+ 
+take DNS name and accessing the server it's working then add /maven-web-application/
+
+DNS - Domain Name System
+========================
+It is better for Human Readable Names.
+It is difficult  to remember IP address or Load Balancer DNS Name.
+IP Address of server or load balancer dns names can be mapped with Domain Name.
+
+amazon.com
+flipkart.com
+instagram.com
+
+Route53, GoDaddy and Hostinger Etc are domain registrars come DNS service providers.
+
+Domain Registrars,
+Route53, GoDaddy and Hostinger will sell and manager DNS names.
+
+DNS Service providers,
+Manage DNS records - DNS Resolution and Traffic routing.
+
+http://maven-loadbalancer-ad62841d11375389.elb.ap-south-1.amazonaws.com/maven-web-application/ ==>> devopstools.com
+
+sudo yum install bind-utils -y
+
+15.206.197.196 mavendevops.com
+
+http://mavendevops.com/
+
+http://mavendevops.com/maven-web-application/
+
+Windows
+=======
+Open the Start menu, search for Notepad.
+Right-click Notepad and select Run as administrator.
+In Notepad, go to File > Open and navigate to C:\Windows\System32\drivers\etc\.
+Change the file filter from "Text Documents (.txt)" to "**All Files (.*)**" to see the hosts file.
+Open the hosts file, add your entries, and save. 
+
+Route53
+=======
+It is a managed DNS - Domain Name system.
+We can use route53 to purchase domain and map domain with Load balancer uisng Route53 service.
+
+TLDs
+.com
+.co
+.in
+
+maven.devopstoolstechnologies.com ==>> http://maven-loadbalancer-ad62841d11375389.elb.ap-south-1.amazonaws.com
+
+maven.devopstoolstechnologies.com
+java.devopstoolstechnologies.com
+
+------------------------------------Class-12
+                                    ========
+let's turn on all the servers
+connect jumpbox_server ssh -i "AbdulHameedKey.pem" ec2-user@98.80.137.82
+
+ssh -i AbdulHameedKey.pem ec2-user@192.168.17.152    #application1
+cd /opt/tomcat9/bin/
+./startup.sh
+curl -v 192.168.17.152:8080/maven-web-application/
+
+exit
+
+ssh -i AbdulHameedKey.pem ec2-user@192.168.50.218    #application2
+cd /opt/tomcat9/bin/
+./startup.sh
+exit
+curl -v 192.168.50.218:8080/maven-web-application/
+
+ps -ef | grep tomcat
+
+let me create 13:12
+
+
+Http Status Codes
+=================
+200 - OK - Successful.  internally(not outside)
+
+400 - Bad Request.
+
+401 - Unauthorized - Credentials.
+
+403 - Forbidden.
+
+404 - Not found.
+
+500 - Internal Server Error
+
+503 - Service Unavailanle
+
+Troubleshoot appication wihch is running in Virtual Server
+==========================================================
+Make sure server is up and running where applications are deployed.
+Make sure process is running [tomcat] within application server.
+Make sure firewall is opened for required ports to access application.
+Make sure application/artifact is deployed into Tomcat Webapps Directory
+
+AWS Cost Optimization
+=====================
+Create Infrastructure [Servers, Volumes and Load Balancer] only what is needed.
+Delete unused servers, volume, snapshots and LBs etc.
+Use autoscaling to scale up and scale down application servers.
+Use cost efficient pricing models [OnDemand, Spot and Reserved].
+Use AWS Cost explorer to analyze billing cost for the infrastructure created.
+
+-------------------------------------Class-13
+                                     ========1 hour completed
+
+
+
+Http and Https
+==============
+Hyper Text Transfer Protocol.
+Hyper Text Transfer Protocol Secure.
+
+Why Not to Http..??
+It is not recommended to use Http protocol as it is not secured.
+
+We need to use https protocol to secure data.
+
+http://devopstoolstechnologies.com/maven-web-application/
+
+https://www.instagram.com/
+https://www.netflix.com/in/
+
+SSL/TLS Certificates
+===================
+SSL - Secure socket layer.
+TLS - Transport Layer Security.
+
+These certificates can be maped with Https Urls to secure applications.
+
+TLS is latest, TLS is successfor of SSL.
+TLS is advanced version of configuring certificates.
+
+We can configure SSL/TLS certificates in Load Balancer.
+
+http://devopstoolstechnologies.com/maven-web-application/ ==>> https://devopstoolstechnologies.com/maven-web-application/
+
+
+--------------------------------Class-14
+                                ========
+
+IAM - Identity and Access Management
+====================================
+IAM is a global service which is not specific to any region.
+IAM can be used to provide access to AWS resources like EC2, VPC, ECR and EKS Etc.
+We can manage access to AWS resources like who can access what resources and what they do using IAM.
+
+Authentication
+Credentials are valid or not.
+
+Authorization
+What kind of permissions have been given to the user/groups of users who authenticated.
+
+IAM Concepts,
+Users,
+User Groups,
+Policies,
+Roles,
+Identidy Providers.
+
+Development Team - 1 User.
+DevOps Team - 2 Users.
+
+Users
+=====
+We can create IAM users in AWS which can be used to access AWS resources.
+IAM users are basically AWS users [Developers, DevOps Engineers, Operation Engineers and AWS Architects].
+We can attach existing polices to user directly [AdministratorAccess and AmazonEC2FullAccess].
+or
+User can be added to groups so that user will get permissions based on polices of group which user belongs to.
+
+click on create an IAM users 
+click on create user User name manan tick it Custom password abdul@1994 click on next click on next click on create user
+https://096638078078.signin.aws.amazon.com/console  this is creadntial i will be sharing with developer 
+manan         #username 
+abdul@1994    #passwd
+
+i will take this will open in the open new incognitomode https://096638078078.signin.aws.amazon.com/console
+IAM username  manan
+password      abdul@1994
+click on sign in
+
+Old Password  abdul@1994
+New Password  hameed@1994
+Confirm New Password  hameed@1994
+click on confirm password change
+
+click on EC2  #don't have a permistion to manan
+
+i will create one more user
+
+click on create iam user
+User name mithun tick it select Custom password hameed@1994 click on Users must create a new password at next sign-in - Recommended
+click on next select Attach policies directly select AmazonEC2FullAccess here click on next click on create user 
+go to the incognitomode https://096638078078.signin.aws.amazon.com/console
+
+IAM username mithun
+Password hameed@1994  click on sign in
+Old Password hameed@1994
+New Password abdul@1994
+Confirm New Password abdul@1994 click on confirm password change
+
+u can search on EC2 u can able to access
+suppose if u create s3 ur not able to access
+
+go to users and click on manan click on add permitsion click on Attach policies directly select AmazonS3FullAccess 
+click on next click on Add permistion
+open new incognitomode https://096638078078.signin.aws.amazon.com/console
+IAM username  manan
+password      abdul@1994
+click on sign in
+
+Old Password  abdul@1994
+New Password  hameed@1994
+Confirm New Password  hameed@1994
+click on confirm password change
+
+here search s3 click on create bucket Bucket name abduls3bucket1245785 click on create bucket (don't forget to delete the bucket)
+
+i will create group 
+click on User groups click on create group User group name devops User name select mithun manan select policy AmazonVPCFullAccess ElasticLoadBalancingFullAccess select both 
+click creat usergroup 
+
+click on create user
+create user User name pavan tick it click on Custom password pavan@2026 click on next click Add user to group select devops click on next click create user
+
+
+Users Groups
+===========
+Group will have one or more users.
+We can add polices to the created group.
+
+Policies
+========
+We can give specific permissions [create, list and delete] to a specific AWS resources.
+AWS resources like EC2, EBS, EFS, S3, EBB and EKS Etc.
+
+Types of policies
+AWS Managed policies.
+Customer managed policy - we can create custom polices based on requirement.
+
+Roles
+=====
+We can create role by attaching polices [permissions].
+Roles can be used to gie aws permissions to AWS resources like EC2.
+
+IAM User
+We use IAM user, when granting permissions to Users to access aws resources.
+
+IAM Role
+We use IAM role, when granting permissions to any aws services to access another aws service.
+
+Identity Providers
+==================
+It is a trusted service that authenticates users, sends that identity information to AWS so the user can access aws resources wihtout creating an IAM user in account.
+
+AWS says like I don't want to manage passwords for users, when i turst Identity provider login system.
+
+AWS CLI - Amazon Command Line Interface
+=======================================
+It is a tool to manage AWS services.
+We can control multiple AWS services from CLI.
+
+let's create an EC2 Server 
+Name AWS_Cli_server RedHat  create an Ec2 instance
+ssh -i AbdulHameedKey.pem ec2-user@3.239.125.66
+
+
+#https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html     #using this link we will get this command
+
+sudo yum update -y           #install CLI
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo yum install unzip -y
+unzip awscliv2.zip
+sudo ./aws/install
+
+aws --version
+
+aws configure
+
+AWS Access Key ID [None]: AKIARNAAUBR7N2X5DQM6
+AWS Secret Access Key [None]: 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
+Default region name [None]: us-east-1
+Default output format: table
+
+aws s3 mb s3://abduls3bucket-8105363205     #mb make bucket #let me to check
+
+aws s3api delete-bucket --bucket abduls3bucket-8105363205
+
+aws ec2 run-instances \
+  --image-id ami-01b14b7ad41e17ba4 \
+  --instance-type t3.micro \
+  --key-name AbdulHameedKey \
+  --count 1
+
+
+Browser => DNS Lookup => Route53 ==>> AWS Load Balancer ==>> Application ==>> Response ==>> Browser.
+
+---------------------------------Class-15
+                                 ========Actually load-balancer are not supporting to my account
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
