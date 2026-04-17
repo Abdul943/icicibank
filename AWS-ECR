@@ -1,0 +1,136 @@
+20:00 AWS=ECR
+
+go to the ECR and click on create Repository name maven-web-application Image tag mutability select Mutable Encryption configuration AES-256 then create
+
+vi Dockerfile   #this image will build it will take 15minutes of the time
+
+FROM ubuntu
+
+RUN apt-get update && apt-get install -y apache2
+
+EXPOSE 80
+
+CMD ["apache2ctl", "-D", "FOREGROUND"]
+
+using this Docker we will create a docker images this is a ECR URL 096638078078.dkr.ecr.us-east-1.amazonaws.com/maven-web-application
+
+docker build -t 096638078078.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1 .
+
+docker build -t 096638078078.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:2 .
+
+docker images
+
+then select the repository what you have created click on View push commands
+
+#aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 096638078078.dkr.ecr.us-east-1.amazonaws.com
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+
+sudo apt install unzip -y
+
+unzip awscliv2.zip
+
+sudo apt update
+sudo apt install awscli
+
+sudo snap install aws-cli --classic
+
+aws --version
+
+aws configure
+
+Access key    AKIARNAAUBR7N2X5DQM6
+Secret access key  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
+Default region name [None]: us-east-1
+Default output format [None]: table
+
+aws ecr get-login-password --region us-east-1                 #this command will give the password
+
+docker login --username AWS --password-stdin 096638078078.dkr.ecr.us-east-1.amazonaws.com     #this command will be connected
+
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 096638078078.dkr.ecr.us-east-1.amazonaws.com
+
+cat /home/ubuntu/.docker/config.json
+
+docker images
+
+docker push 096638078078.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1
+
+docker push 096638078078.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:2
+
+
+#then go the registre and check pushed or not click on repo maven-web-application
+34:48 videos5
+
+docker rmi 096638078078.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1 096638078078.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:2 ubuntu:latest
+#am deleting all those images
+
+docker images
+
+cat /home/ubuntu/.docker/config.json
+
+docker logout
+
+cat /home/ubuntu/.docker/config.json  #still we are not logout
+
+docker logout 096638078078.dkr.ecr.us-east-1.amazonaws.com       #now removed
+
+docker pull 096638078078.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1     #it's not downloading
+
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 096638078078.dkr.ecr.us-east-1.amazonaws.com
+#am again login
+
+docker pull 096638078078.dkr.ecr.us-east-1.amazonaws.com/maven-web-application:1    #it will work
+
+docker images
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
